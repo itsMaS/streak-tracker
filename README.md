@@ -30,7 +30,32 @@ poked.
   buddies occasionally wander across the screen (tap them!)
 - Optional reminder notification at a configurable time (fires while the app
   is open or installed)
-- Data lives in `localStorage` on the phone — no accounts, no server
+- Buddies: tap **Add buddies** to get a 6-character code; two people who swap
+  codes see each other's full streak (calendar, plank chart, badges), ranked
+  by current streak, and can send cheers 📣 and nudges 👉 that pop up as
+  toasts next time the other opens the app
+- Data lives in `localStorage` on the phone — no sign-up. The buddy feature
+  syncs your log to Supabase; everything else works fully offline
+
+## Buddy sync backend (Supabase)
+
+Project: `Streak Buddies` (`payvkfccgzwgsiflazuv`, eu-central-1). The embedded
+key is the publishable anon key — safe to ship. Design:
+
+- No Supabase Auth: registering returns a device-local `{uid, secret}` pair
+  (kept in `localStorage`; the DB stores only a SHA-256 hash of the secret)
+- Tables (`profiles`, `friendships`, `events`) have RLS enabled with **no
+  policies** and all direct grants revoked — the anon key cannot touch them
+- The only API surface is six `security definer` RPCs (`buddy_register`,
+  `buddy_sync`, `buddy_add_friend`, `buddy_unfriend`, `buddy_send_event`,
+  `buddy_delete`), each of which re-verifies the secret; friendship is
+  mutual and instant when someone enters your code
+- `buddy_sync` uploads your day log and returns friends' logs plus any
+  pending cheer/nudge events (deleted on delivery)
+- Erase-all in settings also calls `buddy_delete`, removing the server profile
+
+Losing the phone's site data loses the buddy account (a fresh code must be
+shared again) — the streak data itself can keep living on the device.
 
 ## Install on Android
 
