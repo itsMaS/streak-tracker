@@ -237,6 +237,15 @@
   .toggle input:checked + .tr::after{transform:translateX(21px)}
   .danger-btn{border:1.5px solid #F3C1BB;background:#FDEEEC;color:#C0504A;border-radius:11px;
     padding:8px 16px;font-family:"Nunito";font-weight:800;font-size:12px;cursor:pointer}
+
+  /* debug menu */
+  .dbg-grid{display:flex;flex-wrap:wrap;gap:6px}
+  .dbg-btn{border:1.5px solid var(--line);background:var(--inset);color:var(--ink);border-radius:11px;
+    padding:8px 12px;font-family:"Nunito";font-weight:800;font-size:12px;cursor:pointer}
+  .dbg-btn:active{transform:scale(.95)}
+  .dbg-info{background:var(--inset);border:1.5px solid var(--line);border-radius:11px;
+    padding:10px 12px;font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;color:var(--muted);
+    margin:0;white-space:pre-wrap;word-break:break-word}
   .done-btn{width:100%;margin-top:18px;border:none;cursor:pointer;
     background:linear-gradient(180deg,var(--accent),var(--accent-deep));color:#fff;
     font-family:"Baloo 2";font-weight:800;font-size:16px;padding:12px;border-radius:14px;box-shadow:0 4px 0 #7A5BB5}
@@ -311,6 +320,7 @@
     <div class="wordmark">Streak 🐾</div>
     <div class="hbtns">
       <button class="gear" id="infoBtn" aria-label="Help">❓</button>
+      <button class="gear" id="dbgBtn" aria-label="Debug" style="display:none">🐞</button>
       <button class="gear" id="gearBtn" aria-label="Settings">⚙️</button>
     </div>
   </header>
@@ -409,6 +419,50 @@
       <button class="danger-btn" id="resetBtn">Erase all</button>
     </div>
     <button class="done-btn" id="setDone">Done</button>
+  </div>
+</div>
+
+<!-- debug menu (unlocked by tapping ⚙️ 10 times within 10 seconds) -->
+<div class="sheet-wrap" id="dbgWrap">
+  <div class="sheet">
+    <h2>Debug 🐞</h2>
+    <div class="fd-sec">COINS · <span id="dbgCoins"></span></div>
+    <div class="dbg-grid">
+      <button class="dbg-btn" data-coins="-100">−100</button>
+      <button class="dbg-btn" data-coins="100">+100</button>
+      <button class="dbg-btn" data-coins="1000">+1000</button>
+      <button class="dbg-btn" data-coins="10000">+10000</button>
+      <button class="dbg-btn" id="dbgCoinZero">zero</button>
+      <button class="dbg-btn" id="dbgEarnReset">re-allow today's payout</button>
+    </div>
+    <div class="fd-sec">STREAK</div>
+    <div class="dbg-grid">
+      <button class="dbg-btn" data-back="7">backfill 7d</button>
+      <button class="dbg-btn" data-back="14">backfill 14d</button>
+      <button class="dbg-btn" data-back="30">backfill 30d</button>
+      <button class="dbg-btn" id="dbgBreak">break streak</button>
+    </div>
+    <div class="fd-sec">FARM</div>
+    <div class="dbg-grid">
+      <button class="dbg-btn" id="dbgFarmFill">fill farm</button>
+      <button class="dbg-btn" id="dbgFarmClear">clear farm</button>
+    </div>
+    <div class="fd-sec">RACCOON PUSH</div>
+    <div class="dbg-grid">
+      <button class="dbg-btn" id="dbgNagAngry">test angry 😡</button>
+      <button class="dbg-btn" id="dbgNagCalm">test calm 🎉</button>
+    </div>
+    <div class="fd-sec">FX & SYNC</div>
+    <div class="dbg-grid">
+      <button class="dbg-btn" id="dbgParty">party</button>
+      <button class="dbg-btn" id="dbgMilestone">milestone party</button>
+      <button class="dbg-btn" id="dbgWalker">spawn walker</button>
+      <button class="dbg-btn" id="dbgSync">sync now</button>
+    </div>
+    <div class="fd-sec">STATE</div>
+    <pre class="dbg-info" id="dbgInfo"></pre>
+    <button class="danger-btn" id="dbgHide" style="width:100%;margin-top:14px">Hide debug button (tap ⚙️ 10× to re-unlock)</button>
+    <button class="done-btn" id="dbgDone">Done</button>
   </div>
 </div>
 
@@ -1412,6 +1466,7 @@ $("infoWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("info
 
 /* ---------- settings ---------- */
 $("gearBtn").onclick=()=>{
+  dbgTap();
   $("remTime").value=state.remTime;
   $("remToggle").checked=state.remOn;
   $("soundToggle").checked=state.soundOn;
@@ -1419,7 +1474,14 @@ $("gearBtn").onclick=()=>{
   $("setWrap").classList.add("show");
 };
 $("setDone").onclick=()=>$("setWrap").classList.remove("show");
-$("setWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("setWrap").classList.remove("show");});
+/* While the sheet is open it covers the gear, so a tap aimed at the gear
+   lands on the backdrop — still count it toward the debug unlock. */
+$("setWrap").addEventListener("click",e=>{
+  if(e.target!==e.currentTarget)return;
+  const r=$("gearBtn").getBoundingClientRect();
+  if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom)dbgTap();
+  $("setWrap").classList.remove("show");
+});
 $("remTime").onchange=e=>{
   state.remTime=e.target.value||"19:00";state.lastRemind="";save();
   registerPush().catch(()=>{});
@@ -1493,9 +1555,110 @@ $("resetBtn").onclick=()=>{
     }
     state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[],
       coins:0,farm:{},lastEarn:""};
+    $("dbgBtn").style.display="none";
     save();render();
     $("setWrap").classList.remove("show");
   }
+};
+
+/* ---------- debug menu ----------
+   Hidden dev tools: 10 taps on the gear within 10 seconds reveal a 🐞
+   button next to it (persisted in state.debug until hidden again). */
+let dbgTaps=[];
+function dbgTap(){
+  const now=Date.now();
+  dbgTaps=dbgTaps.filter(t=>now-t<10000);
+  dbgTaps.push(now);
+  if(dbgTaps.length>=10&&!state.debug){
+    dbgTaps=[];
+    state.debug=true;save();
+    $("dbgBtn").style.display="";
+    $("setWrap").classList.remove("show");
+    toast("🐞 Debug mode unlocked");
+    fanfare();buzz([40,60,40]);
+  }
+}
+if(state.debug)$("dbgBtn").style.display="";
+$("dbgBtn").onclick=()=>{refreshDbg();$("dbgWrap").classList.add("show");};
+$("dbgDone").onclick=()=>$("dbgWrap").classList.remove("show");
+$("dbgWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("dbgWrap").classList.remove("show");});
+
+async function refreshDbg(){
+  $("dbgCoins").textContent="🪙 "+(state.coins||0);
+  let reg=null,sub=null;
+  try{
+    reg=await navigator.serviceWorker.getRegistration();
+    if(reg)sub=await reg.pushManager.getSubscription();
+  }catch(e){}
+  let bytes=0;try{bytes=(localStorage.getItem(KEY)||"").length;}catch(e){}
+  $("dbgInfo").textContent=[
+    "streak "+currentStreak()+" · best "+bestStreak(),
+    "days logged: "+Object.keys(state.days).length+" · lastEarn "+(state.lastEarn||"—"),
+    "farm "+farmList().length+"/"+FARM_CAP+" · coins "+(state.coins||0),
+    "buddy: "+(state.buddy?state.buddy.code+" · "+(state.friends||[]).length+" friends":"not connected"),
+    "sw: "+(reg?"registered":"none")+" · push: "+(sub?"subscribed":"off")+
+      " · notif: "+("Notification" in window?Notification.permission:"n/a"),
+    "state: "+(bytes/1024).toFixed(1)+" KB · tz "+deviceTZ()
+  ].join("\n");
+}
+function dbgDone(msg){save();render();queueSync();refreshDbg();pop();if(msg)toast(msg);}
+$("dbgWrap").querySelectorAll("[data-coins]").forEach(b=>{
+  b.onclick=()=>{state.coins=Math.max(0,(state.coins||0)+ +b.dataset.coins);dbgDone();flashCoins();};
+});
+$("dbgCoinZero").onclick=()=>{state.coins=0;dbgDone();};
+$("dbgEarnReset").onclick=()=>{state.lastEarn="";dbgDone("Today's payout re-armed 🪙");};
+$("dbgWrap").querySelectorAll("[data-back]").forEach(b=>{
+  b.onclick=()=>{
+    const d=new Date();
+    for(let i=0;i<+b.dataset.back;i++){
+      d.setDate(d.getDate()-1);
+      const k=iso(d), e=state.days[k]||{};
+      e.ex=true;state.days[k]=e;
+    }
+    dbgDone("Backfilled "+b.dataset.back+" days 💪");
+  };
+});
+$("dbgBreak").onclick=()=>{
+  const d=new Date();d.setDate(d.getDate()-1);
+  delete state.days[iso(d)];
+  dbgDone("Yesterday cleared — streak broken 💔");
+};
+$("dbgFarmFill").onclick=()=>{
+  state.farm={chicken:8,rat:5,raccoon:4,panda:2,donkey:1};
+  dbgDone("Farm filled 🐾");
+};
+$("dbgFarmClear").onclick=()=>{state.farm={};dbgDone("Farm cleared");};
+/* Shows the exact notification sw.js builds when a real push lands. */
+async function dbgNag(angry){
+  let perm="denied";
+  try{perm=await Notification.requestPermission();}catch(e){}
+  if(perm!=="granted"){toast("Notifications are blocked for this page");return;}
+  let reg=null;
+  try{reg=await navigator.serviceWorker.getRegistration();}catch(e){}
+  if(!reg){toast("No service worker yet — reload once");return;}
+  if(angry)await reg.showNotification("THE RACCOON IS ANGRY 😡",{
+    body:"Nothing logged today. Do your workout before midnight!",
+    icon:"icons/icon-192.png",image:"icons/angry.png",tag:"angry-raccoon",
+    requireInteraction:true,vibrate:[200,100,200,100,400]});
+  else await reg.showNotification("Streak safe 🎉",{
+    body:"Today is logged. The raccoon is at peace.",
+    icon:"icons/icon-192.png",tag:"angry-raccoon",silent:true});
+  toast("Notification sent 🦝");
+}
+$("dbgNagAngry").onclick=()=>dbgNag(true);
+$("dbgNagCalm").onclick=()=>dbgNag(false);
+$("dbgParty").onclick=()=>celebrate(currentStreak()||1,COIN_BASE*Math.max(1,Math.min(currentStreak()||1,COIN_CAP)));
+$("dbgMilestone").onclick=()=>celebrate(MILESTONES[Math.random()*MILESTONES.length|0].n);
+$("dbgWalker").onclick=()=>{spawnWalker(true);toast("Walker incoming 🐾");};
+$("dbgSync").onclick=()=>{
+  if(!state.buddy){toast("Not connected to buddies");return;}
+  doSync().then(()=>{toast("Synced 🐾");refreshDbg();});
+};
+$("dbgHide").onclick=()=>{
+  state.debug=false;save();
+  $("dbgBtn").style.display="none";
+  $("dbgWrap").classList.remove("show");
+  toast("Debug hidden — tap ⚙️ 10× to re-unlock");
 };
 
 /* ---------- reminder ---------- */
@@ -1530,8 +1693,8 @@ function idleMascot(){
 setTimeout(idleMascot,15000);
 
 /* ---------- wandering buddies ---------- */
-function spawnWalker(){
-  if(document.hidden){schedWalker();return;}
+function spawnWalker(once){
+  if(document.hidden){if(!once)schedWalker();return;}
   const i=Math.random()*SQUAD.length|0;
   const fromLeft=Math.random()<.5;
   const el=document.createElement("div");
@@ -1558,7 +1721,7 @@ function spawnWalker(){
     el.style.transition="left 1.2s ease-in";
     el.style.left=fromLeft?(innerWidth+"px"):(-w+"px");
   });
-  schedWalker();
+  if(!once)schedWalker();
 }
 function schedWalker(){setTimeout(spawnWalker,18000+Math.random()*35000);}
 setTimeout(spawnWalker,7000);
