@@ -7,15 +7,20 @@ file once everything below is verified working.
 
 ## Status (2026-08-30)
 
+Server side fully deployed and verified:
+
 - Step 1 done — migration `push_nags` applied (tables + RPCs live).
-- Step 2 **pending** — waiting on Martynas for the VAPID private key; until
-  it's inserted the function returns 500 "vapid_private_key missing".
+- Step 2 done — VAPID private key inserted into `push_config`.
 - Step 3 done — `send-nags` deployed (v1, JWT verification on).
 - Step 4 done — `pg_cron` + `pg_net` enabled, job `send-nags` scheduled
   every 10 minutes with the publishable key.
-- Step 5 partly done — manual invoke via `net.http_post` returned the
-  expected 500 naming `push_config`. Remaining once the key is in: invoke
-  again expecting `{"total":0,...}` 200, then the phone-subscription test.
+- Step 5 — manual invoke via `net.http_post` returned HTTP 200
+  `{"total":0,"sent":0,"dropped":0,"failed":0}` as expected.
+
+Remaining (needs Martynas's phone): flip Settings → Angry raccoon in the
+installed app, confirm a row lands in `push_subscriptions`, then run the
+nag_time-rewind test from step 5 and expect a raccoon push. Delete this
+file after that.
 
 ## Context
 
