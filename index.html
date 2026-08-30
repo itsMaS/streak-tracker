@@ -68,12 +68,25 @@
     font-family:inherit;font-size:17px;text-align:center;padding:2px 0;color-scheme:dark}
   .dur input:focus{outline:none;border-color:var(--blood)}
   .dur span{color:var(--ash);font-size:13px}
-  .mig-box{flex:none;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;
-    background:var(--inset);border:1px solid #33262C;border-radius:12px;padding:8px 12px;cursor:pointer;user-select:none}
+  .mig-box{flex:none;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;
+    background:var(--inset);border:1px solid #33262C;border-radius:12px;padding:7px 12px;cursor:pointer;user-select:none}
   .mig-box small{color:var(--ash);font-size:10px;letter-spacing:1px;text-transform:uppercase}
-  .mig-box .ic{font-size:20px;filter:grayscale(1) opacity(.45)}
+  .mig-box .hint{font-size:8.5px;color:#6B5C62;letter-spacing:.5px}
+  .mig-box .ic{font-size:19px;filter:grayscale(1) opacity(.45)}
   .mig-box.on{border-color:var(--mig);background:var(--mig-bg)}
   .mig-box.on .ic{filter:none}
+  .mig-box.on .hint{color:#B3A0D6}
+  .status-chips{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .schip{display:inline-flex;align-items:center;gap:6px;background:var(--inset);border:1px solid #33262C;
+    border-radius:99px;padding:5px 12px;font-size:14px}
+  .schip.ex{border-color:var(--blood-deep);background:#26090B}
+  .schip.mig{border-color:var(--mig);background:var(--mig-bg)}
+  .schip b{font-family:"Creepster";font-weight:400;font-size:17px;color:var(--bone);letter-spacing:1px}
+  .card-note{font-size:10.5px;color:#6B5C62;margin-top:8px;line-height:1.5}
+  .info-list{margin:0;padding:0;list-style:none}
+  .info-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed #2A2126;font-size:13px;line-height:1.55;color:var(--bone)}
+  .info-list li:last-child{border-bottom:none}
+  .info-list .i{flex:none;font-size:16px}
   .logbtn{width:100%;margin-top:10px;border:1px solid var(--blood-deep);cursor:pointer;
     background:linear-gradient(180deg,#8E1414,var(--blood-dark));color:#F5E6E0;
     font-family:"Creepster";font-size:20px;letter-spacing:3px;padding:14px;border-radius:14px;
@@ -108,6 +121,7 @@
     filter:grayscale(.6) brightness(.85)}
   .day-dot.ex .c{background:#26090B;border:1px solid var(--blood-deep);box-shadow:0 0 10px rgba(196,30,30,.22)}
   .day-dot.mig .c{background:var(--mig-bg);border:1px solid var(--mig)}
+  .day-dot.ex.mig .c{background:#26090B;border:1px solid var(--mig);box-shadow:0 0 10px rgba(90,68,120,.35)}
   .day-dot.today .c{outline:2px solid var(--candle);outline-offset:2px}
   .day-dot small{display:block;margin-top:5px;font-size:10px;color:var(--ash);letter-spacing:1px}
 
@@ -119,9 +133,12 @@
   .cal-grid .dow{font-size:10px;color:var(--ash);padding:4px 0}
   .cal-cell{aspect-ratio:1;border-radius:9px;display:grid;place-items:center;font-size:12px;color:#5C4F54;position:relative;cursor:pointer}
   .cal-cell.ex{background:#26090B;color:#E08E8E;border:1px solid var(--blood-dark)}
-  .cal-cell.ex::after{content:"🩸";position:absolute;font-size:7px;bottom:1px;right:2px}
+  .cal-cell.ex::after{content:"💪";position:absolute;font-size:7px;bottom:1px;right:2px}
   .cal-cell.mig{background:var(--mig-bg);color:#B3A0D6;border:1px solid #3A2C52}
   .cal-cell.mig::after{content:"🧠";position:absolute;font-size:7px;bottom:1px;right:2px}
+  .cal-cell.ex.mig{background:#26090B;color:#E08E8E;border:1px solid var(--mig)}
+  .cal-cell.ex.mig::after{content:"💪🧠";font-size:6px}
+  .legend{margin-top:10px;font-size:11px;color:var(--ash);display:flex;gap:14px;flex-wrap:wrap}
   .cal-cell.today{outline:1.5px solid var(--candle)}
   .cal-cell.future{opacity:.25;cursor:default}
 
@@ -207,7 +224,10 @@
 <div class="app">
   <header>
     <div class="wordmark">Streak</div>
-    <button class="gear" id="gearBtn" aria-label="Settings">🕯️</button>
+    <div style="display:flex;gap:8px">
+      <button class="gear" id="infoBtn" aria-label="Help">❓</button>
+      <button class="gear" id="gearBtn" aria-label="Settings">🕯️</button>
+    </div>
   </header>
 
   <div class="card hero">
@@ -218,15 +238,19 @@
     </div>
   </div>
 
-  <div class="card" id="todayCard"></div>
+  <div class="card">
+    <h2>Today</h2>
+    <div id="todayCard"></div>
+  </div>
 
   <div class="card">
-    <h2>Plank</h2>
+    <h2>Plank duration</h2>
     <div class="chips" id="chips"></div>
     <div id="chartBox"><div id="tip"></div><div id="chartMount"></div></div>
   </div>
 
   <div class="card">
+    <h2>This week</h2>
     <div class="week" id="week"></div>
   </div>
 
@@ -237,9 +261,11 @@
       <button class="cal-nav" id="calNext">▶</button>
     </div>
     <div class="cal-grid" id="calGrid"></div>
+    <div class="legend"><span>💪 workout</span><span>🧠 migraine — streak kept</span><span>tap a day to edit</span></div>
   </div>
 
   <div class="card">
+    <h2>Milestones</h2>
     <div class="badges" id="badges"></div>
   </div>
 
@@ -288,9 +314,8 @@
   <div class="sheet">
     <h2 id="edDate"></h2>
     <div class="seg">
-      <button class="s-none" data-t="">—</button>
-      <button class="s-ex" data-t="ex">🩸</button>
-      <button class="s-mig" data-t="mig">🧠</button>
+      <button class="s-ex" id="segEx">💪<div style="font-size:10px;font-family:'Special Elite';color:var(--ash);margin-top:3px">workout</div></button>
+      <button class="s-mig" id="segMig">🧠<div style="font-size:10px;font-family:'Special Elite';color:var(--ash);margin-top:3px">migraine</div></button>
     </div>
     <div class="field" id="edDur">
       <small>Plank</small>
@@ -299,7 +324,24 @@
         <input id="edSec" type="number" min="0" max="59" inputmode="numeric" placeholder="00"><span>sec</span>
       </div>
     </div>
+    <div class="card-note">Toggle both off to clear the day.</div>
     <button class="done-btn" id="edSave">Save</button>
+  </div>
+</div>
+
+<!-- how it works -->
+<div class="sheet-wrap" id="infoWrap">
+  <div class="sheet">
+    <h2>How it works</h2>
+    <ul class="info-list">
+      <li><span class="i">💪</span><span>Log a workout every day to grow the streak. Plank time is optional.</span></li>
+      <li><span class="i">🧠</span><span>Migraine day: the streak is kept safe but doesn't grow. You can still log a workout on a migraine day — then it counts.</span></li>
+      <li><span class="i">📅</span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
+      <li><span class="i">📈</span><span>The graph shows plank duration over time. Tap a dot for details.</span></li>
+      <li><span class="i">⛓️</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
+      <li><span class="i">🕯️</span><span>Settings: daily reminder time, sound, reset.</span></li>
+    </ul>
+    <button class="done-btn" id="infoDone">Done</button>
   </div>
 </div>
 
@@ -313,10 +355,15 @@ const MILESTONES=[
 
 /* ---------- state ---------- */
 const KEY="wiggle-squad-v1";
-let state={v:2,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:""};
+let state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:""};
 try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
-for(const k in state.days){ if(state.days[k]===true) state.days[k]={t:"ex"}; }
-state.v=2;
+for(const k in state.days){
+  const e=state.days[k];
+  if(e===true) state.days[k]={ex:true};
+  else if(e&&e.t==="ex"){ state.days[k]={ex:true}; if(e.p)state.days[k].p=e.p; }
+  else if(e&&e.t==="mig") state.days[k]={mig:true};
+}
+state.v=3;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
 
 const $=id=>document.getElementById(id);
@@ -326,7 +373,7 @@ const today=()=>iso(new Date());
 const dayOfYear=()=>{const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);};
 const fmtDur=s=>Math.floor(s/60)+":"+pad(s%60);
 
-/* ---------- streak logic: ex counts, mig bridges, empty breaks ---------- */
+/* ---------- streak logic: workout counts, migraine-only bridges, empty breaks ---------- */
 function currentStreak(){
   const d=new Date();
   if(!state.days[today()]) d.setDate(d.getDate()-1);
@@ -334,7 +381,7 @@ function currentStreak(){
   for(;;){
     const e=state.days[iso(d)];
     if(!e) break;
-    if(e.t==="ex") n++;
+    if(e.ex) n++;
     d.setDate(d.getDate()-1);
   }
   return n;
@@ -347,7 +394,7 @@ function bestStreak(){
   while(d<=end){
     const e=state.days[iso(d)];
     if(!e) run=0;
-    else if(e.t==="ex"){run++; if(run>best)best=run;}
+    else if(e.ex){run++; if(run>best)best=run;}
     d.setDate(d.getDate()+1);
   }
   return best;
@@ -405,45 +452,48 @@ function tick(){
 }
 
 /* ---------- today card ---------- */
-let migChecked=false;
 function renderToday(){
-  const e=state.days[today()],c=$("todayCard");
-  if(!e){
+  const t=today(), e=state.days[t]||{}, c=$("todayCard");
+  const migOn=!!e.mig;
+  if(!e.ex){
     c.innerHTML=
       '<div class="logrow">'+
-        '<div class="field"><small>Plank</small><div class="dur">'+
+        '<div class="field"><small>Plank (optional)</small><div class="dur">'+
           '<input id="inMin" type="number" min="0" max="59" inputmode="numeric" placeholder="0"><span>min</span>'+
           '<input id="inSec" type="number" min="0" max="59" inputmode="numeric" placeholder="00"><span>sec</span>'+
         '</div></div>'+
-        '<div class="mig-box'+(migChecked?" on":"")+'" id="migBox"><span class="ic">🧠</span><small>Migraine</small></div>'+
+        '<div class="mig-box'+(migOn?" on":"")+'" id="migBox"><span class="ic">🧠</span><small>Migraine</small><span class="hint">keeps streak</span></div>'+
       '</div>'+
-      '<button class="logbtn'+(migChecked?" mig":"")+'" id="logBtn">'+(migChecked?"Skip Day":"Log")+'</button>';
-    $("migBox").onclick=()=>{migChecked=!migChecked;renderToday();};
-    $("logBtn").onclick=logToday;
-    if(migChecked){$("inMin").disabled=true;$("inSec").disabled=true;$("inMin").parentElement.parentElement.style.opacity=.35;}
+      '<button class="logbtn" id="logBtn">Log workout 💪</button>'+
+      (migOn?'<div class="card-note">Migraine marked — today is streak-safe. A workout still counts if you log one.</div>':'');
+    $("migBox").onclick=toggleMig;
+    $("logBtn").onclick=logWorkout;
   }else{
-    const isEx=e.t==="ex";
     c.innerHTML=
-      '<div class="logged"><div class="st">'+
-        '<span class="big">'+(isEx?"🩸":"🧠")+'</span>'+
-        (isEx&&e.p?'<b>'+fmtDur(e.p)+'</b>':'')+
-      '</div><button class="editbtn" id="todayEdit">✎</button></div>';
-    $("todayEdit").onclick=()=>openEditor(today());
+      '<div class="logged"><div class="status-chips">'+
+        '<span class="schip ex">💪'+(e.p?' <b>'+fmtDur(e.p)+'</b>':'')+'</span>'+
+        (migOn?'<span class="schip mig">🧠</span>':'')+
+      '</div><button class="editbtn" id="todayEdit" aria-label="Edit today">✎</button></div>';
+    $("todayEdit").onclick=()=>openEditor(t);
   }
 }
-function logToday(){
-  const t=today();
-  if(migChecked){
-    state.days[t]={t:"mig"};save();
-    const b=$("logBtn").getBoundingClientRect();
-    burst(b.left+b.width/2,b.top,22,false,true);
+function toggleMig(){
+  const t=today(), e=state.days[t]||{};
+  if(e.mig){ delete e.mig; if(!e.ex) delete state.days[t]; else state.days[t]=e; }
+  else{
+    e.mig=true; state.days[t]=e;
+    const b=$("migBox").getBoundingClientRect();
+    burst(b.left+b.width/2,b.top,18,false,true);
     toll(147,0,.3,.1);buzz(20);
-    migChecked=false;render();
-    return;
   }
+  save();render();
+}
+function logWorkout(){
+  const t=today(), e=state.days[t]||{};
   const m=+($("inMin").value||0),s=+($("inSec").value||0);
   const p=Math.max(0,Math.min(59,m))*60+Math.max(0,Math.min(59,s));
-  state.days[t]={t:"ex"};if(p>0)state.days[t].p=p;
+  e.ex=true; if(p>0)e.p=p;
+  state.days[t]=e;
   save();render();
   celebrate(currentStreak());
 }
@@ -483,7 +533,7 @@ function plankPoints(){
   const pts=[];
   for(const k of Object.keys(state.days).sort()){
     const e=state.days[k];
-    if(e.t==="ex"&&e.p>0)pts.push({d:k,p:e.p});
+    if(e.ex&&e.p>0)pts.push({d:k,p:e.p});
   }
   if(range>0){
     const cut=new Date();cut.setDate(cut.getDate()-(range-1));
@@ -567,8 +617,9 @@ function render(){
     const d=new Date();d.setDate(d.getDate()-i);
     const ds=iso(d),e=state.days[ds];
     const el=document.createElement("div");
-    el.className="day-dot"+(e?(e.t==="ex"?" ex":" mig"):"")+(i===0?" today":"");
-    el.innerHTML='<div class="c">'+(e?(e.t==="ex"?SQUAD[(d.getDate()+d.getMonth())%SQUAD.length]:"🧠"):"·")+'</div><small>'+DOW[d.getDay()]+'</small>';
+    el.className="day-dot"+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(i===0?" today":"");
+    const stamp=e?(e.ex?SQUAD[(d.getDate()+d.getMonth())%SQUAD.length]:"🧠"):"·";
+    el.innerHTML='<div class="c">'+stamp+'</div><small>'+DOW[d.getDay()]+'</small>';
     el.querySelector(".c").onclick=()=>openEditor(ds);
     wk.appendChild(el);
   }
@@ -584,7 +635,7 @@ function render(){
     bd.appendChild(el);
   }
 
-  const exKeys=Object.keys(state.days).filter(k=>state.days[k].t==="ex");
+  const exKeys=Object.keys(state.days).filter(k=>state.days[k].ex);
   $("statTotal").textContent=exKeys.length;
   $("statBest").textContent=best;
   const mP=today().slice(0,7);
@@ -601,7 +652,7 @@ function renderCalendar(){
     const ds=y+"-"+pad(m+1)+"-"+pad(day);
     const e=state.days[ds],future=ds>t;
     const el=document.createElement("div");
-    el.className="cal-cell"+(e?(e.t==="ex"?" ex":" mig"):"")+(ds===t?" today":"")+(future?" future":"");
+    el.className="cal-cell"+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(ds===t?" today":"")+(future?" future":"");
     el.textContent=day;
     if(!future)el.onclick=()=>openEditor(ds);
     g.appendChild(el);
@@ -609,35 +660,45 @@ function renderCalendar(){
 }
 
 /* ---------- day editor ---------- */
-let edDate=null,edType="";
+let edDate=null,edEx=false,edMig=false;
 function openEditor(ds){
   edDate=ds;
-  const e=state.days[ds];
-  edType=e?e.t:"";
+  const e=state.days[ds]||{};
+  edEx=!!e.ex; edMig=!!e.mig;
   $("edDate").textContent=new Date(ds+"T12:00:00").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric"});
-  $("edMin").value=e&&e.p?Math.floor(e.p/60):"";
-  $("edSec").value=e&&e.p?pad(e.p%60):"";
+  $("edMin").value=e.p?Math.floor(e.p/60):"";
+  $("edSec").value=e.p?pad(e.p%60):"";
   refreshSeg();
   $("edWrap").classList.add("show");
 }
 function refreshSeg(){
-  document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.t===edType));
-  $("edDur").style.display=edType==="ex"?"":"none";
+  $("segEx").classList.toggle("on",edEx);
+  $("segMig").classList.toggle("on",edMig);
+  $("edDur").style.display=edEx?"":"none";
 }
-document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{edType=b.dataset.t;refreshSeg();});
+$("segEx").onclick=()=>{edEx=!edEx;refreshSeg();};
+$("segMig").onclick=()=>{edMig=!edMig;refreshSeg();};
 $("edSave").onclick=()=>{
-  if(edType===""){delete state.days[edDate];}
-  else if(edType==="mig"){state.days[edDate]={t:"mig"};}
+  if(!edEx&&!edMig){delete state.days[edDate];}
   else{
-    const m=+($("edMin").value||0),s=+($("edSec").value||0);
-    const p=Math.max(0,Math.min(59,m))*60+Math.max(0,Math.min(59,s));
-    state.days[edDate]={t:"ex"};if(p>0)state.days[edDate].p=p;
+    const e={};
+    if(edEx){
+      e.ex=true;
+      const m=+($("edMin").value||0),s=+($("edSec").value||0);
+      const p=Math.max(0,Math.min(59,m))*60+Math.max(0,Math.min(59,s));
+      if(p>0)e.p=p;
+    }
+    if(edMig)e.mig=true;
+    state.days[edDate]=e;
   }
   save();render();
   $("edWrap").classList.remove("show");
   toll(196,0,.15,.08);
 };
 $("edWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("edWrap").classList.remove("show");});
+$("infoBtn").onclick=()=>$("infoWrap").classList.add("show");
+$("infoDone").onclick=()=>$("infoWrap").classList.remove("show");
+$("infoWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("infoWrap").classList.remove("show");});
 
 /* ---------- settings ---------- */
 $("gearBtn").onclick=()=>{
