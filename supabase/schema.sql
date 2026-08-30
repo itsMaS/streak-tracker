@@ -1,6 +1,6 @@
 -- Reference copy of the schema applied to the "Streak Buddies" Supabase
--- project (payvkfccgzwgsiflazuv). Applied as migrations `buddy_schema` and
--- `buddy_revoke_authenticated`.
+-- project (payvkfccgzwgsiflazuv). Applied as migrations `buddy_schema`,
+-- `buddy_revoke_authenticated` and `buddy_farm`.
 --
 -- Identity model: each device registers and gets {uid, secret}; the secret is
 -- stored hashed. All access goes through security-definer RPCs that verify the
@@ -15,6 +15,8 @@ create table public.profiles (
   name text not null,
   friend_code text not null unique,
   days jsonb not null default '{}'::jsonb,
+  -- farm blob ({coins, animals}) synced by the app so buddies see each other's farms
+  farm jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -111,7 +113,7 @@ begin
 end;
 $$;
 
-create or replace function public.buddy_sync(p_uid uuid, p_secret text, p_days jsonb, p_name text default null)
+create or replace function public.buddy_sync(p_uid uuid, p_secret text, p_days jsonb, p_name text default null, p_farm jsonb default null)
 returns jsonb
 language plpgsql volatile security definer
 set search_path = public, extensions
@@ -128,14 +130,23 @@ begin
   if pg_column_size(p_days) > 262144 then
     raise exception 'days_too_big';
   end if;
+  if p_farm is not null then
+    if jsonb_typeof(p_farm) is distinct from 'object' then
+      raise exception 'bad_farm';
+    end if;
+    if pg_column_size(p_farm) > 8192 then
+      raise exception 'farm_too_big';
+    end if;
+  end if;
   update public.profiles
   set days = p_days,
+      farm = coalesce(p_farm, farm),
       name = case when v_name <> '' and char_length(v_name) <= 24 then v_name else name end,
       updated_at = now()
   where id = p_uid;
 
   select coalesce(jsonb_agg(jsonb_build_object(
-           'id', pr.id, 'name', pr.name, 'days', pr.days, 'updated_at', pr.updated_at)
+           'id', pr.id, 'name', pr.name, 'days', pr.days, 'farm', pr.farm, 'updated_at', pr.updated_at)
            order by pr.name), '[]'::jsonb)
   into v_friends
   from public.friendships f
@@ -182,7 +193,7 @@ begin
   values (p_uid, v_friend.id), (v_friend.id, p_uid)
   on conflict do nothing;
   return jsonb_build_object('id', v_friend.id, 'name', v_friend.name,
-                            'days', v_friend.days, 'updated_at', v_friend.updated_at);
+                            'days', v_friend.days, 'farm', v_friend.farm, 'updated_at', v_friend.updated_at);
 end;
 $$;
 
@@ -232,7 +243,7 @@ $$;
 
 revoke all on function
   public.buddy_register(text),
-  public.buddy_sync(uuid, text, jsonb, text),
+  public.buddy_sync(uuid, text, jsonb, text, jsonb),
   public.buddy_add_friend(uuid, text, text),
   public.buddy_unfriend(uuid, text, uuid),
   public.buddy_send_event(uuid, text, uuid, text),
@@ -241,7 +252,7 @@ from public, authenticated;
 
 grant execute on function
   public.buddy_register(text),
-  public.buddy_sync(uuid, text, jsonb, text),
+  public.buddy_sync(uuid, text, jsonb, text, jsonb),
   public.buddy_add_friend(uuid, text, text),
   public.buddy_unfriend(uuid, text, uuid),
   public.buddy_send_event(uuid, text, uuid, text),
