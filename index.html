@@ -37,6 +37,8 @@
   .gear{border:none;background:var(--card);width:40px;height:40px;border-radius:14px;
     font-size:17px;cursor:pointer;box-shadow:0 2px 8px rgba(70,64,60,.08)}
   .gear:active{transform:scale(.92)}
+  .avabtn{padding:0;overflow:hidden;display:grid;place-items:center;font-size:21px}
+  .avabtn img{width:100%;height:100%;object-fit:cover}
 
   .card{background:var(--card);border-radius:var(--radius);padding:16px;
     box-shadow:0 4px 16px rgba(70,64,60,.06);margin-top:14px;position:relative}
@@ -48,6 +50,7 @@
   .mascot.poke{animation:boing .55s cubic-bezier(.36,1.6,.4,1) 1}
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
   @keyframes boing{0%{transform:scale(1)}30%{transform:scale(1.25,.75)}60%{transform:scale(.85,1.18) rotate(-5deg)}100%{transform:scale(1)}}
+  .hero-name{font-family:"Baloo 2";font-weight:800;font-size:13px;color:var(--muted);margin-bottom:2px}
   .hero-num{font-family:"Baloo 2";font-weight:800;font-size:68px;line-height:.9;color:var(--accent);
     font-variant-numeric:tabular-nums}
   .hero-sub{color:var(--muted);font-size:12.5px;margin-top:6px}
@@ -198,6 +201,24 @@
     background:linear-gradient(180deg,var(--accent),var(--accent-deep));color:#fff;
     font-family:"Baloo 2";font-weight:800;font-size:16px;padding:12px;border-radius:14px;box-shadow:0 4px 0 #7A5BB5}
 
+  /* profile */
+  .prof-top{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+  .prof-ava{width:66px;height:66px;flex:none;border-radius:22px;background:var(--accent-soft);
+    border:1.5px solid #D4C5F0;display:grid;place-items:center;font-size:36px;overflow:hidden}
+  .prof-ava img{width:100%;height:100%;object-fit:cover}
+  .name-input{width:100%;background:none;border:none;border-bottom:1.5px solid var(--line);
+    font-family:"Nunito";font-weight:800;font-size:16px;color:var(--ink);padding:3px 0}
+  .name-input:focus{outline:none;border-color:var(--accent)}
+  .prof-label{font-size:10px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin:10px 0 6px}
+  .emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+  .emoji-grid button{border:1.5px solid var(--line);background:var(--inset);border-radius:12px;
+    aspect-ratio:1;font-size:20px;cursor:pointer;padding:0}
+  .emoji-grid button.on{border-color:var(--accent);background:var(--accent-soft)}
+  .photo-row{display:flex;gap:8px;margin-top:12px}
+  .photo-btn{flex:1;border:1.5px solid var(--line);background:var(--inset);color:var(--ink);
+    border-radius:12px;padding:9px 0;font-family:"Nunito";font-weight:800;font-size:12.5px;cursor:pointer}
+  .photo-btn.remove{flex:none;padding:9px 14px;border-color:#F3C1BB;background:#FDEEEC;color:#C0504A}
+
   /* day editor */
   .seg{display:flex;gap:8px;margin:6px 0 14px}
   .seg button{flex:1;border:1.5px solid var(--line);background:var(--inset);border-radius:14px;padding:11px 0;
@@ -220,6 +241,7 @@
   <header>
     <div class="wordmark">Streak 🐾</div>
     <div class="hbtns">
+      <button class="gear avabtn" id="profBtn" aria-label="Profile">🐼</button>
       <button class="gear" id="infoBtn" aria-label="Help">❓</button>
       <button class="gear" id="gearBtn" aria-label="Settings">⚙️</button>
     </div>
@@ -228,6 +250,7 @@
   <div class="card hero">
     <div class="mascot" id="mascot">🐼</div>
     <div>
+      <div class="hero-name" id="heroName" hidden></div>
       <div class="hero-num" id="streakNum">0</div>
       <div class="hero-sub">day streak · best <b id="bestNum">0</b></div>
     </div>
@@ -325,6 +348,28 @@
   </div>
 </div>
 
+<!-- profile -->
+<div class="sheet-wrap" id="profWrap">
+  <div class="sheet">
+    <h2>Your profile</h2>
+    <div class="prof-top">
+      <div class="prof-ava" id="profAva">🐼</div>
+      <div style="flex:1">
+        <div class="prof-label" style="margin-top:0">Name</div>
+        <input class="name-input" id="profName" type="text" maxlength="20" placeholder="Your name" autocomplete="off">
+      </div>
+    </div>
+    <div class="prof-label">Pick a buddy</div>
+    <div class="emoji-grid" id="emojiGrid"></div>
+    <div class="photo-row">
+      <button class="photo-btn" id="photoBtn">📷 Use a photo instead</button>
+      <button class="photo-btn remove" id="photoRemove" hidden>✕</button>
+      <input type="file" id="photoInput" accept="image/*" hidden>
+    </div>
+    <button class="done-btn" id="profDone">Done</button>
+  </div>
+</div>
+
 <!-- how it works -->
 <div class="sheet-wrap" id="infoWrap">
   <div class="sheet">
@@ -335,6 +380,7 @@
       <li><span class="i">📅</span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
       <li><span class="i">📈</span><span>The graph shows plank duration over time. Tap a dot for details.</span></li>
       <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
+      <li><span class="i">🙂</span><span>Tap your avatar up top to set your name and picture — pick a buddy or use a photo.</span></li>
       <li><span class="i">🐾</span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
     </ul>
     <button class="done-btn" id="infoDone">Done</button>
@@ -351,8 +397,10 @@ const MILESTONES=[
 
 /* ---------- state ---------- */
 const KEY="wiggle-squad-v1";
-let state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:""};
+let state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",
+  profile:{name:"",emoji:"🐼",photo:""}};
 try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
+state.profile=Object.assign({name:"",emoji:"🐼",photo:""},state.profile||{});
 for(const k in state.days){
   const e=state.days[k];
   if(e===true) state.days[k]={ex:true};
@@ -612,11 +660,21 @@ function renderChart(){
 
 /* ---------- render ---------- */
 let calCursor=new Date();
+function avatarHTML(){
+  return state.profile.photo?'<img src="'+state.profile.photo+'" alt="">':state.profile.emoji;
+}
+function renderProfile(){
+  $("profBtn").innerHTML=avatarHTML();
+  const nm=state.profile.name.trim();
+  $("heroName").hidden=!nm;
+  $("heroName").textContent=nm;
+}
 function render(){
   const cur=currentStreak(),best=Math.max(bestStreak(),cur);
   $("streakNum").textContent=cur;
   $("bestNum").textContent=best;
   $("mascot").textContent=SQUAD[dayOfYear()%SQUAD.length];
+  renderProfile();
   renderToday();
   renderChart();
 
@@ -709,6 +767,55 @@ $("infoBtn").onclick=()=>$("infoWrap").classList.add("show");
 $("infoDone").onclick=()=>$("infoWrap").classList.remove("show");
 $("infoWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("infoWrap").classList.remove("show");});
 
+/* ---------- profile ---------- */
+const AVATARS=["🐼","🫏","🦝","🐭","🐮","🐸","🐰","🦊","🐻","🐨","🐷","🐤","🐙","🦄","🐢","🐧"];
+function refreshProfSheet(){
+  $("profAva").innerHTML=avatarHTML();
+  $("photoRemove").hidden=!state.profile.photo;
+  $("photoBtn").textContent=state.profile.photo?"📷 Change photo":"📷 Use a photo instead";
+  $("emojiGrid").querySelectorAll("button").forEach(b=>
+    b.classList.toggle("on",!state.profile.photo&&b.textContent===state.profile.emoji));
+}
+{
+  const g=$("emojiGrid");
+  for(const e of AVATARS){
+    const b=document.createElement("button");
+    b.type="button";b.textContent=e;
+    b.onclick=()=>{state.profile.emoji=e;state.profile.photo="";save();refreshProfSheet();renderProfile();pop();};
+    g.appendChild(b);
+  }
+}
+$("profBtn").onclick=()=>{
+  $("profName").value=state.profile.name;
+  refreshProfSheet();
+  $("profWrap").classList.add("show");
+};
+$("profName").oninput=e=>{state.profile.name=e.target.value.slice(0,20);save();renderProfile();};
+$("photoBtn").onclick=()=>$("photoInput").click();
+$("photoInput").onchange=e=>{
+  const f=e.target.files&&e.target.files[0];
+  e.target.value="";
+  if(!f)return;
+  const img=new Image();
+  const url=URL.createObjectURL(f);
+  img.onload=()=>{
+    try{
+      const S=160,c=document.createElement("canvas");c.width=S;c.height=S;
+      const x=c.getContext("2d");
+      const s=Math.min(img.width,img.height);
+      x.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,S,S);
+      state.profile.photo=c.toDataURL("image/jpeg",.82);
+      save();refreshProfSheet();renderProfile();pop();
+    }catch(err){alert("Couldn't read that image.");}
+    URL.revokeObjectURL(url);
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);alert("Couldn't read that image.");};
+  img.src=url;
+};
+$("photoRemove").onclick=()=>{state.profile.photo="";save();refreshProfSheet();renderProfile();};
+$("profDone").onclick=()=>$("profWrap").classList.remove("show");
+$("profWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("profWrap").classList.remove("show");});
+
 /* ---------- settings ---------- */
 $("gearBtn").onclick=()=>{
   $("remTime").value=state.remTime;
@@ -730,7 +837,8 @@ $("remToggle").onchange=async e=>{
 };
 $("resetBtn").onclick=()=>{
   if(confirm("Erase all data?")){
-    state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:""};save();render();
+    state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",
+      profile:{name:"",emoji:"🐼",photo:""}};save();render();
     $("setWrap").classList.remove("show");
   }
 };

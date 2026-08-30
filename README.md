@@ -25,6 +25,8 @@ poked.
   (3/7/14/21/30/50/75/100) and stats — minimal text
 - Celebrations with confetti, haptics, and synthesized animal sounds;
   buddies occasionally wander across the screen (tap them!)
+- Profile: set your name and a picture (pick an emoji buddy or use a photo,
+  auto-cropped and stored locally) from the avatar button in the header
 - Optional reminder notification at a configurable time (fires while the app
   is open or installed)
 - Data lives in `localStorage` on the phone — no accounts, no server
