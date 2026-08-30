@@ -92,7 +92,7 @@
     padding:4px 12px;font-family:"Nunito";font-weight:800;font-size:11px;cursor:pointer}
   .chip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep)}
   #chartBox{position:relative}
-  #chart{width:100%;display:block}
+  .chart{width:100%;display:block}
   #tip{position:absolute;background:#fff;border:1.5px solid var(--accent);border-radius:10px;
     padding:4px 9px;font-size:12px;color:var(--ink);pointer-events:none;display:none;white-space:nowrap;
     transform:translate(-50%,-130%);box-shadow:0 4px 14px rgba(70,64,60,.15)}
@@ -177,6 +177,7 @@
   .sheet-wrap.show{display:block}
   .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);
     border-radius:26px 26px 0 0;padding:20px 20px 32px;max-width:430px;margin:0 auto;
+    max-height:86vh;overflow-y:auto;
     animation:sheet-up .3s cubic-bezier(.3,1.2,.4,1);box-shadow:0 -10px 40px rgba(70,64,60,.2)}
   @keyframes sheet-up{from{transform:translateY(60%)}to{transform:none}}
   .sheet h2{margin:0 0 14px;font-family:"Baloo 2";font-weight:800;font-size:18px;color:var(--ink)}
@@ -210,6 +211,53 @@
   .info-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1.5px dashed var(--line);font-size:13px;line-height:1.55}
   .info-list li:last-child{border-bottom:none}
   .info-list .i{flex:none;font-size:16px}
+
+  /* buddies */
+  .brow{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1.5px dashed var(--line);cursor:pointer}
+  .brow:last-of-type{border-bottom:none}
+  .brow .av{font-size:24px;flex:none}
+  .brow .bn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+  .brow .bn small{font-size:10px;color:var(--muted);margin-left:4px}
+  .brow.me{background:var(--accent-soft);border-radius:12px;border-bottom:none;padding-left:8px;padding-right:8px}
+  .brow .bt{flex:none;font-size:15px;width:22px;text-align:center;color:#D8D0C6}
+  .brow .bs{font-family:"Baloo 2";font-weight:800;font-size:19px;color:var(--accent);flex:none;min-width:26px;text-align:right}
+  .bfoot{display:flex;gap:8px;margin-top:12px}
+  .codepill{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--inset);
+    border:1.5px dashed var(--accent);border-radius:12px;padding:9px;cursor:pointer;
+    font-family:"Baloo 2";font-weight:800;letter-spacing:2px;color:var(--accent-deep);font-size:15px}
+  .addbtn{flex:none;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:9px 14px;
+    font-family:"Nunito";font-weight:800;font-size:12px;color:var(--accent-deep);cursor:pointer}
+  .bempty{color:var(--muted);font-size:12.5px;text-align:center;padding:4px 0 10px;line-height:1.6}
+
+  /* toasts */
+  #toasts{position:fixed;top:12px;left:0;right:0;z-index:70;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+  .toast{background:var(--card);border:1.5px solid var(--accent);border-radius:99px;padding:9px 16px;font-size:13px;
+    box-shadow:0 6px 20px rgba(70,64,60,.18);animation:toast-in .35s cubic-bezier(.3,1.4,.4,1);max-width:88vw;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  @keyframes toast-in{from{transform:translateY(-24px);opacity:0}to{transform:none;opacity:1}}
+  .toast.out{transition:opacity .4s,transform .4s;opacity:0;transform:translateY(-14px)}
+
+  /* sheet inputs */
+  .tinput{width:100%;border:1.5px solid var(--line);background:var(--inset);border-radius:12px;padding:11px 12px;
+    font-family:"Nunito";font-weight:800;font-size:15px;color:var(--ink)}
+  .tinput:focus{outline:none;border-color:var(--accent)}
+  .sheet .err{color:#C0504A;font-size:12px;margin-top:8px;min-height:15px}
+  .sheet-note{font-size:11.5px;color:var(--muted);line-height:1.55;margin-bottom:12px}
+
+  /* friend detail */
+  .fd-hero{display:flex;align-items:center;gap:14px}
+  .fd-hero .av{font-size:44px}
+  .fd-num{font-family:"Baloo 2";font-weight:800;font-size:40px;line-height:1;color:var(--accent)}
+  .fd-sub{color:var(--muted);font-size:12px;margin-top:3px}
+  .fd-sub b{color:var(--ink)}
+  .fd-sec{font-family:"Baloo 2";font-weight:800;font-size:11px;letter-spacing:.6px;color:var(--muted);margin:14px 0 6px}
+  .fd-badges .badge{padding:7px 2px 6px}
+  .fd-badges .badge .e{font-size:19px}
+  .fd-actions{display:flex;gap:8px;margin-top:16px}
+  .fd-actions .done-btn{margin-top:0}
+  .nudge-btn{background:linear-gradient(180deg,var(--mint),#5FB597) !important;box-shadow:0 4px 0 #4E9A80 !important}
+  .unfriend{margin-top:12px;width:100%;background:none;border:none;color:#C4BBB1;font-size:11px;cursor:pointer;font-family:"Nunito";font-weight:700}
+  .ro .cal-cell{cursor:default}
 
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
@@ -247,6 +295,11 @@
   <div class="card">
     <h2>This week</h2>
     <div class="week" id="week"></div>
+  </div>
+
+  <div class="card">
+    <h2>Buddies</h2>
+    <div id="buddyBody"></div>
   </div>
 
   <div class="card">
@@ -335,11 +388,43 @@
       <li><span class="i">📅</span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
       <li><span class="i">📈</span><span>The graph shows plank duration over time. Tap a dot for details.</span></li>
       <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
+      <li><span class="i">💛</span><span>Buddies: swap codes with friends to see each other's streaks, calendars and planks — and send cheers 📣 or nudges 👉.</span></li>
       <li><span class="i">🐾</span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
     </ul>
     <button class="done-btn" id="infoDone">Done</button>
   </div>
 </div>
+
+<!-- buddy setup / rename -->
+<div class="sheet-wrap" id="bsWrap">
+  <div class="sheet">
+    <h2 id="bsTitle">Add buddies</h2>
+    <div class="sheet-note" id="bsIntro">Pick a name and you'll get a short code to share.
+      Buddies who add each other's codes see each other's full streak — calendar, planks, badges.</div>
+    <input class="tinput" id="bsName" maxlength="24" placeholder="Your name" autocomplete="off">
+    <div class="err" id="bsErr"></div>
+    <button class="done-btn" id="bsGo">Get my code 🐾</button>
+  </div>
+</div>
+
+<!-- add buddy -->
+<div class="sheet-wrap" id="baWrap">
+  <div class="sheet">
+    <h2>Add a buddy</h2>
+    <div class="sheet-note">Type the 6-character code your buddy shared with you.</div>
+    <input class="tinput" id="baCode" maxlength="6" placeholder="ABC123" autocomplete="off"
+      style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-family:'Baloo 2'">
+    <div class="err" id="baErr"></div>
+    <button class="done-btn" id="baGo">Add buddy 💛</button>
+  </div>
+</div>
+
+<!-- friend detail -->
+<div class="sheet-wrap" id="fdWrap">
+  <div class="sheet" id="fdSheet"></div>
+</div>
+
+<div id="toasts"></div>
 
 <script>
 "use strict";
@@ -351,7 +436,7 @@ const MILESTONES=[
 
 /* ---------- state ---------- */
 const KEY="wiggle-squad-v1";
-let state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:""};
+let state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
 try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
 for(const k in state.days){
   const e=state.days[k];
@@ -370,25 +455,25 @@ const dayOfYear=()=>{const d=new Date();return Math.floor((d-new Date(d.getFullY
 const fmtDur=s=>Math.floor(s/60)+":"+pad(s%60);
 
 /* ---------- streak: workout counts, migraine-only bridges, empty breaks ---------- */
-function currentStreak(){
+function currentStreak(days=state.days){
   const d=new Date();
-  if(!state.days[today()]) d.setDate(d.getDate()-1);
+  if(!days[today()]) d.setDate(d.getDate()-1);
   let n=0;
   for(;;){
-    const e=state.days[iso(d)];
+    const e=days[iso(d)];
     if(!e) break;
     if(e.ex) n++;
     d.setDate(d.getDate()-1);
   }
   return n;
 }
-function bestStreak(){
-  const keys=Object.keys(state.days).sort();
+function bestStreak(days=state.days){
+  const keys=Object.keys(days).sort();
   if(!keys.length) return 0;
   let best=0,run=0;
   const d=new Date(keys[0]+"T12:00:00"), end=new Date(keys[keys.length-1]+"T12:00:00");
   while(d<=end){
-    const e=state.days[iso(d)];
+    const e=days[iso(d)];
     if(!e) run=0;
     else if(e.ex){run++; if(run>best)best=run;}
     d.setDate(d.getDate()+1);
@@ -492,7 +577,7 @@ function toggleMig(){
     burst(b.left+b.width/2,b.top,16,false,true);
     note(392,0,.15,.08);buzz(20);
   }
-  save();render();
+  save();render();queueSync();
 }
 function logWorkout(){
   const t=today(), e=state.days[t]||{};
@@ -500,7 +585,7 @@ function logWorkout(){
   const p=Math.max(0,Math.min(59,m))*60+Math.max(0,Math.min(59,s));
   e.ex=true; if(p>0)e.p=p;
   state.days[t]=e;
-  save();render();
+  save();render();queueSync();
   celebrate(currentStreak());
 }
 
@@ -541,14 +626,14 @@ function renderChips(){
     c.appendChild(b);
   }
 }
-function plankPoints(){
+function plankPoints(days,rng){
   const pts=[];
-  for(const k of Object.keys(state.days).sort()){
-    const e=state.days[k];
+  for(const k of Object.keys(days).sort()){
+    const e=days[k];
     if(e.ex&&e.p>0)pts.push({d:k,p:e.p});
   }
-  if(range>0){
-    const cut=new Date();cut.setDate(cut.getDate()-(range-1));
+  if(rng>0){
+    const cut=new Date();cut.setDate(cut.getDate()-(rng-1));
     const cs=iso(cut);
     return pts.filter(x=>x.d>=cs);
   }
@@ -559,20 +644,18 @@ function niceCeil(v){
   for(const s of steps)if(v<=s)return s;
   return Math.ceil(v/600)*600;
 }
-function renderChart(){
-  renderChips();
-  const mount=$("chartMount"),tip=$("tip");tip.style.display="none";
-  const pts=plankPoints();
-  if(pts.length<1){mount.innerHTML='<div class="chart-empty">no plank data yet</div>';return;}
+function chartSVG(days,rng){
+  const pts=plankPoints(days,rng);
+  if(pts.length<1)return {html:'<div class="chart-empty">no plank data yet</div>',pts};
   const W=340,H=150,L=38,R=8,T=10,B=22;
   const iw=W-L-R,ih=H-T-B;
-  const t0=new Date((range>0?iso(new Date(Date.now()-(range-1)*864e5)):pts[0].d)+"T12:00:00").getTime();
+  const t0=new Date((rng>0?iso(new Date(Date.now()-(rng-1)*864e5)):pts[0].d)+"T12:00:00").getTime();
   const t1=new Date(today()+"T12:00:00").getTime();
   const span=Math.max(t1-t0,864e5);
   const ymax=niceCeil(Math.max(...pts.map(p=>p.p))*1.1);
   const X=d=>L+((new Date(d+"T12:00:00").getTime()-t0)/span)*iw;
   const Y=v=>T+ih-(v/ymax)*ih;
-  let s='<svg id="chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
+  let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
   for(const gv of [0,ymax/2,ymax]){
     s+='<line x1="'+L+'" y1="'+Y(gv)+'" x2="'+(W-R)+'" y2="'+Y(gv)+'" stroke="#F0EAE2" stroke-width="1"/>';
     s+='<text x="'+(L-6)+'" y="'+(Y(gv)+3.5)+'" text-anchor="end" font-size="9" fill="#A39A91" font-family="sans-serif">'+fmtDur(gv)+'</text>';
@@ -592,7 +675,16 @@ function renderChart(){
     s+='<circle class="hit" data-i="'+i+'" cx="'+X(p.d).toFixed(1)+'" cy="'+Y(p.p).toFixed(1)+'" r="13" fill="transparent"/>';
   });
   s+='</svg>';
-  mount.innerHTML=s;
+  return {html:s,pts};
+}
+function renderChart(){
+  renderChips();
+  const mount=$("chartMount"),tip=$("tip");tip.style.display="none";
+  const {html,pts}=chartSVG(state.days,range);
+  mount.innerHTML=html;
+  if(!pts.length)return;
+  const W=340;
+  const xl=d=>{const dt=new Date(d+"T12:00:00");return dt.getDate()+"/"+(dt.getMonth()+1);};
   mount.querySelectorAll(".hit").forEach(h=>{
     h.addEventListener("click",ev=>{
       ev.stopPropagation();
@@ -619,6 +711,7 @@ function render(){
   $("mascot").textContent=SQUAD[dayOfYear()%SQUAD.length];
   renderToday();
   renderChart();
+  renderBuddies();
 
   const wk=$("week");wk.innerHTML="";
   const DOW=["S","M","T","W","T","F","S"];
@@ -650,23 +743,233 @@ function render(){
   const mP=today().slice(0,7);
   $("statMonth").textContent=exKeys.filter(d=>d.startsWith(mP)).length;
 }
+function calHTML(days,y,m){
+  const t=today();
+  let h="";
+  for(const d of ["S","M","T","W","T","F","S"])h+='<div class="dow">'+d+'</div>';
+  const first=new Date(y,m,1).getDay(),len=new Date(y,m+1,0).getDate();
+  for(let i=0;i<first;i++)h+="<div></div>";
+  for(let day=1;day<=len;day++){
+    const ds=y+"-"+pad(m+1)+"-"+pad(day),e=days[ds];
+    h+='<div class="cal-cell'+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(ds===t?" today":"")+(ds>t?" future":"")+'" data-ds="'+ds+'">'+day+'</div>';
+  }
+  return h;
+}
 function renderCalendar(){
   const y=calCursor.getFullYear(),m=calCursor.getMonth();
   $("calTitle").textContent=calCursor.toLocaleString("en",{month:"long"})+" "+y;
-  const g=$("calGrid");g.innerHTML="";
-  for(const d of ["S","M","T","W","T","F","S"]){const el=document.createElement("div");el.className="dow";el.textContent=d;g.appendChild(el);}
-  const first=new Date(y,m,1).getDay(),len=new Date(y,m+1,0).getDate(),t=today();
-  for(let i=0;i<first;i++)g.appendChild(document.createElement("div"));
-  for(let day=1;day<=len;day++){
-    const ds=y+"-"+pad(m+1)+"-"+pad(day);
-    const e=state.days[ds],future=ds>t;
-    const el=document.createElement("div");
-    el.className="cal-cell"+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(ds===t?" today":"")+(future?" future":"");
-    el.textContent=day;
-    if(!future)el.onclick=()=>openEditor(ds);
-    g.appendChild(el);
+  const g=$("calGrid");g.innerHTML=calHTML(state.days,y,m);
+  const t=today();
+  g.querySelectorAll(".cal-cell").forEach(el=>{
+    if(el.dataset.ds<=t)el.onclick=()=>openEditor(el.dataset.ds);
+  });
+}
+
+/* ---------- buddies (Supabase) ----------
+   Identity is a device-generated {uid, secret} pair returned by buddy_register;
+   the database only stores a hash of the secret and every call re-verifies it.
+   The app stays local-first: all network work is best-effort and debounced. */
+const SB_URL="https://payvkfccgzwgsiflazuv.supabase.co";
+const SB_KEY="sb_publishable_H6YAB9LinIPgAUBlZUKFsw_PWeipvti";
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const buddyAnimal=id=>{let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return SQUAD[h%SQUAD.length];};
+
+async function rpc(fn,args){
+  const r=await fetch(SB_URL+"/rest/v1/rpc/"+fn,{
+    method:"POST",
+    headers:{apikey:SB_KEY,"Content-Type":"application/json"},
+    body:JSON.stringify(args)
+  });
+  if(!r.ok){
+    let m="offline";
+    try{m=(await r.json()).message||m;}catch(e){}
+    throw new Error(m);
+  }
+  const t=await r.text();
+  return t?JSON.parse(t):null;
+}
+
+function toast(msg){
+  const t=document.createElement("div");
+  t.className="toast";t.textContent=msg;
+  $("toasts").appendChild(t);
+  setTimeout(()=>{t.classList.add("out");setTimeout(()=>t.remove(),450);},5200);
+}
+
+let syncTimer=null;
+function queueSync(){if(!state.buddy)return;clearTimeout(syncTimer);syncTimer=setTimeout(doSync,1200);}
+async function doSync(){
+  if(!state.buddy)return;
+  clearTimeout(syncTimer);
+  try{
+    const res=await rpc("buddy_sync",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,
+      p_days:state.days,p_name:state.buddy.name});
+    state.friends=res.friends||[];
+    save();renderBuddies();
+    handleBuddyEvents(res.events||[]);
+  }catch(e){
+    if(String(e.message).includes("auth_failed")){
+      state.buddy=null;state.friends=[];save();renderBuddies();
+      toast("Buddy account was reset — reconnect to get a new code");
+    }
   }
 }
+function handleBuddyEvents(evts){
+  evts.forEach((ev,i)=>{
+    const f=(state.friends||[]).find(x=>x.id===ev.from);
+    const who=f?f.name:"A buddy";
+    setTimeout(()=>{
+      if(ev.kind==="cheer"){
+        toast(buddyAnimal(ev.from)+" "+who+" cheers you on! 📣");
+        burst(innerWidth/2,90,18,false,true);pop();buzz([30,40,60]);
+      }else{
+        toast(buddyAnimal(ev.from)+" "+who+" nudges you — log today? 👉");buzz(20);
+      }
+    },i*1100);
+  });
+}
+
+function renderBuddies(){
+  const c=$("buddyBody");
+  if(!state.buddy){
+    c.innerHTML='<div class="bempty">Swap codes with friends to see each other’s streaks,<br>cheer 📣 and nudge 👉 each other.</div>'+
+      '<button class="done-btn" style="margin-top:0" id="buddyConnect">Add buddies 🐾</button>'+
+      '<div class="card-note">No account needed — you just get a code to share.</div>';
+    $("buddyConnect").onclick=()=>openBuddySetup(false);
+    return;
+  }
+  const t=today();
+  const rows=[{id:"me",name:state.buddy.name,days:state.days}]
+    .concat(state.friends||[])
+    .map(f=>({id:f.id,name:f.name,streak:currentStreak(f.days||{}),e:(f.days||{})[t]}));
+  rows.sort((a,b)=>b.streak-a.streak);
+  let h="";
+  for(const f of rows){
+    const me=f.id==="me";
+    h+='<div class="brow'+(me?" me":"")+'" data-id="'+f.id+'">'+
+      '<span class="av">'+(me?SQUAD[dayOfYear()%SQUAD.length]:buddyAnimal(f.id))+'</span>'+
+      '<span class="bn">'+esc(f.name)+(me?'<small>you</small>':"")+'</span>'+
+      '<span class="bt">'+(f.e?(f.e.ex?"💪":"🧠"):"·")+'</span>'+
+      '<span class="bs">'+f.streak+'</span>'+
+      '</div>';
+  }
+  h+='<div class="bfoot">'+
+     '<div class="codepill" id="codePill">'+state.buddy.code+' 📋</div>'+
+     '<button class="addbtn" id="buddyAdd">+ Add</button></div>';
+  c.innerHTML=h;
+  c.querySelectorAll(".brow").forEach(el=>{
+    el.onclick=()=>{el.dataset.id==="me"?openBuddySetup(true):openFriend(el.dataset.id);};
+  });
+  $("codePill").onclick=shareCode;
+  $("buddyAdd").onclick=()=>{$("baCode").value="";$("baErr").textContent="";$("baWrap").classList.add("show");};
+}
+
+async function shareCode(){
+  const msg="Add me on Streak Buddies 🐾 My code: "+state.buddy.code;
+  if(navigator.share){try{await navigator.share({text:msg});}catch(e){}return;}
+  try{await navigator.clipboard.writeText(state.buddy.code);toast("Code copied 📋");}
+  catch(e){toast("Your code: "+state.buddy.code);}
+}
+
+let bsRename=false;
+function openBuddySetup(rename){
+  bsRename=rename;
+  $("bsTitle").textContent=rename?"Your name":"Add buddies";
+  $("bsIntro").style.display=rename?"none":"";
+  $("bsName").value=rename?state.buddy.name:"";
+  $("bsErr").textContent="";
+  $("bsGo").textContent=rename?"Save":"Get my code 🐾";
+  $("bsWrap").classList.add("show");
+}
+$("bsGo").onclick=async()=>{
+  const name=$("bsName").value.trim();
+  if(!name){$("bsErr").textContent="Pick a name first";return;}
+  $("bsGo").disabled=true;$("bsErr").textContent="";
+  try{
+    if(bsRename){state.buddy.name=name;save();queueSync();}
+    else{
+      const res=await rpc("buddy_register",{p_name:name});
+      state.buddy={uid:res.uid,secret:res.secret,code:res.code,name:res.name};
+      save();doSync();
+      toast("Share your code: "+res.code);
+    }
+    $("bsWrap").classList.remove("show");renderBuddies();pop();
+  }catch(e){$("bsErr").textContent="Couldn't connect — try again later";}
+  $("bsGo").disabled=false;
+};
+
+$("baGo").onclick=async()=>{
+  const code=$("baCode").value.trim().toUpperCase();
+  if(code.length<6){$("baErr").textContent="Codes are 6 characters";return;}
+  $("baGo").disabled=true;$("baErr").textContent="";
+  try{
+    const f=await rpc("buddy_add_friend",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,p_code:code});
+    state.friends=(state.friends||[]).filter(x=>x.id!==f.id).concat([f]);
+    save();renderBuddies();
+    $("baWrap").classList.remove("show");
+    toast(buddyAnimal(f.id)+" "+f.name+" is now your buddy!");
+    burst(innerWidth/2,90,22,false,true);pop();buzz([30,40,60]);
+  }catch(e){
+    const m=String(e.message||"");
+    $("baErr").textContent=
+      m.includes("code_not_found")?"No buddy with that code":
+      m.includes("cannot_add_self")?"That's your own code 🙃":
+      m.includes("too_many")?"Buddy limit reached":
+      "Couldn't connect — try again later";
+  }
+  $("baGo").disabled=false;
+};
+
+function openFriend(id){
+  const f=(state.friends||[]).find(x=>x.id===id);
+  if(!f)return;
+  const days=f.days||{},cur=currentStreak(days),best=Math.max(bestStreak(days),cur);
+  const t=today(),mP=t.slice(0,7),now=new Date();
+  const exKeys=Object.keys(days).filter(k=>days[k].ex);
+  let h='<div class="fd-hero"><span class="av">'+buddyAnimal(id)+'</span>'+
+    '<div><div class="fd-num">'+cur+'</div>'+
+    '<div class="fd-sub">'+esc(f.name)+' · day streak · best <b>'+best+'</b></div></div></div>';
+  h+='<div class="stats" style="margin-top:12px">'+
+     '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+exKeys.length+'</div><small>total</small></div>'+
+     '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+best+'</div><small>best</small></div>'+
+     '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+exKeys.filter(d=>d.startsWith(mP)).length+'</div><small>month</small></div></div>';
+  h+='<div class="fd-sec">PLANK · 30 DAYS</div>'+chartSVG(days,30).html;
+  h+='<div class="fd-sec">'+now.toLocaleString("en",{month:"long"}).toUpperCase()+' '+now.getFullYear()+'</div>'+
+     '<div class="cal-grid ro">'+calHTML(days,now.getFullYear(),now.getMonth())+'</div>';
+  h+='<div class="fd-sec">MILESTONES</div><div class="badges fd-badges">';
+  for(const m of MILESTONES){
+    const won=best>=m.n;
+    h+='<div class="badge'+(won?" won":"")+'"><span class="e">'+(won?m.e:"🔒")+'</span><small>'+m.n+'</small></div>';
+  }
+  h+='</div>';
+  const loggedToday=!!(days[t]&&days[t].ex);
+  h+='<div class="fd-actions">'+
+     '<button class="done-btn" id="fdCheer">Cheer 📣</button>'+
+     (loggedToday?"":'<button class="done-btn nudge-btn" id="fdNudge">Nudge 👉</button>')+
+     '</div>'+
+     '<button class="unfriend" id="fdRemove">remove buddy</button>';
+  $("fdSheet").innerHTML=h;
+  $("fdWrap").classList.add("show");
+  $("fdCheer").onclick=()=>sendBuddyEvent(id,"cheer","📣 Cheered "+f.name+"!");
+  const n=$("fdNudge");if(n)n.onclick=()=>sendBuddyEvent(id,"nudge","👉 Nudged "+f.name+"!");
+  $("fdRemove").onclick=async()=>{
+    if(!confirm("Remove "+f.name+" from your buddies?"))return;
+    try{await rpc("buddy_unfriend",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,p_fid:id});}catch(e){}
+    state.friends=(state.friends||[]).filter(x=>x.id!==id);
+    save();renderBuddies();
+    $("fdWrap").classList.remove("show");
+  };
+}
+async function sendBuddyEvent(id,kind,okMsg){
+  try{
+    await rpc("buddy_send_event",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,p_to:id,p_kind:kind});
+    toast(okMsg);pop();buzz(15);
+    $("fdWrap").classList.remove("show");
+  }catch(e){toast("Couldn't send — offline?");}
+}
+["bsWrap","baWrap","fdWrap"].forEach(id=>{
+  $(id).addEventListener("click",e=>{if(e.target===e.currentTarget)$(id).classList.remove("show");});
+});
 
 /* ---------- day editor ---------- */
 let edDate=null,edEx=false,edMig=false;
@@ -700,7 +1003,7 @@ $("edSave").onclick=()=>{
     if(edMig)e.mig=true;
     state.days[edDate]=e;
   }
-  save();render();
+  save();render();queueSync();
   $("edWrap").classList.remove("show");
   pop();
 };
@@ -729,8 +1032,10 @@ $("remToggle").onchange=async e=>{
   state.remOn=e.target.checked;save();
 };
 $("resetBtn").onclick=()=>{
-  if(confirm("Erase all data?")){
-    state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:""};save();render();
+  if(confirm("Erase all data?"+(state.buddy?" Your buddy code and connections are removed too.":""))){
+    if(state.buddy)rpc("buddy_delete",{p_uid:state.buddy.uid,p_secret:state.buddy.secret}).catch(()=>{});
+    state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
+    save();render();
     $("setWrap").classList.remove("show");
   }
 };
@@ -746,7 +1051,7 @@ function checkReminder(){
   }
 }
 setInterval(checkReminder,30000);checkReminder();
-document.addEventListener("visibilitychange",()=>{if(!document.hidden){render();checkReminder();}});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){render();checkReminder();doSync();}});
 setInterval(render,60000);
 
 /* ---------- mascot poke ---------- */
@@ -805,6 +1110,7 @@ $("calNext").onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalen
 
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
 render();
+doSync();
 </script>
 
 </body>
