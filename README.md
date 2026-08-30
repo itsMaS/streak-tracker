@@ -15,15 +15,16 @@ bursts, tolling bells, and milestone rites on the relic shelf.
 
 ## Features
 
-- One giant "Feed the Streak 🩸" button with ash/bat/skull bursts, haptics, and
-  low tolling sounds
-- Streak counter ("nights kept"), week strip, monthly calendar, and stats
-- Milestone rites at 3 / 7 / 14 / 21 / 30 / 50 / 75 / 100 nights with a blood-moon
-  all-beast procession animation
-- "I performed yesterday's ritual" rescue button so a forgotten log doesn't kill a streak
-- Evening summons: the keeper of the night asks about the workout after 5pm, plus an
-  optional browser notification at a configurable time (fires while the app is open
-  or installed)
+- Daily log with optional plank duration (min:sec) and a migraine checkbox —
+  a migraine day is skipped without breaking the streak, but doesn't increase it
+- Plank line chart over time with 7D / 14D / 30D / All ranges and tap tooltips
+- Any past day is editable from the calendar or week strip: mark exercise
+  (with plank time), migraine, or clear it
+- Streak counter, week strip, monthly calendar, milestone badges
+  (3/7/14/21/30/50/75/100) and stats — minimal text, horror is visual only
+- Visual celebrations: beast + particle bursts, low tolling sounds, haptics
+- Optional reminder notification at a configurable time (fires while the app
+  is open or installed)
 - Data lives in `localStorage` on the phone — no accounts, no server
 
 ## Install on Android
