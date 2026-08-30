@@ -11,4 +11,10 @@
   (`payvkfccgzwgsiflazuv`, eu-central-1); the schema lives in
   `supabase/schema.sql` (reference copy — apply changes as migrations via
   the Supabase connector). Tables are RLS deny-all; the only API surface is
-  the `buddy_*` security-definer RPCs.
+  the `buddy_*` and `push_*` security-definer RPCs.
+- Angry raccoon push: subscriptions live in `push_subscriptions`; a pg_cron
+  job invokes the `send-nags` edge function (source in
+  `supabase/functions/send-nags/`) every 10 min. The VAPID private key is in
+  the `push_config` table (service-role only) — NEVER in this public repo;
+  the public key is hardcoded in `app.html` and the edge function. Server
+  setup/verification steps: `supabase/DEPLOY_NAGS.md`.

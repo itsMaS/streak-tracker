@@ -14,8 +14,9 @@ poked.
 - `index.html` — generated; ready for GitHub Pages / any static host
 - `manifest.webmanifest`, `sw.js` — PWA install + offline support when self-hosted;
   the service worker also shows the angry-raccoon push notification
-- `.github/workflows/angry-push.yml`, `.github/send-push.js` — daily web push
-  that wakes the service worker (works with the app closed and the phone locked)
+- `supabase/` — backend reference: `schema.sql` (buddy + push tables/RPCs),
+  `functions/send-nags/` (daily raccoon push sender), `DEPLOY_NAGS.md`
+  (server setup brief)
 
 ## Features
 
@@ -65,28 +66,22 @@ offline, and can show notifications.
 
 ## Angry raccoon (lock-screen nag) 😡🦝
 
-Every evening a GitHub Actions cron sends a web push to the phone. The push
-wakes the service worker even when the app is closed and the phone is locked;
-the worker checks the day log (mirrored into IndexedDB) and shows either a big
-angry raccoon (nothing logged today) or a quiet "streak safe" note. A migraine
-day counts as logged.
+Flip **Settings → Angry raccoon** in the installed app: the phone's push
+subscription, reminder time, and timezone are registered in Supabase
+(`push_register` RPC). A pg_cron job runs the `send-nags` edge function every
+10 minutes, which sends one wake-up push per subscription per *local* day once
+its reminder time passes — so every user gets nagged at their own time in
+their own timezone. The push wakes the service worker even when the app is
+closed and the phone is locked; the worker checks the day log (mirrored into
+IndexedDB, never sent to the server for this) and shows either a big angry
+raccoon (nothing logged today) or a quiet "streak safe" note. A migraine day
+counts as logged.
 
-One-time setup:
-
-1. In the installed app: **Settings → Angry raccoon** → allow notifications →
-   tap **Copy** (this copies your phone's push subscription).
-2. On GitHub: repo **Settings → Secrets and variables → Actions** → add secret
-   `PUSH_SUBSCRIPTION` → paste the copied code.
-3. Add a second secret `VAPID_PRIVATE_KEY` with the private key that pairs with
-   the public key in `app.html` (kept outside the repo; regenerate a pair with
-   `npx web-push generate-vapid-keys` if lost — then update the public key in
-   `app.html` + `.github/send-push.js` and redo step 1-2).
-4. Test it: **Actions → Angry raccoon push → Run workflow**. The raccoon should
-   appear on the phone within seconds.
-
-Notes: the schedule in `angry-push.yml` is UTC (17:00 UTC ≈ 8pm Vilnius summer
-time) and GitHub cron can run 15-30 min late. If pushes stop arriving (e.g.
-after clearing site data), re-toggle Angry raccoon and re-paste the secret.
+The nag fires at the Reminder time (default 19:00) whether or not the in-app
+Reminder toggle is on. Server setup lives in `supabase/DEPLOY_NAGS.md`; the
+VAPID private key is stored in the `push_config` table, never in this repo.
+If pushes stop arriving (e.g. after clearing site data), re-toggle Angry
+raccoon to re-register.
 
 ## Develop
 

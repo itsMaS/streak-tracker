@@ -1,5 +1,5 @@
 /* Minimal offline cache so the installed PWA opens instantly, even without signal. */
-const CACHE = "streak-buddies-v8";
+const CACHE = "streak-buddies-v9";
 const ASSETS = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/angry.png"];
 
 self.addEventListener("install", (e) => {
@@ -30,10 +30,11 @@ self.addEventListener("fetch", (e) => {
 });
 
 /* ---------- angry raccoon push ----------
-   A GitHub Actions cron sends a daily push (see .github/workflows/angry-push.yml).
-   The push wakes this worker even when the app is closed and the phone is locked.
-   The app mirrors its day log into IndexedDB ("streak-push"/"kv"/"days"), so the
-   decision — angry or calm — is made here on the phone, not on the server. */
+   A Supabase cron + edge function (supabase/functions/send-nags) sends a daily
+   push at each phone's own local reminder time. The push wakes this worker even
+   when the app is closed and the phone is locked. The app mirrors its day log
+   into IndexedDB ("streak-push"/"kv"/"days"), so the decision — angry or calm —
+   is made here on the phone, not on the server. */
 
 function readDays() {
   return new Promise((resolve) => {

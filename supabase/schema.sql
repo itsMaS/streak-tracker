@@ -247,3 +247,86 @@ grant execute on function
   public.buddy_send_event(uuid, text, uuid, text),
   public.buddy_delete(uuid, text)
 to anon;
+
+-- ---------- angry raccoon push (migration `push_nags`) ----------
+-- Per-device web push subscriptions with a per-device nag time + timezone.
+-- A pg_cron job invokes the send-nags edge function every 10 minutes; the
+-- function sends a wake-up push to every subscription whose local time has
+-- passed its nag time and that wasn't nagged yet today (in its own tz).
+-- The angry-vs-calm decision happens in sw.js on the phone.
+-- push_config holds the VAPID private key (service-role only; never in git).
+
+create table public.push_config (
+  key text primary key,
+  value text not null
+);
+
+create table public.push_subscriptions (
+  endpoint text primary key,
+  subscription jsonb not null,
+  nag_time text not null default '19:00',
+  tz text not null default 'UTC',
+  last_nag_date text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.push_config enable row level security;
+alter table public.push_subscriptions enable row level security;
+revoke all on public.push_config, public.push_subscriptions from anon, authenticated, public;
+
+create or replace function public.push_register(p_sub jsonb, p_time text, p_tz text)
+returns void
+language plpgsql volatile security definer
+set search_path = public, extensions
+as $$
+declare
+  v_endpoint text;
+begin
+  if jsonb_typeof(p_sub) is distinct from 'object' then
+    raise exception 'bad_sub';
+  end if;
+  v_endpoint := p_sub->>'endpoint';
+  if v_endpoint is null or v_endpoint not like 'https://%' or char_length(v_endpoint) > 1024 then
+    raise exception 'bad_endpoint';
+  end if;
+  if pg_column_size(p_sub) > 8192 then
+    raise exception 'sub_too_big';
+  end if;
+  if p_time !~ '^([01][0-9]|2[0-3]):[0-5][0-9]$' then
+    raise exception 'bad_time';
+  end if;
+  if p_tz is null or p_tz = '' or char_length(p_tz) > 64 then
+    raise exception 'bad_tz';
+  end if;
+  if (select count(*) from public.push_subscriptions) >= 500
+     and not exists (select 1 from public.push_subscriptions where endpoint = v_endpoint) then
+    raise exception 'full';
+  end if;
+  insert into public.push_subscriptions (endpoint, subscription, nag_time, tz)
+  values (v_endpoint, p_sub, p_time, p_tz)
+  on conflict (endpoint) do update
+    set subscription = excluded.subscription,
+        nag_time = excluded.nag_time,
+        tz = excluded.tz,
+        updated_at = now();
+end;
+$$;
+
+create or replace function public.push_unregister(p_endpoint text)
+returns void
+language sql volatile security definer
+set search_path = public, extensions
+as $$
+  delete from public.push_subscriptions where endpoint = p_endpoint;
+$$;
+
+revoke all on function
+  public.push_register(jsonb, text, text),
+  public.push_unregister(text)
+from public, authenticated;
+
+grant execute on function
+  public.push_register(jsonb, text, text),
+  public.push_unregister(text)
+to anon;

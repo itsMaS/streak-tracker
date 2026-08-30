@@ -197,8 +197,6 @@
     background:#fff;box-shadow:0 1px 4px rgba(70,64,60,.25);transition:.2s}
   .toggle input:checked + .tr{background:var(--mint)}
   .toggle input:checked + .tr::after{transform:translateX(21px)}
-  .mini-btn{border:1.5px solid var(--line);background:#FAF6F0;color:var(--muted);border-radius:11px;
-    padding:7px 16px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer}
   .danger-btn{border:1.5px solid #F3C1BB;background:#FDEEEC;color:#C0504A;border-radius:11px;
     padding:8px 16px;font-family:"Nunito";font-weight:800;font-size:12px;cursor:pointer}
   .done-btn{width:100%;margin-top:18px;border:none;cursor:pointer;
@@ -360,9 +358,6 @@
     <div class="set-row"><label>Angry raccoon 🦝</label>
       <div class="toggle"><input type="checkbox" id="pushToggle"><span class="tr"></span></div>
     </div>
-    <div class="set-row" id="pushSetupRow" style="display:none"><label>Setup code</label>
-      <button class="mini-btn" id="pushCopyBtn">Copy</button>
-    </div>
     <div class="set-row"><label>Reset</label>
       <button class="danger-btn" id="resetBtn">Erase all</button>
     </div>
@@ -399,7 +394,7 @@
       <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
       <li><span class="i">💛</span><span>Buddies: swap codes with friends to see each other's streaks, calendars and planks — and send cheers 📣 or nudges 👉.</span></li>
       <li><span class="i">🐾</span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
-      <li><span class="i">😡</span><span>Angry raccoon: with setup done (Settings → Angry raccoon + README), a very cross raccoon appears on your lock screen in the evening if today is still empty.</span></li>
+      <li><span class="i">😡</span><span>Angry raccoon: flip it on in Settings and a very cross raccoon appears on your lock screen at reminder time if today is still empty — even with the app closed.</span></li>
     </ul>
     <button class="done-btn" id="infoDone">Done</button>
   </div>
@@ -1164,7 +1159,10 @@ $("gearBtn").onclick=()=>{
 };
 $("setDone").onclick=()=>$("setWrap").classList.remove("show");
 $("setWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("setWrap").classList.remove("show");});
-$("remTime").onchange=e=>{state.remTime=e.target.value||"19:00";state.lastRemind="";save();};
+$("remTime").onchange=e=>{
+  state.remTime=e.target.value||"19:00";state.lastRemind="";save();
+  registerPush().catch(()=>{});
+};
 $("soundToggle").onchange=e=>{state.soundOn=e.target.checked;save();};
 $("remToggle").onchange=async e=>{
   if(e.target.checked){
@@ -1175,15 +1173,22 @@ $("remToggle").onchange=async e=>{
   state.remOn=e.target.checked;save();
 };
 /* ---------- angry raccoon push (works with the phone locked) ----------
-   Subscribing here only registers this phone with the browser's push service.
-   The daily "check in" push is sent by the GitHub Actions workflow in this
-   repo — it needs the subscription pasted into the PUSH_SUBSCRIPTION repo
-   secret (the Copy button below). See README for the one-time setup. */
+   Toggling on subscribes this phone with the browser's push service and
+   registers the subscription in Supabase via push_register, together with
+   the reminder time and this phone's timezone. A Supabase cron + edge
+   function (supabase/functions/send-nags) sends a wake-up push once a day
+   at that local time; sw.js then decides angry vs calm from the IndexedDB
+   day mirror, so the decision stays on the phone. */
 const VAPID_PUB="BIE6jCotBRxxS0eknIHEsztxZHG7U_PCx0Sk0J2brx1mxRYBdb536dDVigeFTiF2OFTNBWj4Bd2YEhfgWwlBBoc";
 const b64ToU8=s=>{const p="=".repeat((4-s.length%4)%4);
   return Uint8Array.from(atob((s+p).replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));};
 const pushOK=()=> "serviceWorker" in navigator && "PushManager" in window;
+const deviceTZ=()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC";}catch(e){return "UTC";}};
 let pushSub=null;
+function registerPush(){
+  if(!pushSub)return Promise.resolve();
+  return rpc("push_register",{p_sub:pushSub.toJSON(),p_time:state.remTime,p_tz:deviceTZ()});
+}
 async function refreshPushUI(){
   pushSub=null;
   if(pushOK()){
@@ -1193,12 +1198,13 @@ async function refreshPushUI(){
     }catch(e){}
   }
   $("pushToggle").checked=!!pushSub;
-  $("pushSetupRow").style.display=pushSub?"":"none";
-  $("pushCopyBtn").textContent="Copy";
 }
 $("pushToggle").onchange=async e=>{
   if(!e.target.checked){
-    if(pushSub){try{await pushSub.unsubscribe();}catch(err){}}
+    if(pushSub){
+      rpc("push_unregister",{p_endpoint:pushSub.endpoint}).catch(()=>{});
+      try{await pushSub.unsubscribe();}catch(err){}
+    }
     refreshPushUI();return;
   }
   if(!pushOK()){e.target.checked=false;alert("Push needs the installed app (Add to Home screen).");return;}
@@ -1208,19 +1214,22 @@ $("pushToggle").onchange=async e=>{
   try{
     const reg=await navigator.serviceWorker.ready;
     pushSub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToU8(VAPID_PUB)});
-  }catch(err){e.target.checked=false;alert("Couldn't subscribe to push: "+(err&&err.message||err));return;}
+    await registerPush();
+  }catch(err){
+    if(pushSub){try{await pushSub.unsubscribe();}catch(e2){}pushSub=null;}
+    e.target.checked=false;
+    alert("Couldn't set up the raccoon: "+(err&&err.message||err));return;
+  }
   refreshPushUI();
-  alert("Almost there! Tap Copy, then paste the code into the PUSH_SUBSCRIPTION secret on GitHub (see README).");
-};
-$("pushCopyBtn").onclick=async()=>{
-  if(!pushSub)return;
-  const txt=JSON.stringify(pushSub);
-  try{await navigator.clipboard.writeText(txt);$("pushCopyBtn").textContent="Copied!";}
-  catch(e){prompt("Copy this and paste it into the PUSH_SUBSCRIPTION repo secret:",txt);}
+  toast("🦝 The raccoon is watching — it checks around "+state.remTime);
 };
 $("resetBtn").onclick=()=>{
   if(confirm("Erase all data?"+(state.buddy?" Your buddy code and connections are removed too.":""))){
     if(state.buddy)rpc("buddy_delete",{p_uid:state.buddy.uid,p_secret:state.buddy.secret}).catch(()=>{});
+    if(pushSub){
+      rpc("push_unregister",{p_endpoint:pushSub.endpoint}).catch(()=>{});
+      pushSub.unsubscribe().catch(()=>{});pushSub=null;
+    }
     state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
     save();render();
     $("setWrap").classList.remove("show");
