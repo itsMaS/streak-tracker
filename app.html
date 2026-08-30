@@ -182,6 +182,8 @@
     background:#fff;box-shadow:0 1px 4px rgba(70,64,60,.25);transition:.2s}
   .toggle input:checked + .tr{background:var(--mint)}
   .toggle input:checked + .tr::after{transform:translateX(21px)}
+  .mini-btn{border:1.5px solid var(--line);background:#FAF6F0;color:var(--muted);border-radius:11px;
+    padding:7px 16px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer}
   .danger-btn{border:1.5px solid #F3C1BB;background:#FDEEEC;color:#C0504A;border-radius:11px;
     padding:8px 16px;font-family:"Nunito";font-weight:800;font-size:12px;cursor:pointer}
   .done-btn{width:100%;margin-top:18px;border:none;cursor:pointer;
@@ -288,6 +290,12 @@
     <div class="set-row"><label>Sound</label>
       <div class="toggle"><input type="checkbox" id="soundToggle" checked><span class="tr"></span></div>
     </div>
+    <div class="set-row"><label>Angry raccoon 🦝</label>
+      <div class="toggle"><input type="checkbox" id="pushToggle"><span class="tr"></span></div>
+    </div>
+    <div class="set-row" id="pushSetupRow" style="display:none"><label>Setup code</label>
+      <button class="mini-btn" id="pushCopyBtn">Copy</button>
+    </div>
     <div class="set-row"><label>Reset</label>
       <button class="danger-btn" id="resetBtn">Erase all</button>
     </div>
@@ -326,6 +334,7 @@
       <li><span class="i">📈</span><span>The graph shows plank duration over time. Tap a dot for details.</span></li>
       <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
       <li><span class="i">🐾</span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
+      <li><span class="i">😡</span><span>Angry raccoon: with setup done (Settings → Angry raccoon + README), a very cross raccoon appears on your lock screen in the evening if today is still empty.</span></li>
     </ul>
     <button class="done-btn" id="infoDone">Done</button>
   </div>
@@ -350,7 +359,25 @@ for(const k in state.days){
   else if(e&&e.t==="mig") state.days[k]={mig:true};
 }
 state.v=3;
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}mirrorDays();}
+/* Mirror the day log into IndexedDB — the service worker reads it there when a
+   push arrives, to decide whether the raccoon should be angry (localStorage is
+   invisible to service workers). */
+function mirrorDays(){
+  try{
+    const req=indexedDB.open("streak-push",1);
+    req.onupgradeneeded=()=>{req.result.createObjectStore("kv");};
+    req.onsuccess=()=>{
+      const db=req.result;
+      try{
+        const tx=db.transaction("kv","readwrite");
+        tx.objectStore("kv").put(JSON.parse(JSON.stringify(state.days)),"days");
+        tx.oncomplete=()=>db.close();
+      }catch(e){db.close();}
+    };
+  }catch(e){}
+}
+mirrorDays();
 
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,"0");
@@ -704,6 +731,7 @@ $("gearBtn").onclick=()=>{
   $("remTime").value=state.remTime;
   $("remToggle").checked=state.remOn;
   $("soundToggle").checked=state.soundOn;
+  refreshPushUI();
   $("setWrap").classList.add("show");
 };
 $("setDone").onclick=()=>$("setWrap").classList.remove("show");
@@ -717,6 +745,50 @@ $("remToggle").onchange=async e=>{
     if(perm!=="granted"){e.target.checked=false;alert("Notifications are blocked for this page.");return;}
   }
   state.remOn=e.target.checked;save();
+};
+/* ---------- angry raccoon push (works with the phone locked) ----------
+   Subscribing here only registers this phone with the browser's push service.
+   The daily "check in" push is sent by the GitHub Actions workflow in this
+   repo — it needs the subscription pasted into the PUSH_SUBSCRIPTION repo
+   secret (the Copy button below). See README for the one-time setup. */
+const VAPID_PUB="BIE6jCotBRxxS0eknIHEsztxZHG7U_PCx0Sk0J2brx1mxRYBdb536dDVigeFTiF2OFTNBWj4Bd2YEhfgWwlBBoc";
+const b64ToU8=s=>{const p="=".repeat((4-s.length%4)%4);
+  return Uint8Array.from(atob((s+p).replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));};
+const pushOK=()=> "serviceWorker" in navigator && "PushManager" in window;
+let pushSub=null;
+async function refreshPushUI(){
+  pushSub=null;
+  if(pushOK()){
+    try{
+      const reg=await navigator.serviceWorker.getRegistration();
+      if(reg)pushSub=await reg.pushManager.getSubscription();
+    }catch(e){}
+  }
+  $("pushToggle").checked=!!pushSub;
+  $("pushSetupRow").style.display=pushSub?"":"none";
+  $("pushCopyBtn").textContent="Copy";
+}
+$("pushToggle").onchange=async e=>{
+  if(!e.target.checked){
+    if(pushSub){try{await pushSub.unsubscribe();}catch(err){}}
+    refreshPushUI();return;
+  }
+  if(!pushOK()){e.target.checked=false;alert("Push needs the installed app (Add to Home screen).");return;}
+  let perm="denied";
+  try{perm=await Notification.requestPermission();}catch(err){}
+  if(perm!=="granted"){e.target.checked=false;alert("Notifications are blocked for this page.");return;}
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    pushSub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToU8(VAPID_PUB)});
+  }catch(err){e.target.checked=false;alert("Couldn't subscribe to push: "+(err&&err.message||err));return;}
+  refreshPushUI();
+  alert("Almost there! Tap Copy, then paste the code into the PUSH_SUBSCRIPTION secret on GitHub (see README).");
+};
+$("pushCopyBtn").onclick=async()=>{
+  if(!pushSub)return;
+  const txt=JSON.stringify(pushSub);
+  try{await navigator.clipboard.writeText(txt);$("pushCopyBtn").textContent="Copied!";}
+  catch(e){prompt("Copy this and paste it into the PUSH_SUBSCRIPTION repo secret:",txt);}
 };
 $("resetBtn").onclick=()=>{
   if(confirm("Erase all data?")){
