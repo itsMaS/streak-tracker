@@ -1,275 +1,317 @@
-<title>The Wiggle Squad</title>
+<title>The Midnight Menagerie</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap">
 <style>
   :root{
-    --paper:#FFF5F7;      /* blush milk */
-    --card:#FFFFFF;
-    --ink:#52333F;        /* cocoa berry */
-    --ink-soft:#8C6B78;
-    --berry:#F26089;
-    --berry-deep:#D94A73;
-    --mint:#7ED0B4;
-    --mint-deep:#4CAF8E;
-    --butter:#FFD166;
-    --lilac:#C9B3F5;
-    --sky:#A8D8F0;
-    --shadow:0 6px 0 rgba(217,74,115,.18);
-    --radius:26px;
+    --void:#0A0708;        /* near-black ground */
+    --crypt:#141014;       /* card */
+    --crypt-2:#1C1418;     /* raised card */
+    --bone:#D8CDB8;        /* primary text */
+    --ash:#8A7D7A;         /* muted text */
+    --blood:#C41E1E;
+    --blood-deep:#7A1010;
+    --blood-dark:#4A0808;
+    --rot:#5E7A3A;         /* sickly green */
+    --fog:#3B2E4A;         /* bruised purple */
+    --candle:#D9A441;      /* dim candlelight */
+    --radius:22px;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
-    background:var(--paper);
+    background:var(--void);
     background-image:
-      radial-gradient(circle at 12% 8%, rgba(201,179,245,.22) 0 140px, transparent 141px),
-      radial-gradient(circle at 88% 20%, rgba(255,209,102,.20) 0 120px, transparent 121px),
-      radial-gradient(circle at 80% 90%, rgba(126,208,180,.16) 0 160px, transparent 161px);
-    color:var(--ink);
-    font-family:"Nunito",system-ui,sans-serif;
-    font-weight:600;
+      radial-gradient(ellipse at 15% 5%, rgba(59,46,74,.35) 0 220px, transparent 320px),
+      radial-gradient(ellipse at 90% 30%, rgba(74,8,8,.25) 0 180px, transparent 300px),
+      radial-gradient(ellipse at 70% 95%, rgba(94,122,58,.10) 0 200px, transparent 320px);
+    color:var(--bone);
+    font-family:"Special Elite","Courier New",monospace;
     min-height:100vh;
     -webkit-tap-highlight-color:transparent;
     overflow-x:hidden;
   }
-  .app{max-width:430px;margin:0 auto;padding:18px 18px 60px}
-  h1,h2,.display{font-family:"Baloo 2","Nunito",system-ui,sans-serif}
+  /* vignette — the darkness closes in */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:5;
+    background:radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%);
+  }
+  .app{max-width:430px;margin:0 auto;padding:18px 18px 60px;position:relative;z-index:1}
+  h1,h2,.display{font-family:"Creepster","Special Elite",cursive;font-weight:400;letter-spacing:1px}
 
   /* ---------- header ---------- */
   header{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 14px}
   .brand{display:flex;align-items:center;gap:10px}
   .brand-badge{
-    width:44px;height:44px;border-radius:16px;background:var(--berry);
-    display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow);
-    transform:rotate(-6deg);
+    width:44px;height:44px;border-radius:12px;background:var(--blood-dark);
+    border:1px solid var(--blood-deep);
+    display:grid;place-items:center;font-size:24px;
+    box-shadow:0 0 18px rgba(196,30,30,.35), inset 0 0 12px rgba(0,0,0,.6);
+    transform:rotate(-4deg);
+    filter:saturate(.5);
   }
-  .brand h1{font-size:22px;margin:0;line-height:1;letter-spacing:.2px}
-  .brand small{display:block;color:var(--ink-soft);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;margin-top:3px}
+  .brand h1{
+    font-size:23px;margin:0;line-height:1;color:var(--blood);
+    text-shadow:0 0 12px rgba(196,30,30,.6);
+    animation:flicker 6s linear infinite;
+  }
+  .brand small{display:block;color:var(--ash);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-top:4px}
+  @keyframes flicker{
+    0%,93%,96%,100%{opacity:1}
+    94%{opacity:.4}
+    95%{opacity:.85}
+    97.5%{opacity:.55}
+  }
   .gear{
-    border:none;background:var(--card);width:44px;height:44px;border-radius:16px;
-    font-size:20px;cursor:pointer;box-shadow:0 4px 0 rgba(82,51,63,.10);
+    border:1px solid #2A2126;background:var(--crypt);width:44px;height:44px;border-radius:12px;
+    font-size:19px;cursor:pointer;color:var(--ash);
+    box-shadow:inset 0 0 10px rgba(0,0,0,.5);
     transition:transform .15s;
   }
   .gear:active{transform:scale(.92) rotate(30deg)}
 
   /* ---------- mascot stage ---------- */
   .stage{
-    background:var(--card);border-radius:var(--radius);padding:20px 18px 22px;
-    box-shadow:0 8px 0 rgba(82,51,63,.07);
+    background:var(--crypt);border-radius:var(--radius);padding:22px 18px 24px;
+    border:1px solid #241B20;
+    box-shadow:0 12px 30px rgba(0,0,0,.6), inset 0 0 40px rgba(0,0,0,.4);
     text-align:center;position:relative;overflow:hidden;
   }
-  .stage::before{
-    content:"";position:absolute;inset:auto -30px -70px -30px;height:130px;
-    background:linear-gradient(0deg,rgba(242,96,137,.10),transparent);
-    border-radius:50% 50% 0 0;
+  .stage::before{ /* creeping red glow from below */
+    content:"";position:absolute;inset:auto -40px -80px -40px;height:150px;
+    background:radial-gradient(ellipse at 50% 100%, rgba(122,16,16,.30), transparent 70%);
+  }
+  .stage::after{ /* hanging cobweb corner */
+    content:"🕸️";position:absolute;top:-6px;left:-4px;font-size:34px;opacity:.35;
+    filter:grayscale(1);
   }
   .bubble{
-    position:relative;background:var(--paper);border:2.5px solid #F7D2DD;
-    border-radius:20px;padding:12px 16px;font-size:15px;line-height:1.45;
-    margin:0 auto 14px;max-width:34ch;font-weight:700;
+    position:relative;background:#0E0A0C;border:1px solid #33262C;
+    border-radius:14px;padding:13px 16px;font-size:14.5px;line-height:1.55;
+    margin:0 auto 16px;max-width:36ch;color:var(--bone);
+    box-shadow:inset 0 0 14px rgba(0,0,0,.7);
   }
   .bubble::after{
-    content:"";position:absolute;left:50%;bottom:-11px;transform:translateX(-50%) rotate(45deg);
-    width:16px;height:16px;background:var(--paper);
-    border-right:2.5px solid #F7D2DD;border-bottom:2.5px solid #F7D2DD;
+    content:"";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%) rotate(45deg);
+    width:14px;height:14px;background:#0E0A0C;
+    border-right:1px solid #33262C;border-bottom:1px solid #33262C;
   }
   .mascot{
     font-size:88px;line-height:1;display:inline-block;position:relative;
-    filter:drop-shadow(0 8px 0 rgba(217,74,115,.15));
-    animation:idle-bob 3.2s ease-in-out infinite;
+    filter:grayscale(.65) brightness(.75) contrast(1.1) drop-shadow(0 0 16px rgba(196,30,30,.45));
+    animation:lurk 5.5s ease-in-out infinite;
     cursor:pointer;user-select:none;
   }
-  .mascot.poke{animation:poke .55s cubic-bezier(.36,1.6,.4,1) 1}
-  .coach-name{margin-top:8px;font-size:13px;color:var(--ink-soft);font-weight:800}
-  .coach-name b{color:var(--berry-deep)}
-  @keyframes idle-bob{
-    0%,100%{transform:translateY(0) rotate(-2deg)}
-    50%{transform:translateY(-9px) rotate(2deg)}
+  .mascot.poke{animation:jolt .5s cubic-bezier(.36,1.6,.4,1) 1}
+  .coach-name{margin-top:10px;font-size:12.5px;color:var(--ash);letter-spacing:.5px}
+  .coach-name b{color:var(--blood);font-weight:400;text-shadow:0 0 8px rgba(196,30,30,.5)}
+  @keyframes lurk{
+    0%,100%{transform:translateY(0) rotate(-1.5deg)}
+    50%{transform:translateY(-6px) rotate(1.5deg)}
   }
-  @keyframes poke{
+  @keyframes jolt{
     0%{transform:scale(1)}
-    30%{transform:scale(1.25,.75)}
-    60%{transform:scale(.85,1.2) rotate(-6deg)}
+    25%{transform:scale(1.22,.8) rotate(-4deg)}
+    55%{transform:scale(.88,1.15) rotate(5deg)}
     100%{transform:scale(1)}
   }
 
   /* ---------- streak hero ---------- */
-  .hero{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin:22px 0 4px}
+  .hero{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin:24px 0 4px}
   .streak-num{
-    font-family:"Baloo 2";font-size:92px;font-weight:800;line-height:.85;
-    color:var(--berry);text-shadow:0 5px 0 rgba(217,74,115,.18);
+    font-family:"Creepster";font-size:96px;line-height:.85;
+    color:var(--blood);
+    text-shadow:0 0 22px rgba(196,30,30,.65), 0 4px 0 var(--blood-dark);
     font-variant-numeric:tabular-nums;
   }
   .streak-label{padding-bottom:10px;text-align:left}
-  .streak-label .display{font-size:22px;line-height:1.05}
-  .streak-label small{color:var(--ink-soft);font-size:12.5px;font-weight:700}
-  .hearts{display:flex;justify-content:center;gap:5px;margin:8px 0 18px;font-size:15px;min-height:20px}
-  .hearts span{animation:heart-in .4s cubic-bezier(.36,1.6,.4,1) backwards}
-
-  @keyframes heart-in{from{transform:scale(0)}to{transform:scale(1)}}
+  .streak-label .display{font-size:21px;line-height:1.05;color:var(--bone)}
+  .streak-label small{color:var(--ash);font-size:12px}
+  .hearts{display:flex;justify-content:center;gap:5px;margin:10px 0 20px;font-size:15px;min-height:20px;filter:drop-shadow(0 0 6px rgba(196,30,30,.4))}
+  .hearts span{animation:rise-in .4s cubic-bezier(.36,1.6,.4,1) backwards}
+  @keyframes rise-in{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
 
   /* ---------- log button ---------- */
   .log-wrap{padding:0 6px}
   .log-btn{
-    width:100%;border:none;cursor:pointer;
-    background:linear-gradient(180deg,var(--berry) 0%,var(--berry-deep) 100%);
-    color:#fff;font-family:"Baloo 2";font-weight:800;font-size:24px;
-    padding:20px 16px 22px;border-radius:28px;
-    box-shadow:0 8px 0 #B93A60, 0 14px 22px rgba(217,74,115,.30);
+    width:100%;border:1px solid var(--blood-deep);cursor:pointer;
+    background:linear-gradient(180deg,#8E1414 0%,var(--blood-dark) 100%);
+    color:#F5E6E0;font-family:"Creepster";font-size:24px;letter-spacing:2px;
+    padding:20px 16px 22px;border-radius:18px;
+    box-shadow:0 8px 0 #300505, 0 0 30px rgba(196,30,30,.35);
     transition:transform .1s, box-shadow .1s;
-    letter-spacing:.3px;
+    text-shadow:0 2px 4px rgba(0,0,0,.6);
   }
-  .log-btn:active{transform:translateY(6px);box-shadow:0 2px 0 #B93A60}
+  .log-btn:active{transform:translateY(6px);box-shadow:0 2px 0 #300505, 0 0 40px rgba(196,30,30,.5)}
   .log-btn.done{
-    background:linear-gradient(180deg,var(--mint) 0%,var(--mint-deep) 100%);
-    box-shadow:0 8px 0 #3B9377, 0 14px 22px rgba(76,175,142,.30);
+    background:linear-gradient(180deg,#2E3D1E 0%,#1A2311 100%);
+    border-color:#3E5228;
+    box-shadow:0 8px 0 #0D1108, 0 0 24px rgba(94,122,58,.30);
+    color:#C9D8AE;
   }
-  .log-btn.done:active{box-shadow:0 2px 0 #3B9377}
-  .log-btn.wiggle{animation:wiggle .5s ease 1}
-  @keyframes wiggle{
-    0%,100%{transform:rotate(0)}
-    20%{transform:rotate(-2.5deg)}40%{transform:rotate(2.5deg)}
-    60%{transform:rotate(-1.5deg)}80%{transform:rotate(1.5deg)}
+  .log-btn.done:active{box-shadow:0 2px 0 #0D1108}
+  .log-btn.wiggle{animation:shudder .5s ease 1}
+  @keyframes shudder{
+    0%,100%{transform:translateX(0)}
+    15%{transform:translateX(-5px)}30%{transform:translateX(5px)}
+    45%{transform:translateX(-4px)}60%{transform:translateX(4px)}
+    75%{transform:translateX(-2px)}90%{transform:translateX(2px)}
   }
   .rescue{
-    display:block;margin:12px auto 0;border:none;background:none;cursor:pointer;
-    color:var(--ink-soft);font-family:"Nunito";font-weight:800;font-size:13px;
+    display:block;margin:14px auto 0;border:none;background:none;cursor:pointer;
+    color:var(--ash);font-family:"Special Elite";font-size:12.5px;
     text-decoration:underline dotted;
   }
 
   /* ---------- cards ---------- */
   section.card{
-    background:var(--card);border-radius:var(--radius);padding:18px;
-    box-shadow:0 8px 0 rgba(82,51,63,.07);margin-top:18px;
+    background:var(--crypt);border-radius:var(--radius);padding:18px;
+    border:1px solid #241B20;
+    box-shadow:0 12px 30px rgba(0,0,0,.5), inset 0 0 30px rgba(0,0,0,.35);
+    margin-top:18px;
   }
-  section.card h2{margin:0 0 12px;font-size:17px;display:flex;align-items:center;gap:8px}
+  section.card h2{margin:0 0 14px;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--bone);letter-spacing:1.5px}
 
   /* week strip */
   .week{display:flex;justify-content:space-between;gap:6px}
   .day-dot{flex:1;text-align:center}
   .day-dot .c{
-    width:100%;aspect-ratio:1;max-width:48px;margin:0 auto;border-radius:16px;
-    background:var(--paper);display:grid;place-items:center;font-size:20px;
-    border:2px dashed #EFD3DC;
+    width:100%;aspect-ratio:1;max-width:48px;margin:0 auto;border-radius:12px;
+    background:#0E0A0C;display:grid;place-items:center;font-size:19px;
+    border:1px dashed #33262C;color:#3A2E33;
+    filter:grayscale(.6) brightness(.85);
   }
-  .day-dot.hit .c{background:#FFE3EC;border:2px solid var(--berry);animation:heart-in .35s backwards}
-  .day-dot.today .c{outline:3px solid var(--butter);outline-offset:2px}
-  .day-dot small{display:block;margin-top:5px;font-size:10.5px;font-weight:800;color:var(--ink-soft);letter-spacing:.6px}
+  .day-dot.hit .c{background:#26090B;border:1px solid var(--blood-deep);box-shadow:0 0 12px rgba(196,30,30,.25);animation:rise-in .35s backwards}
+  .day-dot.today .c{outline:2px solid var(--candle);outline-offset:2px}
+  .day-dot small{display:block;margin-top:6px;font-size:10px;color:var(--ash);letter-spacing:1px}
 
   /* calendar */
-  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-  .cal-head .display{font-size:16px}
-  .cal-nav{border:none;background:var(--paper);width:34px;height:34px;border-radius:12px;cursor:pointer;font-size:15px;color:var(--berry-deep);font-weight:800}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .cal-head .display{font-size:17px;letter-spacing:2px}
+  .cal-nav{border:1px solid #2A2126;background:#0E0A0C;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:14px;color:var(--blood)}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
-  .cal-grid .dow{font-size:10px;font-weight:800;color:var(--ink-soft);letter-spacing:.5px;padding:4px 0}
+  .cal-grid .dow{font-size:10px;color:var(--ash);letter-spacing:.5px;padding:4px 0}
   .cal-cell{
-    aspect-ratio:1;border-radius:12px;display:grid;place-items:center;
-    font-size:12.5px;font-weight:700;color:var(--ink-soft);position:relative;
+    aspect-ratio:1;border-radius:9px;display:grid;place-items:center;
+    font-size:12.5px;color:#5C4F54;position:relative;
   }
-  .cal-cell.hit{background:#FFE3EC;color:var(--berry-deep);font-weight:800}
-  .cal-cell.hit::after{content:"💗";position:absolute;font-size:8px;bottom:2px;right:3px}
-  .cal-cell.today{outline:2.5px solid var(--butter)}
+  .cal-cell.hit{background:#26090B;color:#E08E8E;border:1px solid var(--blood-dark)}
+  .cal-cell.hit::after{content:"🩸";position:absolute;font-size:8px;bottom:1px;right:2px}
+  .cal-cell.today{outline:1.5px solid var(--candle)}
 
   /* badges */
   .badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   .badge{
-    text-align:center;padding:10px 4px 8px;border-radius:18px;background:var(--paper);
-    border:2px solid transparent;
+    text-align:center;padding:11px 4px 9px;border-radius:14px;background:#0E0A0C;
+    border:1px solid #241B20;
   }
-  .badge .e{font-size:30px;display:block;filter:grayscale(1) opacity(.35)}
-  .badge.won{background:#FFF7E0;border-color:var(--butter)}
-  .badge.won .e{filter:none;animation:heart-in .4s backwards}
-  .badge b{display:block;font-size:11px;margin-top:4px;font-family:"Baloo 2"}
-  .badge small{display:block;font-size:9.5px;color:var(--ink-soft);font-weight:800}
+  .badge .e{font-size:29px;display:block;filter:grayscale(1) opacity(.25)}
+  .badge.won{background:#1A0E12;border-color:var(--blood-deep);box-shadow:0 0 14px rgba(196,30,30,.2), inset 0 0 12px rgba(0,0,0,.5)}
+  .badge.won .e{filter:grayscale(.3) drop-shadow(0 0 8px rgba(196,30,30,.5));animation:rise-in .4s backwards}
+  .badge b{display:block;font-size:10.5px;margin-top:5px;font-family:"Creepster";font-weight:400;letter-spacing:.5px;color:var(--bone)}
+  .badge small{display:block;font-size:9px;color:var(--ash);margin-top:1px}
 
   .stats{display:flex;gap:10px;margin-top:18px}
   .stat{
-    flex:1;background:var(--card);border-radius:20px;padding:14px;text-align:center;
-    box-shadow:0 6px 0 rgba(82,51,63,.06);
+    flex:1;background:var(--crypt);border-radius:16px;padding:14px;text-align:center;
+    border:1px solid #241B20;box-shadow:inset 0 0 20px rgba(0,0,0,.4);
   }
-  .stat .display{font-size:26px;color:var(--berry-deep)}
-  .stat small{font-size:11px;color:var(--ink-soft);font-weight:800}
+  .stat .display{font-size:28px;color:var(--blood);text-shadow:0 0 10px rgba(196,30,30,.5)}
+  .stat small{font-size:10.5px;color:var(--ash);letter-spacing:.5px}
 
   /* ---------- celebration overlay ---------- */
   .overlay{
     position:fixed;inset:0;z-index:50;display:none;place-items:center;
-    background:rgba(82,51,63,.45);backdrop-filter:blur(3px);
+    background:rgba(3,2,3,.82);backdrop-filter:blur(4px);
     padding:24px;
   }
   .overlay.show{display:grid}
   .party{
-    background:var(--card);border-radius:34px;padding:34px 26px 28px;text-align:center;
+    background:linear-gradient(180deg,#171014,#0C0709);
+    border:1px solid var(--blood-deep);
+    border-radius:24px;padding:34px 26px 28px;text-align:center;
     max-width:340px;width:100%;position:relative;
-    animation:party-in .5s cubic-bezier(.36,1.6,.4,1);
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    animation:party-in .55s cubic-bezier(.36,1.5,.4,1);
+    box-shadow:0 0 60px rgba(196,30,30,.35), 0 25px 70px rgba(0,0,0,.8);
   }
-  .party.gold{background:linear-gradient(180deg,#FFF9E8,#FFEFC2);border:3px solid var(--butter)}
+  .party.gold{
+    background:radial-gradient(ellipse at 50% 0%, #2A0A0C, #0C0405 70%);
+    border:2px solid var(--blood);
+    box-shadow:0 0 90px rgba(196,30,30,.55), 0 25px 70px rgba(0,0,0,.9);
+  }
   @keyframes party-in{from{transform:scale(.5) translateY(60px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-  .party .big{font-size:96px;line-height:1;display:inline-block;animation:celebrate .9s cubic-bezier(.36,1.6,.4,1) infinite alternate}
-  @keyframes celebrate{
-    0%{transform:translateY(0) rotate(-6deg) scale(1)}
-    100%{transform:translateY(-16px) rotate(6deg) scale(1.08)}
+  .party .big{
+    font-size:96px;line-height:1;display:inline-block;
+    filter:grayscale(.6) brightness(.8) drop-shadow(0 0 20px rgba(196,30,30,.6));
+    animation:loom 1.1s ease-in-out infinite alternate;
   }
-  .party .squadline{font-size:38px;letter-spacing:2px;margin-top:6px}
-  .party .squadline span{display:inline-block;animation:conga .7s ease-in-out infinite alternate}
-  .party .squadline span:nth-child(2){animation-delay:.1s}
-  .party .squadline span:nth-child(3){animation-delay:.2s}
-  .party .squadline span:nth-child(4){animation-delay:.3s}
-  .party .squadline span:nth-child(5){animation-delay:.4s}
-  @keyframes conga{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-  .party h2{font-size:26px;margin:12px 0 6px;line-height:1.1}
-  .party p{margin:0 0 18px;color:var(--ink-soft);font-weight:700;font-size:14.5px;line-height:1.5}
+  @keyframes loom{
+    0%{transform:translateY(0) rotate(-3deg) scale(1)}
+    100%{transform:translateY(-12px) rotate(3deg) scale(1.07)}
+  }
+  .party .squadline{font-size:36px;letter-spacing:3px;margin-top:6px;filter:grayscale(.6) brightness(.8) drop-shadow(0 0 12px rgba(196,30,30,.55))}
+  .party .squadline span{display:inline-block;animation:procession 1s ease-in-out infinite alternate}
+  .party .squadline span:nth-child(2){animation-delay:.15s}
+  .party .squadline span:nth-child(3){animation-delay:.3s}
+  .party .squadline span:nth-child(4){animation-delay:.45s}
+  .party .squadline span:nth-child(5){animation-delay:.6s}
+  @keyframes procession{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+  .party h2{font-size:27px;margin:14px 0 8px;line-height:1.1;color:var(--blood);text-shadow:0 0 14px rgba(196,30,30,.6);letter-spacing:1.5px}
+  .party p{margin:0 0 20px;color:var(--bone);font-size:13.5px;line-height:1.65}
   .party .close{
-    border:none;cursor:pointer;background:var(--berry);color:#fff;
-    font-family:"Baloo 2";font-weight:800;font-size:17px;padding:12px 30px;border-radius:20px;
-    box-shadow:0 5px 0 #B93A60;transition:transform .1s,box-shadow .1s;
+    border:1px solid var(--blood-deep);cursor:pointer;
+    background:linear-gradient(180deg,#8E1414,var(--blood-dark));color:#F5E6E0;
+    font-family:"Creepster";font-size:17px;letter-spacing:2px;padding:12px 32px;border-radius:14px;
+    box-shadow:0 5px 0 #300505;transition:transform .1s,box-shadow .1s;
   }
-  .party .close:active{transform:translateY(4px);box-shadow:0 1px 0 #B93A60}
+  .party .close:active{transform:translateY(4px);box-shadow:0 1px 0 #300505}
   .party .streak-chip{
-    display:inline-block;background:#FFE3EC;color:var(--berry-deep);
-    font-family:"Baloo 2";font-weight:800;padding:4px 14px;border-radius:99px;font-size:14px;
+    display:inline-block;background:#26090B;color:#E08E8E;border:1px solid var(--blood-dark);
+    font-family:"Creepster";padding:4px 16px;border-radius:99px;font-size:13px;letter-spacing:1.5px;
     margin-bottom:8px;
   }
   #confetti{position:fixed;inset:0;z-index:60;pointer-events:none}
 
   /* ---------- settings sheet ---------- */
-  .sheet-wrap{position:fixed;inset:0;z-index:40;display:none;background:rgba(82,51,63,.40)}
+  .sheet-wrap{position:fixed;inset:0;z-index:40;display:none;background:rgba(3,2,3,.75)}
   .sheet-wrap.show{display:block}
   .sheet{
-    position:absolute;left:0;right:0;bottom:0;background:var(--card);
-    border-radius:30px 30px 0 0;padding:22px 22px 34px;max-width:430px;margin:0 auto;
+    position:absolute;left:0;right:0;bottom:0;background:var(--crypt);
+    border-top:1px solid #33262C;
+    border-radius:24px 24px 0 0;padding:22px 22px 34px;max-width:430px;margin:0 auto;
     animation:sheet-up .3s cubic-bezier(.3,1.2,.4,1);
+    box-shadow:0 -20px 60px rgba(0,0,0,.8);
   }
   @keyframes sheet-up{from{transform:translateY(60%)}to{transform:translateY(0)}}
-  .sheet h2{margin:0 0 16px;font-size:20px}
-  .set-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1.5px dashed #F3DCE4;gap:12px}
-  .set-row label{font-weight:800;font-size:14.5px}
-  .set-row small{display:block;color:var(--ink-soft);font-size:11.5px;font-weight:700;margin-top:2px}
+  .sheet h2{margin:0 0 16px;font-size:21px;letter-spacing:2px}
+  .set-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px dashed #2A2126;gap:12px}
+  .set-row label{font-size:13.5px;color:var(--bone)}
+  .set-row small{display:block;color:var(--ash);font-size:11px;margin-top:3px;line-height:1.4}
   .set-row input[type=time]{
-    border:2px solid #F3DCE4;border-radius:12px;padding:7px 10px;font-family:"Nunito";
-    font-weight:800;color:var(--ink);background:var(--paper);font-size:14px;
+    border:1px solid #33262C;border-radius:10px;padding:7px 10px;font-family:"Special Elite";
+    color:var(--bone);background:#0E0A0C;font-size:13px;color-scheme:dark;
   }
   .toggle{position:relative;width:52px;height:30px;flex:none}
   .toggle input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}
-  .toggle .tr{position:absolute;inset:0;background:#EFD3DC;border-radius:99px;transition:background .2s}
+  .toggle .tr{position:absolute;inset:0;background:#2A2126;border-radius:99px;transition:background .2s;border:1px solid #33262C}
   .toggle .tr::after{
-    content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
-    background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s;
+    content:"";position:absolute;top:2px;left:3px;width:24px;height:24px;border-radius:50%;
+    background:#6B5C62;box-shadow:0 2px 4px rgba(0,0,0,.5);transition:transform .2s,background .2s;
   }
-  .toggle input:checked + .tr{background:var(--mint-deep)}
-  .toggle input:checked + .tr::after{transform:translateX(22px)}
+  .toggle input:checked + .tr{background:var(--blood-dark);border-color:var(--blood-deep)}
+  .toggle input:checked + .tr::after{transform:translateX(21px);background:var(--blood)}
   .danger-btn,.soft-btn{
-    border:none;cursor:pointer;border-radius:14px;padding:9px 16px;
-    font-family:"Nunito";font-weight:800;font-size:13px;
+    border:1px solid #33262C;cursor:pointer;border-radius:10px;padding:9px 16px;
+    font-family:"Special Elite";font-size:12px;
   }
-  .soft-btn{background:var(--paper);color:var(--ink)}
-  .danger-btn{background:#FDE8E8;color:#C0392B}
+  .soft-btn{background:#0E0A0C;color:var(--bone)}
+  .danger-btn{background:#26090B;color:#E08E8E;border-color:var(--blood-dark)}
   .sheet .done-btn{
-    width:100%;margin-top:20px;border:none;cursor:pointer;background:var(--berry);color:#fff;
-    font-family:"Baloo 2";font-weight:800;font-size:17px;padding:13px;border-radius:18px;
-    box-shadow:0 5px 0 #B93A60;
+    width:100%;margin-top:20px;border:1px solid var(--blood-deep);cursor:pointer;
+    background:linear-gradient(180deg,#8E1414,var(--blood-dark));color:#F5E6E0;
+    font-family:"Creepster";font-size:17px;letter-spacing:2px;padding:13px;border-radius:14px;
+    box-shadow:0 5px 0 #300505;
   }
-  footer{text-align:center;margin-top:26px;color:var(--ink-soft);font-size:12px;font-weight:700}
+  footer{text-align:center;margin-top:28px;color:var(--ash);font-size:11.5px;letter-spacing:.5px}
 
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
@@ -281,35 +323,35 @@
     <div class="brand">
       <div class="brand-badge">🐼</div>
       <div>
-        <h1>The Wiggle Squad</h1>
-        <small>exercise streak club</small>
+        <h1>The Midnight Menagerie</h1>
+        <small>the streak must not break</small>
       </div>
     </div>
-    <button class="gear" id="gearBtn" aria-label="Settings">⚙️</button>
+    <button class="gear" id="gearBtn" aria-label="Settings">🕯️</button>
   </header>
 
   <div class="stage">
     <div class="bubble" id="bubble">…</div>
-    <div class="mascot" id="mascot" role="img" aria-label="Your coach">🐼</div>
-    <div class="coach-name" id="coachName">Today's coach: <b>Bao the Panda</b></div>
+    <div class="mascot" id="mascot" role="img" aria-label="Your keeper">🐼</div>
+    <div class="coach-name" id="coachName">Tonight's keeper: <b>Mourn the Panda</b></div>
   </div>
 
   <div class="hero">
     <div class="streak-num" id="streakNum">0</div>
     <div class="streak-label">
-      <div class="display" id="streakWord">day streak</div>
-      <small id="bestLine">best ever: 0 days</small>
+      <div class="display" id="streakWord">nights kept</div>
+      <small id="bestLine">darkest run: 0 nights</small>
     </div>
   </div>
   <div class="hearts" id="hearts"></div>
 
   <div class="log-wrap">
-    <button class="log-btn" id="logBtn">I moved today! 💪</button>
-    <button class="rescue" id="rescueBtn" hidden>psst… I actually exercised yesterday too 🙈</button>
+    <button class="log-btn" id="logBtn">Feed the Streak 🩸</button>
+    <button class="rescue" id="rescueBtn" hidden>…I performed yesterday's ritual too, I swear 🕯️</button>
   </div>
 
   <section class="card">
-    <h2>🗓️ This week</h2>
+    <h2>🌒 This week</h2>
     <div class="week" id="week"></div>
   </section>
 
@@ -323,17 +365,17 @@
   </section>
 
   <section class="card">
-    <h2>🏆 Trophy shelf</h2>
+    <h2>🪦 Relic shelf</h2>
     <div class="badges" id="badges"></div>
   </section>
 
   <div class="stats">
-    <div class="stat"><div class="display" id="statTotal">0</div><small>workouts logged</small></div>
+    <div class="stat"><div class="display" id="statTotal">0</div><small>offerings made</small></div>
     <div class="stat"><div class="display" id="statBest">0</div><small>longest streak</small></div>
-    <div class="stat"><div class="display" id="statMonth">0</div><small>this month</small></div>
+    <div class="stat"><div class="display" id="statMonth">0</div><small>this moon</small></div>
   </div>
 
-  <footer>made with 💖 for the cutest athlete alive</footer>
+  <footer>the beasts are always watching 🖤</footer>
 </div>
 
 <!-- celebration -->
@@ -343,10 +385,10 @@
     <div class="squadline" id="squadline" hidden>
       <span>🫏</span><span>🦝</span><span>🐭</span><span>🐮</span><span>🐼</span>
     </div>
-    <div><span class="streak-chip" id="partyChip">Day 1</span></div>
-    <h2 id="partyTitle">You did it!</h2>
-    <p id="partyMsg">So proud of you!</p>
-    <button class="close" id="partyClose">Yay! 💖</button>
+    <div><span class="streak-chip" id="partyChip">Night 1</span></div>
+    <h2 id="partyTitle">The offering is accepted</h2>
+    <p id="partyMsg">The beasts are pleased.</p>
+    <button class="close" id="partyClose">So be it 🖤</button>
   </div>
 </div>
 <canvas id="confetti"></canvas>
@@ -354,67 +396,67 @@
 <!-- settings -->
 <div class="sheet-wrap" id="sheetWrap">
   <div class="sheet">
-    <h2>⚙️ Settings</h2>
+    <h2>🕯️ The Terms</h2>
     <div class="set-row">
-      <div><label for="remTime">Evening check-in time</label>
-        <small>When the squad asks about your workout</small></div>
+      <div><label for="remTime">Hour of reckoning</label>
+        <small>When the beasts come asking about your workout</small></div>
       <input type="time" id="remTime" value="19:00">
     </div>
     <div class="set-row">
-      <div><label>Reminder notification</label>
+      <div><label>Summons notification</label>
         <small>Works while the app is open or installed</small></div>
       <div class="toggle"><input type="checkbox" id="remToggle"><span class="tr"></span></div>
     </div>
     <div class="set-row">
-      <div><label>Celebration sounds</label>
-        <small>Tiny happy pops when you log</small></div>
+      <div><label>Sounds from below</label>
+        <small>Low tones when an offering is made</small></div>
       <div class="toggle"><input type="checkbox" id="soundToggle" checked><span class="tr"></span></div>
     </div>
     <div class="set-row">
-      <div><label>Oops — undo today's log</label>
-        <small>Removes today from the calendar</small></div>
-      <button class="soft-btn" id="undoBtn">Undo</button>
+      <div><label>Recant today's offering</label>
+        <small>Removes today from the record</small></div>
+      <button class="soft-btn" id="undoBtn">Recant</button>
     </div>
     <div class="set-row" style="border-bottom:none">
-      <div><label>Start completely fresh</label>
-        <small>Erases everything. The squad will miss the memories!</small></div>
-      <button class="danger-btn" id="resetBtn">Reset</button>
+      <div><label>Burn the record</label>
+        <small>Erases everything. The beasts will remember.</small></div>
+      <button class="danger-btn" id="resetBtn">Burn it</button>
     </div>
-    <button class="done-btn" id="sheetDone">Done 💖</button>
+    <button class="done-btn" id="sheetDone">Seal the pact 🖤</button>
   </div>
 </div>
 
 <script>
 "use strict";
-/* ---------------- squad ---------------- */
+/* ---------------- the menagerie ---------------- */
 const SQUAD = [
-  {e:"🫏", name:"Waffles the Donkey",
-   cheers:["Hee-haw! You absolute legend! 🎉","I kicked my little legs with joy!","Stubborn about your goals — I love it!"],
-   asks:["Waffles wants to know: did you move that gorgeous body today?","Hee-haw! Any exercise today, superstar?"]},
-  {e:"🦝", name:"Bandit the Raccoon",
-   cheers:["I'd steal trash for you, but you stole my heart! 🖤","Sneaky little workout? I SAW that. Amazing.","Adding this to my treasure stash of proud moments!"],
-   asks:["Bandit rummaged through the day… did you exercise yet?","Psst… got a workout for my collection today?"]},
-  {e:"🐭", name:"Crumb the Rat",
-   cheers:["SQUEAK! That's rat for INCREDIBLE! 🧀","You earned all the cheese today!","Tiny paws, giant applause! 👏"],
-   asks:["Crumb squeaks: did you wiggle about today?","A little birdie (rat) asks: exercise today?"]},
-  {e:"🐮", name:"Clementine the Cow",
-   cheers:["MOOO-VELOUS! Simply outstanding! 🌼","I'm udderly amazed by you!","Holy cow!! (that's me!) You did it!"],
-   asks:["Clementine moos gently: did you move today, flower?","Any mooo-vement today, sweetheart?"]},
-  {e:"🐼", name:"Bao the Panda",
-   cheers:["I rolled over THREE times from excitement! 🎋","Bamboo-tiful work today!","You're my favorite human. Don't tell the others."],
-   asks:["Bao looks up from his bamboo: exercise today, cutie?","Even I did a stretch today… did you? 🎋"]},
+  {e:"🫏", name:"Hollow the Donkey",
+   cheers:["A bray echoes through the fog. It is pleased with you.","Hollow stamps a hoof. Once. That means forever.","The old donkey remembers every offering. Especially this one."],
+   asks:["Hollow stands at the gate, waiting. Did you exercise today?","A distant hee-haw asks: has the ritual been performed?"]},
+  {e:"🦝", name:"Grimm the Raccoon",
+   cheers:["Grimm adds your effort to the hoard of souls… I mean, treasures. 🖤","Little hands applaud from the shadows.","He watched the whole workout through your window. Magnificent."],
+   asks:["Grimm rifles through the day's remains… no workout yet?","Small eyes gleam in the dark: feed the streak?"]},
+  {e:"🐭", name:"Vermin the Rat",
+   cheers:["A thousand tiny squeaks rise from beneath the floorboards. For you.","Vermin carves your triumph into the wall. Scratch, scratch.","The colony approves. The colony always knows."],
+   asks:["Something scratches in the walls: did you move today?","Vermin whispers from the drain: the streak hungers…"]},
+  {e:"🐮", name:"The Heifer",
+   cheers:["A slow, satisfied moo rolls across the moor.","The Heifer's thousand-yard stare softens. Briefly.","Udderly dreadful. In the best way."],
+   asks:["The Heifer stands motionless in the field, facing your house. Exercise today?","A moo at midnight means only one thing: log your workout."]},
+  {e:"🐼", name:"Mourn the Panda",
+   cheers:["Mourn sheds a single black-and-white tear of pride.","The bamboo grove rustles though there is no wind. Approval.","Mourn has eaten. Mourn has judged. Mourn is content."],
+   asks:["Mourn sits in the dark grove, waiting for your answer: exercise today?","Even the bamboo has stopped growing until you log your workout."]},
 ];
 const MILESTONES = [
-  {n:3,  e:"🌱", name:"Sprout",       msg:"Three days! A tiny habit is sprouting!"},
-  {n:7,  e:"🧀", name:"Week Wheel",   msg:"A whole week! Crumb the Rat awards you the golden cheese!"},
-  {n:14, e:"🗑️✨",name:"Shiny Stash", msg:"Two weeks! Bandit has enshrined you in his treasure pile!"},
-  {n:21, e:"🌼", name:"Meadow Queen", msg:"21 days — a real habit! Clementine wove you a flower crown!"},
-  {n:30, e:"🎋", name:"Bamboo Belt",  msg:"A FULL MONTH! Bao shares his sacred bamboo. This is huge."},
-  {n:50, e:"🏅", name:"Hee-Haw Hero", msg:"50 days!! Waffles is doing victory laps around the barn!"},
-  {n:75, e:"👑", name:"Squad Royalty",msg:"75 days. The squad has officially crowned you."},
-  {n:100,e:"💎", name:"Diamond Legend",msg:"ONE HUNDRED DAYS. You are a legend. We are not worthy."},
+  {n:3,  e:"🕯️", name:"First Rite",    msg:"Three nights kept. The candle is lit. It must never go out."},
+  {n:7,  e:"🌑", name:"Dark Week",     msg:"Seven nights. Vermin's colony chants your name beneath the floor."},
+  {n:14, e:"🕸️", name:"Web Weaver",    msg:"A fortnight. Grimm has woven your deeds into the great web."},
+  {n:21, e:"🥀", name:"Wilted Crown",  msg:"21 nights — the habit has taken root in the graveyard soil."},
+  {n:30, e:"🌕", name:"Blood Moon",    msg:"A FULL MOON of devotion. The Heifer bows her heavy head to you."},
+  {n:50, e:"⚰️", name:"Crypt Keeper",  msg:"50 nights. Hollow grants you the key to the lower crypt."},
+  {n:75, e:"👁️", name:"The Watched",   msg:"75 nights. You no longer watch the beasts. They watch over you."},
+  {n:100,e:"🦴", name:"Undying",       msg:"ONE HUNDRED NIGHTS. Death itself has given up waiting for you to skip a day."},
 ];
-const CHEER_TITLES = ["You did it!","Another one!!","Unstoppable!","So strong!","Look at you go!","Star athlete!","Crushed it!"];
+const CHEER_TITLES = ["The offering is accepted","The beasts are sated","It is done","The streak feeds","Another soul… day!","The pact holds","Darkness approves"];
 
 /* ---------------- state ---------------- */
 const KEY = "wiggle-squad-v1";
@@ -453,43 +495,44 @@ function bestStreak(){
   return best;
 }
 
-/* ---------------- sound & haptics ---------------- */
+/* ---------------- sound & haptics — low tones from below ---------------- */
 let actx=null;
-function pop(freq, t=0, dur=.09, vol=.15){
+function toll(freq, t=0, dur=.28, vol=.14){
   if(!state.soundOn) return;
   try{
     actx = actx || new (window.AudioContext||window.webkitAudioContext)();
     const o=actx.createOscillator(), g=actx.createGain();
-    o.type="sine"; o.frequency.setValueAtTime(freq, actx.currentTime+t);
-    o.frequency.exponentialRampToValueAtTime(freq*1.6, actx.currentTime+t+dur);
+    o.type="triangle"; o.frequency.setValueAtTime(freq, actx.currentTime+t);
+    o.frequency.exponentialRampToValueAtTime(freq*.82, actx.currentTime+t+dur);
     g.gain.setValueAtTime(vol, actx.currentTime+t);
     g.gain.exponentialRampToValueAtTime(.001, actx.currentTime+t+dur);
     o.connect(g); g.connect(actx.destination);
-    o.start(actx.currentTime+t); o.stop(actx.currentTime+t+dur+.02);
+    o.start(actx.currentTime+t); o.stop(actx.currentTime+t+dur+.05);
   }catch(e){}
 }
-function fanfare(){ pop(523); pop(659,.09); pop(784,.18); pop(1047,.27,.22,.18); }
+/* a slow minor toll for milestones */
+function knell(){ toll(196,0,.5,.16); toll(155.6,.35,.5,.16); toll(130.8,.7,.9,.18); toll(98,1.1,1.2,.14); }
 function buzz(pat){ try{ navigator.vibrate && navigator.vibrate(pat); }catch(e){} }
 
-/* ---------------- confetti ---------------- */
+/* ---------------- particles — ash, bats & bone ---------------- */
 const canvas=$("confetti"), ctx=canvas.getContext("2d");
 let parts=[], rafId=null;
 function resize(){ canvas.width=innerWidth*devicePixelRatio; canvas.height=innerHeight*devicePixelRatio; }
 addEventListener("resize",resize); resize();
-const CONF_COLORS=["#F26089","#FFD166","#7ED0B4","#C9B3F5","#A8D8F0","#FF9CB8"];
-const CONF_EMOJI=["💖","⭐","🌸","✨"];
+const CONF_COLORS=["#C41E1E","#7A1010","#8A7D7A","#D8CDB8","#3B2E4A","#5E7A3A"];
+const CONF_EMOJI=["🦇","💀","🕷️","🖤","🕯️"];
 function burst(x,y,n,big){
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if(reduced) n = Math.min(n,12);
   for(let i=0;i<n;i++){
-    const a=Math.random()*Math.PI*2, sp=(4+Math.random()*9)*(big?1.4:1);
+    const a=Math.random()*Math.PI*2, sp=(3.5+Math.random()*8)*(big?1.4:1);
     parts.push({
       x:x*devicePixelRatio, y:y*devicePixelRatio,
-      vx:Math.cos(a)*sp*devicePixelRatio, vy:(Math.sin(a)*sp-6)*devicePixelRatio,
-      rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.3,
-      life:1, decay:.008+Math.random()*.012,
+      vx:Math.cos(a)*sp*devicePixelRatio, vy:(Math.sin(a)*sp-5)*devicePixelRatio,
+      rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.25,
+      life:1, decay:.007+Math.random()*.011,
       size:(6+Math.random()*8)*devicePixelRatio,
-      emoji: Math.random()<.18 ? CONF_EMOJI[Math.random()*CONF_EMOJI.length|0] : null,
+      emoji: Math.random()<.22 ? CONF_EMOJI[Math.random()*CONF_EMOJI.length|0] : null,
       color: CONF_COLORS[Math.random()*CONF_COLORS.length|0],
     });
   }
@@ -499,7 +542,7 @@ function tick(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   parts=parts.filter(p=>p.life>0);
   for(const p of parts){
-    p.x+=p.vx; p.y+=p.vy; p.vy+=.35*devicePixelRatio; p.vx*=.99;
+    p.x+=p.vx; p.y+=p.vy; p.vy+=.22*devicePixelRatio; p.vx*=.985; /* ash falls slower than confetti */
     p.rot+=p.vr; p.life-=p.decay;
     ctx.save(); ctx.globalAlpha=Math.max(p.life,0); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
     if(p.emoji){ ctx.font=(p.size*1.6)+"px serif"; ctx.textAlign="center"; ctx.fillText(p.emoji,0,0); }
@@ -517,21 +560,21 @@ function render(){
   const total=Object.keys(state.days).length;
 
   $("streakNum").textContent=cur;
-  $("streakWord").textContent = cur===1 ? "day streak" : "day streak";
-  $("bestLine").textContent = "best ever: "+best+" day"+(best===1?"":"s");
+  $("streakWord").textContent = cur===1 ? "night kept" : "nights kept";
+  $("bestLine").textContent = "darkest run: "+best+" night"+(best===1?"":"s");
 
   const h=$("hearts"); h.innerHTML="";
   for(let i=0;i<Math.min(cur,14);i++){
     const s=document.createElement("span");
-    s.textContent = i<7 ? "💗" : "💖";
+    s.textContent = i<7 ? "🖤" : "💀";
     s.style.animationDelay=(i*.05)+"s";
     h.appendChild(s);
   }
-  if(cur>14){ const s=document.createElement("span"); s.textContent="+"+(cur-14); s.style.cssText="font-weight:800;color:var(--berry-deep);font-size:13px"; h.appendChild(s); }
+  if(cur>14){ const s=document.createElement("span"); s.textContent="+"+(cur-14); s.style.cssText="color:#E08E8E;font-size:13px"; h.appendChild(s); }
 
   const btn=$("logBtn");
   btn.classList.toggle("done",loggedToday);
-  btn.textContent = loggedToday ? "Logged! See you tomorrow 💖" : "I moved today! 💪";
+  btn.textContent = loggedToday ? "The beasts are sated… until tomorrow 🌒" : "Feed the Streak 🩸";
   $("rescueBtn").hidden = !!state.days[yesterday()];
 
   /* bubble */
@@ -539,11 +582,11 @@ function render(){
   let msg;
   if(loggedToday) msg = coach.cheers[dayOfYear()%coach.cheers.length];
   else if(hour>=17) msg = coach.asks[dayOfYear()%coach.asks.length];
-  else if(cur>0) msg = "Day "+(cur+1)+" awaits! The squad believes in you! ✨";
-  else msg = "Hi cutie! Ready to start a brand-new streak? 🌸";
+  else if(cur>0) msg = "Night "+(cur+1)+" approaches. The menagerie stirs in anticipation…";
+  else msg = "So. You have found us. Begin a streak… if you dare. 🌒";
   $("bubble").textContent=msg;
   $("mascot").textContent=coach.e;
-  $("coachName").innerHTML="Today's coach: <b>"+coach.name+"</b>";
+  $("coachName").innerHTML="Tonight's keeper: <b>"+coach.name+"</b>";
 
   /* week strip */
   const wk=$("week"); wk.innerHTML="";
@@ -553,7 +596,7 @@ function render(){
     const ds=iso(d), hit=!!state.days[ds];
     const el=document.createElement("div");
     el.className="day-dot"+(hit?" hit":"")+(i===0?" today":"");
-    const stamp = hit ? SQUAD[(d.getDate()+d.getMonth())%SQUAD.length].e : "·";
+    const stamp = hit ? SQUAD[(d.getDate()+d.getMonth())%SQUAD.length].e : "✕";
     el.innerHTML='<div class="c">'+stamp+'</div><small>'+DOW[d.getDay()]+'</small>';
     wk.appendChild(el);
   }
@@ -566,7 +609,7 @@ function render(){
     const won = best>=m.n;
     const el=document.createElement("div");
     el.className="badge"+(won?" won":"");
-    el.innerHTML='<span class="e">'+(won?m.e:"🔒")+'</span><b>'+m.name+'</b><small>'+m.n+' days</small>';
+    el.innerHTML='<span class="e">'+(won?m.e:"⛓️")+'</span><b>'+m.name+'</b><small>'+m.n+' nights</small>';
     bd.appendChild(el);
   }
 
@@ -601,19 +644,19 @@ function celebrate(streak){
   party.classList.toggle("gold",!!milestone);
   $("squadline").hidden=!milestone;
   $("partyAnimal").style.display = milestone ? "none":"inline-block";
-  $("partyChip").textContent = milestone ? "🏆 "+milestone.n+"-day milestone!" : "Day "+streak;
+  $("partyChip").textContent = milestone ? "⚰️ "+milestone.n+"-night rite complete" : "Night "+streak;
   if(milestone){
-    $("partyTitle").textContent = milestone.e+" "+milestone.name+"!";
+    $("partyTitle").textContent = milestone.e+" "+milestone.name;
     $("partyMsg").textContent = milestone.msg;
     buzz([40,60,40,60,120]);
-    fanfare();
+    knell();
   }else{
     const a=SQUAD[Math.random()*SQUAD.length|0];
     $("partyAnimal").textContent=a.e;
     $("partyTitle").textContent = CHEER_TITLES[Math.random()*CHEER_TITLES.length|0];
     $("partyMsg").textContent = a.cheers[Math.random()*a.cheers.length|0]+" — "+a.name;
     buzz([30,40,60]);
-    pop(660); pop(880,.08);
+    toll(220); toll(174.6,.15);
   }
   ov.classList.add("show");
   const cx=innerWidth/2, cy=innerHeight/2;
@@ -624,7 +667,7 @@ function celebrate(streak){
     setTimeout(()=>burst(cx,cy*0.3,60,true),1050);
   }
 }
-$("partyClose").addEventListener("click",()=>{ $("overlay").classList.remove("show"); pop(523,0,.06,.1); });
+$("partyClose").addEventListener("click",()=>{ $("overlay").classList.remove("show"); toll(147,0,.2,.08); });
 $("overlay").addEventListener("click",e=>{ if(e.target===e.currentTarget) $("overlay").classList.remove("show"); });
 
 /* ---------------- actions ---------------- */
@@ -632,7 +675,7 @@ $("logBtn").addEventListener("click",()=>{
   const t=today();
   if(state.days[t]){
     const b=$("logBtn"); b.classList.remove("wiggle"); void b.offsetWidth; b.classList.add("wiggle");
-    $("bubble").textContent="Already logged today, superstar! Rest those muscles 💆‍♀️";
+    $("bubble").textContent="The offering was already made. Greed does not become you. 🌒";
     return;
   }
   state.days[t]=true; save(); render();
@@ -640,13 +683,13 @@ $("logBtn").addEventListener("click",()=>{
 });
 $("rescueBtn").addEventListener("click",()=>{
   state.days[yesterday()]=true; save(); render();
-  $("bubble").textContent="Backfilled yesterday — the streak lives on! 🙌";
+  $("bubble").textContent="…The beasts choose to believe you. This time. The streak endures. 🕯️";
   burst(innerWidth/2,innerHeight/3,25,false);
-  pop(587); buzz(30);
+  toll(196); buzz(30);
 });
 $("mascot").addEventListener("click",()=>{
   const m=$("mascot"); m.classList.remove("poke"); void m.offsetWidth; m.classList.add("poke");
-  pop(700+Math.random()*300,0,.07,.1); buzz(15);
+  toll(160+Math.random()*80,0,.15,.08); buzz(15);
   burst(innerWidth/2, m.getBoundingClientRect().top+50, 8, false);
 });
 
@@ -665,7 +708,7 @@ $("remToggle").addEventListener("change",async e=>{
   if(e.target.checked){
     let perm="denied";
     try{ perm = await Notification.requestPermission(); }catch(err){}
-    if(perm!=="granted"){ e.target.checked=false; alert("Notifications are blocked for this page — allow them in your browser settings to get the evening check-in."); return; }
+    if(perm!=="granted"){ e.target.checked=false; alert("Notifications are blocked for this page — allow them in your browser settings so the beasts may summon you."); return; }
   }
   state.remOn=e.target.checked; save();
 });
@@ -674,13 +717,13 @@ $("undoBtn").addEventListener("click",()=>{
   $("sheetWrap").classList.remove("show");
 });
 $("resetBtn").addEventListener("click",()=>{
-  if(confirm("Really erase ALL streaks and trophies? The squad will cry.")){
+  if(confirm("Burn the entire record? Every night, every relic — gone. The beasts will remember what you did.")){
     state={days:{}, remTime:"19:00", remOn:false, soundOn:true, lastRemind:""}; save(); render();
     $("sheetWrap").classList.remove("show");
   }
 });
 
-/* ---------------- evening reminder (while app is open/installed) ---------------- */
+/* ---------------- evening summons (while app is open/installed) ---------------- */
 function checkReminder(){
   if(!state.remOn || state.days[today()]) return;
   const now=new Date(), [hh,mm]=state.remTime.split(":").map(Number);
@@ -688,9 +731,9 @@ function checkReminder(){
   if(due && state.lastRemind!==today()){
     state.lastRemind=today(); save();
     try{
-      new Notification(coach.e+" "+coach.name+" is asking…", {
-        body:"Did you exercise today, cutie? Tap to log it! 💪",
-        tag:"wiggle-checkin",
+      new Notification(coach.e+" "+coach.name+" summons you…", {
+        body:"The streak hungers. Did you exercise today? 🩸",
+        tag:"menagerie-summons",
       });
     }catch(e){}
   }

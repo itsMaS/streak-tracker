@@ -1,8 +1,9 @@
-# The Wiggle Squad 🫏🦝🐭🐮🐼
+# The Midnight Menagerie 🫏🦝🐭🐮🐼
 
-A cute exercise streak tracker — a five-animal cheer squad (Waffles the Donkey,
-Bandit the Raccoon, Crumb the Rat, Clementine the Cow, and Bao the Panda)
-celebrates every workout with confetti, wiggles, and milestone trophies.
+A very dark horror exercise streak tracker — five ominous beasts (Hollow the
+Donkey, Grimm the Raccoon, Vermin the Rat, The Heifer, and Mourn the Panda)
+demand a daily offering of exercise. Feeding the streak brings ash-and-bat
+bursts, tolling bells, and milestone rites on the relic shelf.
 
 ## Files
 
@@ -14,12 +15,13 @@ celebrates every workout with confetti, wiggles, and milestone trophies.
 
 ## Features
 
-- One giant squishy "I moved today!" button with confetti, haptics, and pop sounds
-- Streak counter, week strip, monthly calendar, and stats
-- Milestone trophies at 3 / 7 / 14 / 21 / 30 / 50 / 75 / 100 days with a golden
-  all-squad party animation
-- "I actually exercised yesterday" rescue button so a forgotten log doesn't kill a streak
-- Evening check-in: the coach of the day asks about the workout after 5pm, plus an
+- One giant "Feed the Streak 🩸" button with ash/bat/skull bursts, haptics, and
+  low tolling sounds
+- Streak counter ("nights kept"), week strip, monthly calendar, and stats
+- Milestone rites at 3 / 7 / 14 / 21 / 30 / 50 / 75 / 100 nights with a blood-moon
+  all-beast procession animation
+- "I performed yesterday's ritual" rescue button so a forgotten log doesn't kill a streak
+- Evening summons: the keeper of the night asks about the workout after 5pm, plus an
   optional browser notification at a configurable time (fires while the app is open
   or installed)
 - Data lives in `localStorage` on the phone — no accounts, no server
