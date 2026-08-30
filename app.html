@@ -1,0 +1,714 @@
+<title>The Wiggle Squad</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap">
+<style>
+  :root{
+    --paper:#FFF5F7;      /* blush milk */
+    --card:#FFFFFF;
+    --ink:#52333F;        /* cocoa berry */
+    --ink-soft:#8C6B78;
+    --berry:#F26089;
+    --berry-deep:#D94A73;
+    --mint:#7ED0B4;
+    --mint-deep:#4CAF8E;
+    --butter:#FFD166;
+    --lilac:#C9B3F5;
+    --sky:#A8D8F0;
+    --shadow:0 6px 0 rgba(217,74,115,.18);
+    --radius:26px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(201,179,245,.22) 0 140px, transparent 141px),
+      radial-gradient(circle at 88% 20%, rgba(255,209,102,.20) 0 120px, transparent 121px),
+      radial-gradient(circle at 80% 90%, rgba(126,208,180,.16) 0 160px, transparent 161px);
+    color:var(--ink);
+    font-family:"Nunito",system-ui,sans-serif;
+    font-weight:600;
+    min-height:100vh;
+    -webkit-tap-highlight-color:transparent;
+    overflow-x:hidden;
+  }
+  .app{max-width:430px;margin:0 auto;padding:18px 18px 60px}
+  h1,h2,.display{font-family:"Baloo 2","Nunito",system-ui,sans-serif}
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 14px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand-badge{
+    width:44px;height:44px;border-radius:16px;background:var(--berry);
+    display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow);
+    transform:rotate(-6deg);
+  }
+  .brand h1{font-size:22px;margin:0;line-height:1;letter-spacing:.2px}
+  .brand small{display:block;color:var(--ink-soft);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;margin-top:3px}
+  .gear{
+    border:none;background:var(--card);width:44px;height:44px;border-radius:16px;
+    font-size:20px;cursor:pointer;box-shadow:0 4px 0 rgba(82,51,63,.10);
+    transition:transform .15s;
+  }
+  .gear:active{transform:scale(.92) rotate(30deg)}
+
+  /* ---------- mascot stage ---------- */
+  .stage{
+    background:var(--card);border-radius:var(--radius);padding:20px 18px 22px;
+    box-shadow:0 8px 0 rgba(82,51,63,.07);
+    text-align:center;position:relative;overflow:hidden;
+  }
+  .stage::before{
+    content:"";position:absolute;inset:auto -30px -70px -30px;height:130px;
+    background:linear-gradient(0deg,rgba(242,96,137,.10),transparent);
+    border-radius:50% 50% 0 0;
+  }
+  .bubble{
+    position:relative;background:var(--paper);border:2.5px solid #F7D2DD;
+    border-radius:20px;padding:12px 16px;font-size:15px;line-height:1.45;
+    margin:0 auto 14px;max-width:34ch;font-weight:700;
+  }
+  .bubble::after{
+    content:"";position:absolute;left:50%;bottom:-11px;transform:translateX(-50%) rotate(45deg);
+    width:16px;height:16px;background:var(--paper);
+    border-right:2.5px solid #F7D2DD;border-bottom:2.5px solid #F7D2DD;
+  }
+  .mascot{
+    font-size:88px;line-height:1;display:inline-block;position:relative;
+    filter:drop-shadow(0 8px 0 rgba(217,74,115,.15));
+    animation:idle-bob 3.2s ease-in-out infinite;
+    cursor:pointer;user-select:none;
+  }
+  .mascot.poke{animation:poke .55s cubic-bezier(.36,1.6,.4,1) 1}
+  .coach-name{margin-top:8px;font-size:13px;color:var(--ink-soft);font-weight:800}
+  .coach-name b{color:var(--berry-deep)}
+  @keyframes idle-bob{
+    0%,100%{transform:translateY(0) rotate(-2deg)}
+    50%{transform:translateY(-9px) rotate(2deg)}
+  }
+  @keyframes poke{
+    0%{transform:scale(1)}
+    30%{transform:scale(1.25,.75)}
+    60%{transform:scale(.85,1.2) rotate(-6deg)}
+    100%{transform:scale(1)}
+  }
+
+  /* ---------- streak hero ---------- */
+  .hero{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin:22px 0 4px}
+  .streak-num{
+    font-family:"Baloo 2";font-size:92px;font-weight:800;line-height:.85;
+    color:var(--berry);text-shadow:0 5px 0 rgba(217,74,115,.18);
+    font-variant-numeric:tabular-nums;
+  }
+  .streak-label{padding-bottom:10px;text-align:left}
+  .streak-label .display{font-size:22px;line-height:1.05}
+  .streak-label small{color:var(--ink-soft);font-size:12.5px;font-weight:700}
+  .hearts{display:flex;justify-content:center;gap:5px;margin:8px 0 18px;font-size:15px;min-height:20px}
+  .hearts span{animation:heart-in .4s cubic-bezier(.36,1.6,.4,1) backwards}
+
+  @keyframes heart-in{from{transform:scale(0)}to{transform:scale(1)}}
+
+  /* ---------- log button ---------- */
+  .log-wrap{padding:0 6px}
+  .log-btn{
+    width:100%;border:none;cursor:pointer;
+    background:linear-gradient(180deg,var(--berry) 0%,var(--berry-deep) 100%);
+    color:#fff;font-family:"Baloo 2";font-weight:800;font-size:24px;
+    padding:20px 16px 22px;border-radius:28px;
+    box-shadow:0 8px 0 #B93A60, 0 14px 22px rgba(217,74,115,.30);
+    transition:transform .1s, box-shadow .1s;
+    letter-spacing:.3px;
+  }
+  .log-btn:active{transform:translateY(6px);box-shadow:0 2px 0 #B93A60}
+  .log-btn.done{
+    background:linear-gradient(180deg,var(--mint) 0%,var(--mint-deep) 100%);
+    box-shadow:0 8px 0 #3B9377, 0 14px 22px rgba(76,175,142,.30);
+  }
+  .log-btn.done:active{box-shadow:0 2px 0 #3B9377}
+  .log-btn.wiggle{animation:wiggle .5s ease 1}
+  @keyframes wiggle{
+    0%,100%{transform:rotate(0)}
+    20%{transform:rotate(-2.5deg)}40%{transform:rotate(2.5deg)}
+    60%{transform:rotate(-1.5deg)}80%{transform:rotate(1.5deg)}
+  }
+  .rescue{
+    display:block;margin:12px auto 0;border:none;background:none;cursor:pointer;
+    color:var(--ink-soft);font-family:"Nunito";font-weight:800;font-size:13px;
+    text-decoration:underline dotted;
+  }
+
+  /* ---------- cards ---------- */
+  section.card{
+    background:var(--card);border-radius:var(--radius);padding:18px;
+    box-shadow:0 8px 0 rgba(82,51,63,.07);margin-top:18px;
+  }
+  section.card h2{margin:0 0 12px;font-size:17px;display:flex;align-items:center;gap:8px}
+
+  /* week strip */
+  .week{display:flex;justify-content:space-between;gap:6px}
+  .day-dot{flex:1;text-align:center}
+  .day-dot .c{
+    width:100%;aspect-ratio:1;max-width:48px;margin:0 auto;border-radius:16px;
+    background:var(--paper);display:grid;place-items:center;font-size:20px;
+    border:2px dashed #EFD3DC;
+  }
+  .day-dot.hit .c{background:#FFE3EC;border:2px solid var(--berry);animation:heart-in .35s backwards}
+  .day-dot.today .c{outline:3px solid var(--butter);outline-offset:2px}
+  .day-dot small{display:block;margin-top:5px;font-size:10.5px;font-weight:800;color:var(--ink-soft);letter-spacing:.6px}
+
+  /* calendar */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .cal-head .display{font-size:16px}
+  .cal-nav{border:none;background:var(--paper);width:34px;height:34px;border-radius:12px;cursor:pointer;font-size:15px;color:var(--berry-deep);font-weight:800}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .cal-grid .dow{font-size:10px;font-weight:800;color:var(--ink-soft);letter-spacing:.5px;padding:4px 0}
+  .cal-cell{
+    aspect-ratio:1;border-radius:12px;display:grid;place-items:center;
+    font-size:12.5px;font-weight:700;color:var(--ink-soft);position:relative;
+  }
+  .cal-cell.hit{background:#FFE3EC;color:var(--berry-deep);font-weight:800}
+  .cal-cell.hit::after{content:"💗";position:absolute;font-size:8px;bottom:2px;right:3px}
+  .cal-cell.today{outline:2.5px solid var(--butter)}
+
+  /* badges */
+  .badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .badge{
+    text-align:center;padding:10px 4px 8px;border-radius:18px;background:var(--paper);
+    border:2px solid transparent;
+  }
+  .badge .e{font-size:30px;display:block;filter:grayscale(1) opacity(.35)}
+  .badge.won{background:#FFF7E0;border-color:var(--butter)}
+  .badge.won .e{filter:none;animation:heart-in .4s backwards}
+  .badge b{display:block;font-size:11px;margin-top:4px;font-family:"Baloo 2"}
+  .badge small{display:block;font-size:9.5px;color:var(--ink-soft);font-weight:800}
+
+  .stats{display:flex;gap:10px;margin-top:18px}
+  .stat{
+    flex:1;background:var(--card);border-radius:20px;padding:14px;text-align:center;
+    box-shadow:0 6px 0 rgba(82,51,63,.06);
+  }
+  .stat .display{font-size:26px;color:var(--berry-deep)}
+  .stat small{font-size:11px;color:var(--ink-soft);font-weight:800}
+
+  /* ---------- celebration overlay ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:50;display:none;place-items:center;
+    background:rgba(82,51,63,.45);backdrop-filter:blur(3px);
+    padding:24px;
+  }
+  .overlay.show{display:grid}
+  .party{
+    background:var(--card);border-radius:34px;padding:34px 26px 28px;text-align:center;
+    max-width:340px;width:100%;position:relative;
+    animation:party-in .5s cubic-bezier(.36,1.6,.4,1);
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+  }
+  .party.gold{background:linear-gradient(180deg,#FFF9E8,#FFEFC2);border:3px solid var(--butter)}
+  @keyframes party-in{from{transform:scale(.5) translateY(60px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+  .party .big{font-size:96px;line-height:1;display:inline-block;animation:celebrate .9s cubic-bezier(.36,1.6,.4,1) infinite alternate}
+  @keyframes celebrate{
+    0%{transform:translateY(0) rotate(-6deg) scale(1)}
+    100%{transform:translateY(-16px) rotate(6deg) scale(1.08)}
+  }
+  .party .squadline{font-size:38px;letter-spacing:2px;margin-top:6px}
+  .party .squadline span{display:inline-block;animation:conga .7s ease-in-out infinite alternate}
+  .party .squadline span:nth-child(2){animation-delay:.1s}
+  .party .squadline span:nth-child(3){animation-delay:.2s}
+  .party .squadline span:nth-child(4){animation-delay:.3s}
+  .party .squadline span:nth-child(5){animation-delay:.4s}
+  @keyframes conga{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+  .party h2{font-size:26px;margin:12px 0 6px;line-height:1.1}
+  .party p{margin:0 0 18px;color:var(--ink-soft);font-weight:700;font-size:14.5px;line-height:1.5}
+  .party .close{
+    border:none;cursor:pointer;background:var(--berry);color:#fff;
+    font-family:"Baloo 2";font-weight:800;font-size:17px;padding:12px 30px;border-radius:20px;
+    box-shadow:0 5px 0 #B93A60;transition:transform .1s,box-shadow .1s;
+  }
+  .party .close:active{transform:translateY(4px);box-shadow:0 1px 0 #B93A60}
+  .party .streak-chip{
+    display:inline-block;background:#FFE3EC;color:var(--berry-deep);
+    font-family:"Baloo 2";font-weight:800;padding:4px 14px;border-radius:99px;font-size:14px;
+    margin-bottom:8px;
+  }
+  #confetti{position:fixed;inset:0;z-index:60;pointer-events:none}
+
+  /* ---------- settings sheet ---------- */
+  .sheet-wrap{position:fixed;inset:0;z-index:40;display:none;background:rgba(82,51,63,.40)}
+  .sheet-wrap.show{display:block}
+  .sheet{
+    position:absolute;left:0;right:0;bottom:0;background:var(--card);
+    border-radius:30px 30px 0 0;padding:22px 22px 34px;max-width:430px;margin:0 auto;
+    animation:sheet-up .3s cubic-bezier(.3,1.2,.4,1);
+  }
+  @keyframes sheet-up{from{transform:translateY(60%)}to{transform:translateY(0)}}
+  .sheet h2{margin:0 0 16px;font-size:20px}
+  .set-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1.5px dashed #F3DCE4;gap:12px}
+  .set-row label{font-weight:800;font-size:14.5px}
+  .set-row small{display:block;color:var(--ink-soft);font-size:11.5px;font-weight:700;margin-top:2px}
+  .set-row input[type=time]{
+    border:2px solid #F3DCE4;border-radius:12px;padding:7px 10px;font-family:"Nunito";
+    font-weight:800;color:var(--ink);background:var(--paper);font-size:14px;
+  }
+  .toggle{position:relative;width:52px;height:30px;flex:none}
+  .toggle input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}
+  .toggle .tr{position:absolute;inset:0;background:#EFD3DC;border-radius:99px;transition:background .2s}
+  .toggle .tr::after{
+    content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+    background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s;
+  }
+  .toggle input:checked + .tr{background:var(--mint-deep)}
+  .toggle input:checked + .tr::after{transform:translateX(22px)}
+  .danger-btn,.soft-btn{
+    border:none;cursor:pointer;border-radius:14px;padding:9px 16px;
+    font-family:"Nunito";font-weight:800;font-size:13px;
+  }
+  .soft-btn{background:var(--paper);color:var(--ink)}
+  .danger-btn{background:#FDE8E8;color:#C0392B}
+  .sheet .done-btn{
+    width:100%;margin-top:20px;border:none;cursor:pointer;background:var(--berry);color:#fff;
+    font-family:"Baloo 2";font-weight:800;font-size:17px;padding:13px;border-radius:18px;
+    box-shadow:0 5px 0 #B93A60;
+  }
+  footer{text-align:center;margin-top:26px;color:var(--ink-soft);font-size:12px;font-weight:700}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
+  }
+</style>
+
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="brand-badge">🐼</div>
+      <div>
+        <h1>The Wiggle Squad</h1>
+        <small>exercise streak club</small>
+      </div>
+    </div>
+    <button class="gear" id="gearBtn" aria-label="Settings">⚙️</button>
+  </header>
+
+  <div class="stage">
+    <div class="bubble" id="bubble">…</div>
+    <div class="mascot" id="mascot" role="img" aria-label="Your coach">🐼</div>
+    <div class="coach-name" id="coachName">Today's coach: <b>Bao the Panda</b></div>
+  </div>
+
+  <div class="hero">
+    <div class="streak-num" id="streakNum">0</div>
+    <div class="streak-label">
+      <div class="display" id="streakWord">day streak</div>
+      <small id="bestLine">best ever: 0 days</small>
+    </div>
+  </div>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="log-wrap">
+    <button class="log-btn" id="logBtn">I moved today! 💪</button>
+    <button class="rescue" id="rescueBtn" hidden>psst… I actually exercised yesterday too 🙈</button>
+  </div>
+
+  <section class="card">
+    <h2>🗓️ This week</h2>
+    <div class="week" id="week"></div>
+  </section>
+
+  <section class="card">
+    <div class="cal-head">
+      <button class="cal-nav" id="calPrev" aria-label="Previous month">◀</button>
+      <div class="display" id="calTitle">August 2026</div>
+      <button class="cal-nav" id="calNext" aria-label="Next month">▶</button>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </section>
+
+  <section class="card">
+    <h2>🏆 Trophy shelf</h2>
+    <div class="badges" id="badges"></div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="display" id="statTotal">0</div><small>workouts logged</small></div>
+    <div class="stat"><div class="display" id="statBest">0</div><small>longest streak</small></div>
+    <div class="stat"><div class="display" id="statMonth">0</div><small>this month</small></div>
+  </div>
+
+  <footer>made with 💖 for the cutest athlete alive</footer>
+</div>
+
+<!-- celebration -->
+<div class="overlay" id="overlay">
+  <div class="party" id="party">
+    <div class="big" id="partyAnimal">🐼</div>
+    <div class="squadline" id="squadline" hidden>
+      <span>🫏</span><span>🦝</span><span>🐭</span><span>🐮</span><span>🐼</span>
+    </div>
+    <div><span class="streak-chip" id="partyChip">Day 1</span></div>
+    <h2 id="partyTitle">You did it!</h2>
+    <p id="partyMsg">So proud of you!</p>
+    <button class="close" id="partyClose">Yay! 💖</button>
+  </div>
+</div>
+<canvas id="confetti"></canvas>
+
+<!-- settings -->
+<div class="sheet-wrap" id="sheetWrap">
+  <div class="sheet">
+    <h2>⚙️ Settings</h2>
+    <div class="set-row">
+      <div><label for="remTime">Evening check-in time</label>
+        <small>When the squad asks about your workout</small></div>
+      <input type="time" id="remTime" value="19:00">
+    </div>
+    <div class="set-row">
+      <div><label>Reminder notification</label>
+        <small>Works while the app is open or installed</small></div>
+      <div class="toggle"><input type="checkbox" id="remToggle"><span class="tr"></span></div>
+    </div>
+    <div class="set-row">
+      <div><label>Celebration sounds</label>
+        <small>Tiny happy pops when you log</small></div>
+      <div class="toggle"><input type="checkbox" id="soundToggle" checked><span class="tr"></span></div>
+    </div>
+    <div class="set-row">
+      <div><label>Oops — undo today's log</label>
+        <small>Removes today from the calendar</small></div>
+      <button class="soft-btn" id="undoBtn">Undo</button>
+    </div>
+    <div class="set-row" style="border-bottom:none">
+      <div><label>Start completely fresh</label>
+        <small>Erases everything. The squad will miss the memories!</small></div>
+      <button class="danger-btn" id="resetBtn">Reset</button>
+    </div>
+    <button class="done-btn" id="sheetDone">Done 💖</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ---------------- squad ---------------- */
+const SQUAD = [
+  {e:"🫏", name:"Waffles the Donkey",
+   cheers:["Hee-haw! You absolute legend! 🎉","I kicked my little legs with joy!","Stubborn about your goals — I love it!"],
+   asks:["Waffles wants to know: did you move that gorgeous body today?","Hee-haw! Any exercise today, superstar?"]},
+  {e:"🦝", name:"Bandit the Raccoon",
+   cheers:["I'd steal trash for you, but you stole my heart! 🖤","Sneaky little workout? I SAW that. Amazing.","Adding this to my treasure stash of proud moments!"],
+   asks:["Bandit rummaged through the day… did you exercise yet?","Psst… got a workout for my collection today?"]},
+  {e:"🐭", name:"Crumb the Rat",
+   cheers:["SQUEAK! That's rat for INCREDIBLE! 🧀","You earned all the cheese today!","Tiny paws, giant applause! 👏"],
+   asks:["Crumb squeaks: did you wiggle about today?","A little birdie (rat) asks: exercise today?"]},
+  {e:"🐮", name:"Clementine the Cow",
+   cheers:["MOOO-VELOUS! Simply outstanding! 🌼","I'm udderly amazed by you!","Holy cow!! (that's me!) You did it!"],
+   asks:["Clementine moos gently: did you move today, flower?","Any mooo-vement today, sweetheart?"]},
+  {e:"🐼", name:"Bao the Panda",
+   cheers:["I rolled over THREE times from excitement! 🎋","Bamboo-tiful work today!","You're my favorite human. Don't tell the others."],
+   asks:["Bao looks up from his bamboo: exercise today, cutie?","Even I did a stretch today… did you? 🎋"]},
+];
+const MILESTONES = [
+  {n:3,  e:"🌱", name:"Sprout",       msg:"Three days! A tiny habit is sprouting!"},
+  {n:7,  e:"🧀", name:"Week Wheel",   msg:"A whole week! Crumb the Rat awards you the golden cheese!"},
+  {n:14, e:"🗑️✨",name:"Shiny Stash", msg:"Two weeks! Bandit has enshrined you in his treasure pile!"},
+  {n:21, e:"🌼", name:"Meadow Queen", msg:"21 days — a real habit! Clementine wove you a flower crown!"},
+  {n:30, e:"🎋", name:"Bamboo Belt",  msg:"A FULL MONTH! Bao shares his sacred bamboo. This is huge."},
+  {n:50, e:"🏅", name:"Hee-Haw Hero", msg:"50 days!! Waffles is doing victory laps around the barn!"},
+  {n:75, e:"👑", name:"Squad Royalty",msg:"75 days. The squad has officially crowned you."},
+  {n:100,e:"💎", name:"Diamond Legend",msg:"ONE HUNDRED DAYS. You are a legend. We are not worthy."},
+];
+const CHEER_TITLES = ["You did it!","Another one!!","Unstoppable!","So strong!","Look at you go!","Star athlete!","Crushed it!"];
+
+/* ---------------- state ---------------- */
+const KEY = "wiggle-squad-v1";
+let state = {days:{}, remTime:"19:00", remOn:false, soundOn:true, lastRemind:""};
+try{ const raw = localStorage.getItem(KEY); if(raw) state = Object.assign(state, JSON.parse(raw)); }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,"0");
+function iso(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function today(){ return iso(new Date()); }
+function yesterday(){ const d=new Date(); d.setDate(d.getDate()-1); return iso(d); }
+function dayOfYear(){ const d=new Date(); return Math.floor((d - new Date(d.getFullYear(),0,0))/864e5); }
+const coach = SQUAD[dayOfYear() % SQUAD.length];
+
+function streakEndingAt(dateStr){
+  let n=0; const d=new Date(dateStr+"T12:00:00");
+  while(state.days[iso(d)]){ n++; d.setDate(d.getDate()-1); }
+  return n;
+}
+function currentStreak(){
+  if(state.days[today()]) return streakEndingAt(today());
+  return streakEndingAt(yesterday());
+}
+function bestStreak(){
+  const dates = Object.keys(state.days).sort();
+  let best=0, run=0, prev=null;
+  for(const ds of dates){
+    if(prev){
+      const p=new Date(prev+"T12:00:00"); p.setDate(p.getDate()+1);
+      run = (iso(p)===ds) ? run+1 : 1;
+    } else run=1;
+    if(run>best) best=run;
+    prev=ds;
+  }
+  return best;
+}
+
+/* ---------------- sound & haptics ---------------- */
+let actx=null;
+function pop(freq, t=0, dur=.09, vol=.15){
+  if(!state.soundOn) return;
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(), g=actx.createGain();
+    o.type="sine"; o.frequency.setValueAtTime(freq, actx.currentTime+t);
+    o.frequency.exponentialRampToValueAtTime(freq*1.6, actx.currentTime+t+dur);
+    g.gain.setValueAtTime(vol, actx.currentTime+t);
+    g.gain.exponentialRampToValueAtTime(.001, actx.currentTime+t+dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(actx.currentTime+t); o.stop(actx.currentTime+t+dur+.02);
+  }catch(e){}
+}
+function fanfare(){ pop(523); pop(659,.09); pop(784,.18); pop(1047,.27,.22,.18); }
+function buzz(pat){ try{ navigator.vibrate && navigator.vibrate(pat); }catch(e){} }
+
+/* ---------------- confetti ---------------- */
+const canvas=$("confetti"), ctx=canvas.getContext("2d");
+let parts=[], rafId=null;
+function resize(){ canvas.width=innerWidth*devicePixelRatio; canvas.height=innerHeight*devicePixelRatio; }
+addEventListener("resize",resize); resize();
+const CONF_COLORS=["#F26089","#FFD166","#7ED0B4","#C9B3F5","#A8D8F0","#FF9CB8"];
+const CONF_EMOJI=["💖","⭐","🌸","✨"];
+function burst(x,y,n,big){
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduced) n = Math.min(n,12);
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2, sp=(4+Math.random()*9)*(big?1.4:1);
+    parts.push({
+      x:x*devicePixelRatio, y:y*devicePixelRatio,
+      vx:Math.cos(a)*sp*devicePixelRatio, vy:(Math.sin(a)*sp-6)*devicePixelRatio,
+      rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.3,
+      life:1, decay:.008+Math.random()*.012,
+      size:(6+Math.random()*8)*devicePixelRatio,
+      emoji: Math.random()<.18 ? CONF_EMOJI[Math.random()*CONF_EMOJI.length|0] : null,
+      color: CONF_COLORS[Math.random()*CONF_COLORS.length|0],
+    });
+  }
+  if(!rafId) tick();
+}
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  parts=parts.filter(p=>p.life>0);
+  for(const p of parts){
+    p.x+=p.vx; p.y+=p.vy; p.vy+=.35*devicePixelRatio; p.vx*=.99;
+    p.rot+=p.vr; p.life-=p.decay;
+    ctx.save(); ctx.globalAlpha=Math.max(p.life,0); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    if(p.emoji){ ctx.font=(p.size*1.6)+"px serif"; ctx.textAlign="center"; ctx.fillText(p.emoji,0,0); }
+    else{ ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2); }
+    ctx.restore();
+  }
+  rafId = parts.length ? requestAnimationFrame(tick) : null;
+}
+
+/* ---------------- render ---------------- */
+let calCursor = new Date();
+function render(){
+  const t=today(), loggedToday=!!state.days[t];
+  const cur=currentStreak(), best=Math.max(bestStreak(),cur);
+  const total=Object.keys(state.days).length;
+
+  $("streakNum").textContent=cur;
+  $("streakWord").textContent = cur===1 ? "day streak" : "day streak";
+  $("bestLine").textContent = "best ever: "+best+" day"+(best===1?"":"s");
+
+  const h=$("hearts"); h.innerHTML="";
+  for(let i=0;i<Math.min(cur,14);i++){
+    const s=document.createElement("span");
+    s.textContent = i<7 ? "💗" : "💖";
+    s.style.animationDelay=(i*.05)+"s";
+    h.appendChild(s);
+  }
+  if(cur>14){ const s=document.createElement("span"); s.textContent="+"+(cur-14); s.style.cssText="font-weight:800;color:var(--berry-deep);font-size:13px"; h.appendChild(s); }
+
+  const btn=$("logBtn");
+  btn.classList.toggle("done",loggedToday);
+  btn.textContent = loggedToday ? "Logged! See you tomorrow 💖" : "I moved today! 💪";
+  $("rescueBtn").hidden = !!state.days[yesterday()];
+
+  /* bubble */
+  const hour=new Date().getHours();
+  let msg;
+  if(loggedToday) msg = coach.cheers[dayOfYear()%coach.cheers.length];
+  else if(hour>=17) msg = coach.asks[dayOfYear()%coach.asks.length];
+  else if(cur>0) msg = "Day "+(cur+1)+" awaits! The squad believes in you! ✨";
+  else msg = "Hi cutie! Ready to start a brand-new streak? 🌸";
+  $("bubble").textContent=msg;
+  $("mascot").textContent=coach.e;
+  $("coachName").innerHTML="Today's coach: <b>"+coach.name+"</b>";
+
+  /* week strip */
+  const wk=$("week"); wk.innerHTML="";
+  const DOW=["S","M","T","W","T","F","S"];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const ds=iso(d), hit=!!state.days[ds];
+    const el=document.createElement("div");
+    el.className="day-dot"+(hit?" hit":"")+(i===0?" today":"");
+    const stamp = hit ? SQUAD[(d.getDate()+d.getMonth())%SQUAD.length].e : "·";
+    el.innerHTML='<div class="c">'+stamp+'</div><small>'+DOW[d.getDay()]+'</small>';
+    wk.appendChild(el);
+  }
+
+  renderCalendar();
+
+  /* badges */
+  const bd=$("badges"); bd.innerHTML="";
+  for(const m of MILESTONES){
+    const won = best>=m.n;
+    const el=document.createElement("div");
+    el.className="badge"+(won?" won":"");
+    el.innerHTML='<span class="e">'+(won?m.e:"🔒")+'</span><b>'+m.name+'</b><small>'+m.n+' days</small>';
+    bd.appendChild(el);
+  }
+
+  $("statTotal").textContent=total;
+  $("statBest").textContent=best;
+  const now=new Date(), mPrefix=now.getFullYear()+"-"+pad(now.getMonth()+1);
+  $("statMonth").textContent=Object.keys(state.days).filter(d=>d.startsWith(mPrefix)).length;
+}
+
+function renderCalendar(){
+  const y=calCursor.getFullYear(), m=calCursor.getMonth();
+  $("calTitle").textContent = calCursor.toLocaleString("en",{month:"long"})+" "+y;
+  const g=$("calGrid"); g.innerHTML="";
+  for(const d of ["S","M","T","W","T","F","S"]){
+    const el=document.createElement("div"); el.className="dow"; el.textContent=d; g.appendChild(el);
+  }
+  const first=new Date(y,m,1).getDay(), len=new Date(y,m+1,0).getDate(), t=today();
+  for(let i=0;i<first;i++) g.appendChild(document.createElement("div"));
+  for(let day=1;day<=len;day++){
+    const ds=y+"-"+pad(m+1)+"-"+pad(day);
+    const el=document.createElement("div");
+    el.className="cal-cell"+(state.days[ds]?" hit":"")+(ds===t?" today":"");
+    el.textContent=day;
+    g.appendChild(el);
+  }
+}
+
+/* ---------------- celebration ---------------- */
+function celebrate(streak){
+  const milestone = MILESTONES.find(m=>m.n===streak);
+  const ov=$("overlay"), party=$("party");
+  party.classList.toggle("gold",!!milestone);
+  $("squadline").hidden=!milestone;
+  $("partyAnimal").style.display = milestone ? "none":"inline-block";
+  $("partyChip").textContent = milestone ? "🏆 "+milestone.n+"-day milestone!" : "Day "+streak;
+  if(milestone){
+    $("partyTitle").textContent = milestone.e+" "+milestone.name+"!";
+    $("partyMsg").textContent = milestone.msg;
+    buzz([40,60,40,60,120]);
+    fanfare();
+  }else{
+    const a=SQUAD[Math.random()*SQUAD.length|0];
+    $("partyAnimal").textContent=a.e;
+    $("partyTitle").textContent = CHEER_TITLES[Math.random()*CHEER_TITLES.length|0];
+    $("partyMsg").textContent = a.cheers[Math.random()*a.cheers.length|0]+" — "+a.name;
+    buzz([30,40,60]);
+    pop(660); pop(880,.08);
+  }
+  ov.classList.add("show");
+  const cx=innerWidth/2, cy=innerHeight/2;
+  burst(cx,cy-40, milestone?90:45, !!milestone);
+  if(milestone){
+    setTimeout(()=>burst(cx*0.4,cy*0.5,50,true),350);
+    setTimeout(()=>burst(cx*1.6,cy*0.5,50,true),700);
+    setTimeout(()=>burst(cx,cy*0.3,60,true),1050);
+  }
+}
+$("partyClose").addEventListener("click",()=>{ $("overlay").classList.remove("show"); pop(523,0,.06,.1); });
+$("overlay").addEventListener("click",e=>{ if(e.target===e.currentTarget) $("overlay").classList.remove("show"); });
+
+/* ---------------- actions ---------------- */
+$("logBtn").addEventListener("click",()=>{
+  const t=today();
+  if(state.days[t]){
+    const b=$("logBtn"); b.classList.remove("wiggle"); void b.offsetWidth; b.classList.add("wiggle");
+    $("bubble").textContent="Already logged today, superstar! Rest those muscles 💆‍♀️";
+    return;
+  }
+  state.days[t]=true; save(); render();
+  celebrate(currentStreak());
+});
+$("rescueBtn").addEventListener("click",()=>{
+  state.days[yesterday()]=true; save(); render();
+  $("bubble").textContent="Backfilled yesterday — the streak lives on! 🙌";
+  burst(innerWidth/2,innerHeight/3,25,false);
+  pop(587); buzz(30);
+});
+$("mascot").addEventListener("click",()=>{
+  const m=$("mascot"); m.classList.remove("poke"); void m.offsetWidth; m.classList.add("poke");
+  pop(700+Math.random()*300,0,.07,.1); buzz(15);
+  burst(innerWidth/2, m.getBoundingClientRect().top+50, 8, false);
+});
+
+/* ---------------- settings ---------------- */
+$("gearBtn").addEventListener("click",()=>{
+  $("remTime").value=state.remTime;
+  $("remToggle").checked=state.remOn;
+  $("soundToggle").checked=state.soundOn;
+  $("sheetWrap").classList.add("show");
+});
+$("sheetDone").addEventListener("click",()=>$("sheetWrap").classList.remove("show"));
+$("sheetWrap").addEventListener("click",e=>{ if(e.target===e.currentTarget) $("sheetWrap").classList.remove("show"); });
+$("remTime").addEventListener("change",e=>{ state.remTime=e.target.value||"19:00"; state.lastRemind=""; save(); });
+$("soundToggle").addEventListener("change",e=>{ state.soundOn=e.target.checked; save(); });
+$("remToggle").addEventListener("change",async e=>{
+  if(e.target.checked){
+    let perm="denied";
+    try{ perm = await Notification.requestPermission(); }catch(err){}
+    if(perm!=="granted"){ e.target.checked=false; alert("Notifications are blocked for this page — allow them in your browser settings to get the evening check-in."); return; }
+  }
+  state.remOn=e.target.checked; save();
+});
+$("undoBtn").addEventListener("click",()=>{
+  delete state.days[today()]; save(); render();
+  $("sheetWrap").classList.remove("show");
+});
+$("resetBtn").addEventListener("click",()=>{
+  if(confirm("Really erase ALL streaks and trophies? The squad will cry.")){
+    state={days:{}, remTime:"19:00", remOn:false, soundOn:true, lastRemind:""}; save(); render();
+    $("sheetWrap").classList.remove("show");
+  }
+});
+
+/* ---------------- evening reminder (while app is open/installed) ---------------- */
+function checkReminder(){
+  if(!state.remOn || state.days[today()]) return;
+  const now=new Date(), [hh,mm]=state.remTime.split(":").map(Number);
+  const due = now.getHours()>hh || (now.getHours()===hh && now.getMinutes()>=mm);
+  if(due && state.lastRemind!==today()){
+    state.lastRemind=today(); save();
+    try{
+      new Notification(coach.e+" "+coach.name+" is asking…", {
+        body:"Did you exercise today, cutie? Tap to log it! 💪",
+        tag:"wiggle-checkin",
+      });
+    }catch(e){}
+  }
+}
+setInterval(checkReminder, 30000);
+checkReminder();
+
+/* re-render at midnight & when returning to the tab */
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ render(); checkReminder(); } });
+setInterval(()=>{ render(); }, 60000);
+
+$("calPrev").addEventListener("click",()=>{ calCursor.setMonth(calCursor.getMonth()-1); renderCalendar(); });
+$("calNext").addEventListener("click",()=>{ calCursor.setMonth(calCursor.getMonth()+1); renderCalendar(); });
+
+/* PWA service worker — only when self-hosted (silently skipped inside the artifact) */
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+
+render();
+</script>
