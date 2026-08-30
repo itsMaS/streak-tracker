@@ -1,0 +1,298 @@
+<title>The Script Room</title>
+<style>
+  :root{
+    --void:#0A0708; --crypt:#141014; --bone:#D8CDB8; --ash:#8A7D7A;
+    --blood:#C41E1E; --blood-deep:#7A1010; --blood-dark:#4A0808;
+    --ok:#5E7A3A; --ok-bright:#8FB35C;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--void);color:var(--bone);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.5}
+  .wrap{max-width:520px;margin:0 auto;padding:16px 14px 110px}
+  h1{font-size:20px;color:var(--blood);margin:6px 0 2px;letter-spacing:1px}
+  .sub{color:var(--ash);font-size:12px;margin:0 0 18px;line-height:1.6}
+  .film{margin:22px 0 8px;padding:6px 10px;background:var(--blood-dark);border:1px solid var(--blood-deep);
+        border-radius:8px;font-size:12.5px;letter-spacing:1px;color:#E8B8B8;
+        display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .film button{border:1px solid var(--blood-deep);background:transparent;color:#E8B8B8;font-family:inherit;
+        font-size:10.5px;border-radius:6px;padding:3px 8px;cursor:pointer;flex:none}
+  .ref{background:var(--crypt);border:1px solid #241B20;border-radius:10px;padding:10px 12px;margin:8px 0;
+       display:flex;gap:10px;align-items:flex-start}
+  .ref.yes{border-color:var(--ok);background:#11150C}
+  .ref.no{border-color:#3A2126;opacity:.45}
+  .ref .n{color:var(--blood);flex:none;min-width:30px;font-weight:bold}
+  .ref .t{flex:1}
+  .ref .slot{display:block;color:var(--ash);font-size:10.5px;margin-top:5px;letter-spacing:.5px;text-transform:uppercase}
+  .ref .warn{color:#D9A441;font-size:10.5px}
+  .btns{display:flex;flex-direction:column;gap:6px;flex:none}
+  .btns button{width:38px;height:34px;border-radius:8px;border:1px solid #33262C;background:#0E0A0C;
+       color:var(--ash);font-size:15px;cursor:pointer;font-family:inherit}
+  .ref.yes .b-yes{background:var(--ok);color:#0A0708;border-color:var(--ok-bright)}
+  .ref.no .b-no{background:var(--blood-dark);color:#E8B8B8;border-color:var(--blood-deep)}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#0E0A0Cee;border-top:1px solid #33262C;
+       backdrop-filter:blur(6px);padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+  .bar-in{max-width:520px;margin:0 auto;display:flex;gap:8px;align-items:center}
+  #counts{flex:1;font-size:11.5px;color:var(--ash);line-height:1.4}
+  #counts b{color:var(--ok-bright)} #counts s{color:#C97A7A;text-decoration:none}
+  .bar button{border:1px solid var(--blood-deep);background:var(--blood-dark);color:#F0DADA;
+       font-family:inherit;font-size:12.5px;border-radius:9px;padding:10px 14px;cursor:pointer}
+  .bar button.ghost{background:transparent;border-color:#33262C;color:var(--ash)}
+  #status{font-size:11px;color:#D9A441;margin-top:6px;min-height:14px;max-width:520px;margin-left:auto;margin-right:auto}
+</style>
+
+<div class="wrap">
+  <h1>🎬 THE SCRIPT ROOM</h1>
+  <p class="sub">Every candidate line for The Midnight Menagerie, each referencing a horror film released Sept 2024 – Aug 2026.
+  Tap ✓ to approve, ✗ to reject, leave untouched = undecided. Then hit <b>SAVE DECISIONS</b> —
+  it writes your choices into this page so Claude can read them back. Lines marked ⚠ are based on 2026 films
+  Claude couldn't fully verify; approve with caution.</p>
+  <div id="list"></div>
+</div>
+
+<div class="bar">
+  <div class="bar-in">
+    <div id="counts"></div>
+    <button class="ghost" id="copyBtn">COPY</button>
+    <button id="saveBtn">SAVE DECISIONS</button>
+  </div>
+  <div id="status"></div>
+</div>
+
+<script type="application/json" id="decisions">{"ts":0,"d":{}}</script>
+
+<script>
+"use strict";
+const REFS=[
+["The Substance (Sep 2024)",[
+[1,"greeting, day zero","Have you ever dreamt of a better version of yourself? Good news: she's exactly one workout away."],
+[2,"bubble, active streak","Remember. You and your streak are ONE. You cannot escape yourself."],
+[3,"milestone: 7 nights","Seven nights. The balance was respected. Sue and Elisabeth could never."],
+[4,"reset warning","Abuse the balance and you know what crawls out of it. Don't make a Monstro out of this."]]],
+["Smile 2 (Oct 2024)",[
+[5,"already-logged line","You already made today's offering. Now smile. Wider. WIDER."],
+[6,"cheer","An entire arena of fans is smiling at you right now. Every single one of them. At once."],
+[93,"broken-streak line","The entity latched onto your rest day. The only known cure is making it witness a workout. Today."]]],
+["Terrifier 3 (Oct 2024)",[
+[7,"notification","Art the Clown checked the log twice, like a horrible Santa. He knows if you've been lifting."],
+[8,"cheer","The clown says nothing. The clown claps silently. Somehow that's worse — and it means he's impressed."],
+[100,"holiday milestone","Art the Clown put your name on the NICE list, which he wrote in something we won't discuss."]]],
+["Speak No Evil (Sep 2024)",[
+[9,"broken-streak line","Why did the streak die? …Because you let it. (Never again.)"]]],
+["Heretic (Nov 2024)",[
+[10,"greeting","Welcome in. Tonight we discuss the one true religion: leg day."],
+[11,"notification","Mr. Reed says there's a blueberry pie in the oven. There is no pie. There is only cardio."],
+[12,"milestone: 21 nights","Belief systems are just iterations of each other, says Mr. Reed. Twenty-one nights makes yours the original."],
+[97,"settings sheet","Choose a door: BELIEF or DISBELIEF. Both lead to the same place — tomorrow's workout."]]],
+["Nosferatu (Dec 2024)",[
+[13,"evening ask","'I am an appetite. Nothing more.' — the streak, inquiring about today's workout."],
+[14,"notification","He is coming. At your chosen hour. To ask about squats."],
+[15,"bubble","Does evil come from within us, or from beyond? Either way, it does push-ups."],
+[16,"Vermin the Rat line","Vermin brought four hundred friends off the death-ship. All of them are cheering for you."],
+[94,"milestone: 100 nights","One hundred nights of devotion. Even the Count kept his covenant for less."]]],
+["Salem's Lot (Oct 2024)",[
+[17,"evening ask","A pale child floats outside the window, scratching the glass: 'Did you exercise? Let me innnn.'"]]],
+["Apartment 7A (Sep 2024)",[
+[18,"keeper line","The building has taken a special interest in your progress. The neighbors insist."]]],
+["Your Monster (Oct 2024)",[
+[19,"cheer","The monster in your closet is so proud of you he's writing a ballad about it."]]],
+["Wolf Man (Jan 2025)",[
+[20,"cheer","Something howled inside you during that workout. Let it. Preferably not at the neighbors."],
+[102,"evening ask","The moon is up. The question rises with it: did you move today, or do we all start howling?"]]],
+["Presence (Jan 2025)",[
+[21,"bubble","This entire app is filmed from the ghost's point of view. The ghost saw you crushing it."]]],
+["Companion (Jan 2025)",[
+[22,"cheer","Your companion is programmed to adore your progress. We set the adoration dial to maximum."],
+[23,"already-logged line","A real workout? Or an implanted memory of one? …It counts either way."],
+[99,"settings sheet","Motivation dial: 100%. Empathy dial: 100%. Self-defense protocols: we'll discuss those later."]]],
+["Heart Eyes (Feb 2025)",[
+[24,"couple line","The Heart Eyes Killer only stalks couples. Good thing you and this streak are exclusive."],
+[105,"Valentine's notification","Heart Eyes is out tonight hunting couples. Exercising couples confuse and repel him. Stay safe."]]],
+["The Monkey (Feb 2025)",[
+[25,"log moment","Turn the key. When the little drum crashes… a workout happens. It's better this way."],
+[26,"footer / milestone","Everybody dies. That's messed up. But nobody's streak dies today."],
+[27,"notification","Grandpa's toy monkey is winding itself in the attic. Log today, before the drum hits."]]],
+["The Woman in the Yard (Mar 2025)",[
+[28,"greeting","The woman in the yard is holding up a sign: 'TODAY'S THE DAY.' She means burpees."]]],
+["Death of a Unicorn (Mar 2025)",[
+[29,"yesterday rescue","One drop of unicorn blood restores yesterday's ritual. Don't ask how we obtained it."]]],
+["Opus (Mar 2025)",[
+[30,"milestone: 30 nights","Thirty nights. Welcome to the compound. Your blue robe is in the mail."]]],
+["The Ugly Stepsister (Apr 2025)",[
+[31,"cheer","Beauty is pain, said the stepsister. Cardio, magnificently, is both."]]],
+["Sinners (Apr 2025)",[
+[32,"evening ask","Something is knocking: 'We want your stories… your songs… your workout log.' Don't invite it in until you've logged."],
+[33,"stats card","Smoke counts your reps. Stack counts your excuses. Stay on Smoke's list."],
+[34,"milestone: 30 nights","Your streak pierced the veil — dancers from the past and the future joined tonight's session."],
+[35,"milestone: 7 nights","You held out until sunrise. Seven nights survived."],
+[36,"cheer","Even the Irish-dancing vampire stopped mid-jig to applaud that one."],
+[95,"cheer","Your form tonight was so true it pierced the veil. The ancestors nodded. The vampires wept."]]],
+["Until Dawn (Apr 2025)",[
+[37,"comeback line","You died. The night looped. You're back. The streak remembers every single loop."],
+[101,"already-logged line","Logging twice won't loop the night — this isn't Until Dawn. Rest, hero."]]],
+["Final Destination: Bloodlines (May 2025)",[
+[38,"broken-streak line","You slipped out of Death's design for one rest day. Death keeps a list. So do we."],
+[39,"rescue confirm","'Death doesn't like to be cheated.' Neither do the beasts. But yesterday is restored — this once."],
+[40,"milestone: 50 nights","Iris logged every threat in a binder for fifty years and survived. This app is your binder. Fifty nights."],
+[41,"cheer","Somewhere a logging truck dropped its load and every log missed you. Today you are simply blessed."]]],
+["Clown in a Cornfield (May 2025)",[
+[42,"bubble","Frendo waves from the corn. He counted your rest days on his little glove."]]],
+["Bring Her Back (May 2025)",[
+[43,"yesterday rescue","The tape shows the ritual clearly: we can bring back yesterday. ONLY yesterday. Some things must stay gone."],
+[44,"milestone","The circle is complete. This particular ritual only resurrects streaks. We checked. Twice."]]],
+["Dangerous Animals (Jun 2025)",[
+[45,"cheer","A man on a boat filmed your whole workout from the water. Deeply illegal. Five stars though."],
+[104,"stats card","Shark fact: sharks die if they stop moving. Your stats suggest you already knew."]]],
+["28 Years Later (Jun 2025)",[
+[46,"footer motto","Memento mori — remember you must die. Memento moveri — remember you must MOVE."],
+[47,"milestone: 50 nights","Dr. Kelson polishes your fiftieth skull— vertebra. Fiftieth VERTEBRA. For the temple of your spine."],
+[48,"cheer","You are now the undisputed Alpha of your living room."],
+[49,"greeting","Spike trained with a bow at twelve. You have a yoga mat and unfinished business."],
+[98,"yesterday rescue","You limped home like Spike across the causeway — tide's out, the path is open, yesterday is restored."]]],
+["M3GAN 2.0 (Jun 2025)",[
+[50,"cheer","M3GAN 2.0 converted your workout into a dance. It has since been classified as a weapon."],
+[51,"cheer","Even AMELIA, state-of-the-art killer android, logged fewer reps than you today."]]],
+["I Know What You Did Last Summer (Jul 2025)",[
+[52,"comeback line","We know what you did last summer. Nothing. This summer, the hook stays in the closet — log it."]]],
+["Together (Jul 2025)",[
+[53,"couch warning","Skip enough days and you fuse with the couch. Molecularly. There was a whole movie about it."],
+[54,"couple cheer","Codependency is unhealthy — except between you and this streak. You two may fuse."]]],
+["Weapons (Aug 2025)",[
+[55,"notification","At 2:17 AM, seventeen streaks ran out of their houses, arms out, and never came back. Log today. Lock the door."],
+[56,"reset warning","Aunt Gladys heard you want to erase everything. She's already redecorating your guest room. Sooo disappointed."],
+[57,"cheer","Arms straight out, running like the children of Maybrook — directly into fitness."],
+[58,"week view","Seventeen kids vanished; one stayed. Be the one desk that's never empty this week."],
+[96,"mascot poke","The beasts did their makeup like Aunt Gladys today. No reason. Don't worry about it."]]],
+["The Conjuring: Last Rites (Sep 2025)",[
+[59,"relic shelf","The Warrens examined this shelf personally. Verdict: haunted — but only by discipline."],
+[60,"already-logged line","Positively NOT to be opened until tomorrow — like Annabelle's case. Today's log is sealed."]]],
+["Him (Sep 2025)",[
+[61,"cheer","The GOAT reviewed your session at the compound. The GOAT demands one more rep. The GOAT is not asking."]]],
+["The Long Walk (Sep 2025)",[
+[62,"streak motto","Keep walking. The pace is the pace. The streak is the streak."],
+[103,"broken-streak line","That's warning one of three. You do not want to find out what comes after three."]]],
+["Good Boy (Oct 2025)",[
+[63,"keeper line","The dog has been staring at the hallway behind you all workout. Keep going. Do not turn around. Good human."],
+[64,"cheer","Somewhere a very good dog watched that entire set and did not bark once. That's respect."]]],
+["Black Phone 2 (Oct 2025)",[
+[65,"notification","The black phone is ringing. Long distance — from the basement. The voice says: 'Ask her if she trained today.'"],
+[66,"cheer","The kids on the phone line called collect just to say: nice form."]]],
+["Shelby Oaks (Oct 2025)",[
+[67,"rest-day bubble","The Paranormal Paranoids reviewed the footage of your rest day. Findings: inconclusive, but suspicious."]]],
+["Frankenstein (Nov 2025)",[
+[68,"yesterday rescue","We stitched yesterday back onto the streak and threw the switch. IT'S ALIVE. IT'S ALIIIVE."],
+[69,"reset warning","Destroy this record, and it is not the streak that becomes the monster. It is us."]]],
+["Keeper (Nov 2025)",[
+[70,"milestone: 30 nights","An anniversary at a remote cabin. What could go wrong? Nothing — this cabin only keeps streaks."]]],
+["Primate (Jan 2026)",[
+[71,"mascot poke","Please do not agitate the beasts. You saw what one upset chimpanzee did in January."]]],
+["28 Years Later: The Bone Temple (Jan 2026)",[
+[72,"milestone: 75 nights","Sir Jimmy Crystal's cult sent a recruitment letter. The beasts ate it. You're already spoken for."],
+[73,"relic shelf header","Every night you log, the bone temple grows one bone taller."]]],
+["Return to Silent Hill (Jan 2026)",[
+[74,"rest-day bubble","The fog has rolled in over your calendar. When the siren sounds, everything changes — log before it does."],
+[75,"cheer","Pyramid Head drags his great knife to the gym daily. He respects only consistency."]]],
+["Send Help (Jan 2026)",[
+[76,"greeting","Island rule, per Linda Liddle: the coworker who keeps training outlives the boss. Every time."]]],
+["We Bury the Dead (Jan 2026)",[
+[77,"motto","We bury the dead. We LOG the living."]]],
+["Scream 7 (Feb 2026)",[
+[78,"notification","'What's your favorite scary movie?' Wrong question. 'Did you exercise today?' Ghostface has evolved."],
+[79,"milestone","Final-girl rule number one, seven movies running: cardio."]]],
+["The Strangers: Chapter 3 (Feb 2026)",[
+[80,"evening ask","Why are the beasts asking YOU about exercise? …Because you were home."]]],
+["The Bride! (Mar 2026)",[
+[81,"cheer","The Bride rose from the slab with lightning in her hair. You got up when the alarm rang. Same energy."]]],
+["The Mummy (Apr 2026)",[
+[82,"greeting","Still wrapped in your blanket like something freshly excavated? The curse only lifts one way."]]],
+["Backrooms (May 2026)",[
+[83,"broken-streak warning","Skip a day and you no-clip through the floor into the Backrooms: infinite yellow rooms, zero dumbbells."]]],
+["Scary Movie (Jun 2026)",[
+[84,"cheer","Even the Scary Movie reboot wouldn't dare parody this streak. Too powerful. Legal said no."]]],
+["Leviticus (Jun 2026) ⚠",[
+[85,"milestone","As it is written in the book of gains: on the seventh day she rested. On the eighth, she logged."]]],
+["Evil Dead Burn (Jul 2026)",[
+[86,"pact line","The vows survive even in death. So does a streak that's properly fed."],
+[87,"relic shelf","The Kandarian dagger is on the relic shelf now. Whatever you do, do NOT read the book next to it aloud."],
+[88,"evening ask","Log by dusk. You know the chant that starts if you don't. Dead by dawn. Dead by dawn."]]],
+["Insidious: Out of the Further (Aug 2026) ⚠",[
+[89,"broken-streak line","The red door is open a crack. Behind it, in the Further: every Tuesday you never logged."]]],
+["Teenage Sex and Death at Camp Miasma (Aug 2026)",[
+[90,"warning","Camp Miasma rule: the counselor who says 'I'll work out tomorrow' never makes the end credits."]]],
+["It Ends (Aug 2026)",[
+[91,"motto","The road doesn't end. Neither do you. Keep driving."]]],
+["Colony (Aug 2026) ⚠",[
+[92,"cheer","Word from the colony: the survivors train daily. It's not a lifestyle, it's a lifespan."]]]
+];
+
+let state={ts:0,d:{}};
+try{ state=JSON.parse(document.getElementById("decisions").textContent)||state; }catch(e){}
+try{
+  const ls=JSON.parse(localStorage.getItem("script-room-v1"));
+  if(ls && ls.ts>state.ts) state=ls;
+}catch(e){}
+function persistLocal(){ state.ts=Date.now(); try{ localStorage.setItem("script-room-v1",JSON.stringify(state)); }catch(e){} }
+
+const list=document.getElementById("list");
+function build(){
+  list.innerHTML="";
+  for(const [film,items] of REFS){
+    const h=document.createElement("div"); h.className="film";
+    h.innerHTML="<span>"+film+"</span>";
+    const all=document.createElement("button"); all.textContent="✓ all";
+    all.onclick=()=>{ items.forEach(([id])=>state.d[id]="yes"); persistLocal(); refresh(); };
+    h.appendChild(all); list.appendChild(h);
+    for(const [id,slot,text] of items){
+      const r=document.createElement("div"); r.className="ref"; r.dataset.id=id;
+      r.innerHTML='<span class="n">'+id+'</span><span class="t">'+text+
+        '<span class="slot">'+slot+'</span></span>';
+      const b=document.createElement("div"); b.className="btns";
+      const y=document.createElement("button"); y.className="b-yes"; y.textContent="✓";
+      const n=document.createElement("button"); n.className="b-no"; n.textContent="✗";
+      y.onclick=()=>{ state.d[id]=state.d[id]==="yes"?undefined:"yes"; if(!state.d[id])delete state.d[id]; persistLocal(); refresh(); };
+      n.onclick=()=>{ state.d[id]=state.d[id]==="no"?undefined:"no"; if(!state.d[id])delete state.d[id]; persistLocal(); refresh(); };
+      b.appendChild(y); b.appendChild(n); r.appendChild(b);
+      list.appendChild(r);
+    }
+  }
+  refresh();
+}
+function refresh(){
+  let yes=0,no=0,total=0;
+  document.querySelectorAll(".ref").forEach(r=>{
+    total++;
+    const v=state.d[r.dataset.id];
+    r.classList.toggle("yes",v==="yes");
+    r.classList.toggle("no",v==="no");
+    if(v==="yes")yes++; else if(v==="no")no++;
+  });
+  document.getElementById("counts").innerHTML=
+    "<b>"+yes+" approved</b> · <s>"+no+" rejected</s> · "+(total-yes-no)+" undecided";
+}
+function summary(){
+  const yes=[],no=[];
+  for(const k in state.d)(state.d[k]==="yes"?yes:no).push(+k);
+  yes.sort((a,b)=>a-b); no.sort((a,b)=>a-b);
+  return "APPROVED: "+(yes.join(",")||"none")+"\nREJECTED: "+(no.join(",")||"none");
+}
+const status=m=>document.getElementById("status").textContent=m;
+
+document.getElementById("copyBtn").onclick=async()=>{
+  try{ await navigator.clipboard.writeText(summary()); status("Copied — paste it to Claude in chat."); }
+  catch(e){ status(summary().replace("\n"," | ")); }
+};
+document.getElementById("saveBtn").onclick=async()=>{
+  persistLocal();
+  let art=null;
+  try{ art=await claude.use("artifact"); }catch(e){}
+  if(!art){ status("In-page saving unavailable here — tap COPY and paste the summary to Claude."); return; }
+  document.getElementById("decisions").textContent=JSON.stringify(state);
+  const doc="<!doctype html>\n"+document.documentElement.outerHTML;
+  try{
+    await art.publish(doc);
+    status("Saved into the page ✓ — tell Claude you're done and he'll read your verdicts.");
+  }catch(e){
+    status("Save conflicted or failed — tap COPY and paste the summary to Claude instead.");
+  }
+};
+build();
+</script>
