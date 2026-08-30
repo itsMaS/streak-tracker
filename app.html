@@ -76,6 +76,20 @@
     width:38px;height:38px;font-size:15px;cursor:pointer}
   .card-note{font-size:10.5px;color:#C4BBB1;margin-top:8px;line-height:1.5}
 
+  /* activities */
+  .act-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .achip{display:inline-flex;align-items:center;gap:5px;border:1.5px solid #D4C5F0;background:var(--accent-soft);
+    border-radius:99px;padding:5px 10px;font-family:"Nunito";font-weight:800;font-size:12px;color:var(--ink);cursor:pointer}
+  .achip .x{color:var(--muted);font-size:10px}
+  .achip.add{border:1.5px dashed var(--line);background:var(--card);color:var(--muted)}
+  .act-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .act-cell{border:1.5px solid var(--line);background:var(--inset);border-radius:14px;padding:10px 4px;cursor:pointer;text-align:center}
+  .act-cell .e{font-size:24px;display:block}
+  .act-cell small{display:block;font-family:"Nunito";font-weight:800;font-size:10px;color:var(--muted);margin-top:3px}
+  .act-cell.on{border-color:var(--accent);background:var(--accent-soft)}
+  .schip.act{border-color:#D4C5F0;background:var(--accent-soft);font-family:"Nunito";font-weight:800;font-size:13px}
+  .done-btn:disabled{opacity:.45;cursor:default}
+
   /* chart */
   .chips{display:flex;gap:6px;margin-bottom:10px}
   .chip{border:1.5px solid var(--line);background:var(--card);color:var(--muted);border-radius:99px;
@@ -198,7 +212,7 @@
   .seg button.on{filter:none;opacity:1}
   .seg button.on.s-ex{border-color:#D4C5F0;background:var(--accent-soft)}
   .seg button.on.s-mig{border-color:#B8D4EA;background:var(--mig-soft)}
-  #edDur{margin-bottom:6px}
+  #edActsField{margin-bottom:6px}
   .info-list{margin:0;padding:0;list-style:none}
   .info-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1.5px dashed var(--line);font-size:13px;line-height:1.55}
   .info-list li:last-child{border-bottom:none}
@@ -278,7 +292,7 @@
     <div id="todayCard"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="plankCard" style="display:none">
     <h2>Plank duration</h2>
     <div class="chips" id="chips"></div>
     <div id="chartBox"><div id="tip"></div><div id="chartMount"></div></div>
@@ -364,12 +378,9 @@
       <button class="s-ex" id="segEx">💪<div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">workout</div></button>
       <button class="s-mig" id="segMig">🧠<div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">migraine</div></button>
     </div>
-    <div class="field" id="edDur">
-      <small>Plank</small>
-      <div class="dur">
-        <input id="edMin" type="number" min="0" max="59" inputmode="numeric" placeholder="0"><span>min</span>
-        <input id="edSec" type="number" min="0" max="59" inputmode="numeric" placeholder="00"><span>sec</span>
-      </div>
+    <div class="field" id="edActsField">
+      <small>Activities</small>
+      <div class="act-chips" id="edActs"></div>
     </div>
     <div class="card-note">Toggle both off to clear the day.</div>
     <button class="done-btn" id="edSave">Save</button>
@@ -381,10 +392,10 @@
   <div class="sheet">
     <h2>How it works</h2>
     <ul class="info-list">
-      <li><span class="i">💪</span><span>Log a workout every day to grow the streak. Plank time is optional.</span></li>
+      <li><span class="i">💪</span><span>Log a workout every day to grow the streak. Adding activities (plank, run, ride…) with how much you did is optional.</span></li>
       <li><span class="i">🧠</span><span>Migraine day: the streak is kept safe but doesn't grow. You can still log a workout on a migraine day — then it counts.</span></li>
       <li><span class="i">📅</span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
-      <li><span class="i">📈</span><span>The graph shows plank duration over time. Tap a dot for details.</span></li>
+      <li><span class="i">📈</span><span>The graph shows plank duration over time — it appears once you've logged a plank. Tap a dot for details.</span></li>
       <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
       <li><span class="i">💛</span><span>Buddies: swap codes with friends to see each other's streaks, calendars and planks — and send cheers 📣 or nudges 👉.</span></li>
       <li><span class="i">🐾</span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
@@ -423,6 +434,19 @@
   <div class="sheet" id="fdSheet"></div>
 </div>
 
+<!-- activity picker -->
+<div class="sheet-wrap" id="apWrap">
+  <div class="sheet">
+    <h2>Add activity</h2>
+    <div class="act-grid" id="apGrid"></div>
+    <div class="field" id="apDurField" style="display:none;margin-top:12px">
+      <small>Duration (optional)</small>
+      <div class="dur" id="apDur"></div>
+    </div>
+    <button class="done-btn" id="apGo" disabled>Add</button>
+  </div>
+</div>
+
 <div id="toasts"></div>
 
 <script>
@@ -432,10 +456,25 @@ const MILESTONES=[
   {n:3,e:"🌱"},{n:7,e:"⭐"},{n:14,e:"🐾"},{n:21,e:"🌸"},
   {n:30,e:"🌈"},{n:50,e:"🏆"},{n:75,e:"👑"},{n:100,e:"💎"}
 ];
+/* Activity catalog. "sec" = duration entered as min:sec (plank holds are short);
+   everything else is entered in whole minutes. Durations are stored in seconds. */
+const ACTS=[
+  {id:"plank",e:"🪵",name:"Plank",sec:true},
+  {id:"fitness",e:"🤸",name:"Indoor fitness"},
+  {id:"strength",e:"🏋️",name:"Strength"},
+  {id:"run",e:"🏃",name:"Running"},
+  {id:"walk",e:"🚶",name:"Walking"},
+  {id:"cycle",e:"🚴",name:"Cycling"},
+  {id:"swim",e:"🏊",name:"Swimming"},
+  {id:"yoga",e:"🧘",name:"Yoga"},
+  {id:"sport",e:"⚽",name:"Sports"},
+  {id:"other",e:"✨",name:"Other"}
+];
+const actById=id=>ACTS.find(a=>a.id===id)||{id,e:"✨",name:id};
 
 /* ---------- state ---------- */
 const KEY="wiggle-squad-v1";
-let state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
+let state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
 try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
 for(const k in state.days){
   const e=state.days[k];
@@ -443,7 +482,12 @@ for(const k in state.days){
   else if(e&&e.t==="ex"){ state.days[k]={ex:true}; if(e.p)state.days[k].p=e.p; }
   else if(e&&e.t==="mig") state.days[k]={mig:true};
 }
-state.v=3;
+/* v4: the old plank field becomes just another catalog activity (e.acts.plank) */
+for(const k in state.days){
+  const e=state.days[k];
+  if(e&&e.p){ e.acts=Object.assign({plank:e.p},e.acts||{}); delete e.p; }
+}
+state.v=4;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}mirrorDays();}
 /* Mirror the day log into IndexedDB — the service worker reads it there when a
    push arrives, to decide whether the raccoon should be angry (localStorage is
@@ -470,6 +514,15 @@ const iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
 const today=()=>iso(new Date());
 const dayOfYear=()=>{const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);};
 const fmtDur=s=>Math.floor(s/60)+":"+pad(s%60);
+/* e.p fallback covers buddies still syncing from an older app version */
+const plankSecs=e=>(e&&e.acts&&e.acts.plank)||(e&&e.p)||0;
+const hasPlank=days=>Object.keys(days).some(k=>plankSecs(days[k])>0);
+function fmtAmt(id,s){
+  if(!s)return "";
+  if(actById(id).sec)return fmtDur(s);
+  const m=Math.round(s/60),h=Math.floor(m/60);
+  return h?h+"h"+(m%60?" "+(m%60)+"m":""):m+"m";
+}
 
 /* ---------- streak: workout counts, migraine-only bridges, empty breaks ---------- */
 function currentStreak(days=state.days){
@@ -566,9 +619,8 @@ function renderToday(){
   if(!e.ex){
     c.innerHTML=
       '<div class="logrow">'+
-        '<div class="field"><small>Plank (optional)</small><div class="dur">'+
-          '<input id="inMin" type="number" min="0" max="59" inputmode="numeric" placeholder="0"><span>min</span>'+
-          '<input id="inSec" type="number" min="0" max="59" inputmode="numeric" placeholder="00"><span>sec</span>'+
+        '<div class="field"><small>Activities (optional)</small><div class="act-chips">'+
+          '<button class="achip add" id="actAdd">+ add activity</button>'+
         '</div></div>'+
         '<div class="mig-box'+(migOn?" on":"")+'" id="migBox"><span class="ic">🧠</span><small>Migraine</small><span class="hint">keeps streak</span></div>'+
       '</div>'+
@@ -576,14 +628,31 @@ function renderToday(){
       (migOn?'<div class="card-note">Migraine marked — today is streak-safe. A workout still counts if you log one.</div>':'');
     $("migBox").onclick=toggleMig;
     $("logBtn").onclick=logWorkout;
+    $("actAdd").onclick=()=>openActPicker(addTodayAct);
   }else{
+    const acts=e.acts||{},ids=Object.keys(acts);
+    let chips=ids.length?"":'<span class="schip ex">💪</span>';
+    for(const id of ids){
+      const a=actById(id);
+      chips+='<span class="schip act">'+a.e+(acts[id]?' <b>'+fmtAmt(id,acts[id])+'</b>':'')+'</span>';
+    }
     c.innerHTML=
-      '<div class="logged"><div class="status-chips">'+
-        '<span class="schip ex">💪'+(e.p?' <b>'+fmtDur(e.p)+'</b>':'')+'</span>'+
+      '<div class="logged"><div class="status-chips">'+chips+
         (migOn?'<span class="schip mig">🧠</span>':'')+
       '</div><button class="editbtn" id="todayEdit" aria-label="Edit today">✎</button></div>';
     $("todayEdit").onclick=()=>openEditor(t);
   }
+}
+/* Adding an activity from the today card logs the workout right away. */
+function addTodayAct(id,secs){
+  const t=today(), e=state.days[t]||{};
+  const first=!e.ex;
+  e.ex=true;
+  e.acts=e.acts||{};
+  e.acts[id]=(e.acts[id]||0)+secs;
+  state.days[t]=e;
+  save();render();queueSync();
+  if(first)celebrate(currentStreak());else pop();
 }
 function toggleMig(){
   const t=today(), e=state.days[t]||{};
@@ -598,9 +667,7 @@ function toggleMig(){
 }
 function logWorkout(){
   const t=today(), e=state.days[t]||{};
-  const m=+($("inMin").value||0),s=+($("inSec").value||0);
-  const p=Math.max(0,Math.min(59,m))*60+Math.max(0,Math.min(59,s));
-  e.ex=true; if(p>0)e.p=p;
+  e.ex=true;
   state.days[t]=e;
   save();render();queueSync();
   celebrate(currentStreak());
@@ -646,8 +713,8 @@ function renderChips(){
 function plankPoints(days,rng){
   const pts=[];
   for(const k of Object.keys(days).sort()){
-    const e=days[k];
-    if(e.ex&&e.p>0)pts.push({d:k,p:e.p});
+    const e=days[k],p=plankSecs(e);
+    if(e.ex&&p>0)pts.push({d:k,p});
   }
   if(rng>0){
     const cut=new Date();cut.setDate(cut.getDate()-(rng-1));
@@ -727,6 +794,8 @@ function render(){
   $("bestNum").textContent=best;
   $("mascot").textContent=SQUAD[dayOfYear()%SQUAD.length];
   renderToday();
+  /* the plank progress card only appears once a plank has been logged */
+  $("plankCard").style.display=hasPlank(state.days)?"":"none";
   renderChart();
   renderBuddies();
 
@@ -950,7 +1019,7 @@ function openFriend(id){
      '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+exKeys.length+'</div><small>total</small></div>'+
      '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+best+'</div><small>best</small></div>'+
      '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+exKeys.filter(d=>d.startsWith(mP)).length+'</div><small>month</small></div></div>';
-  h+='<div class="fd-sec">PLANK · 30 DAYS</div>'+chartSVG(days,30).html;
+  if(hasPlank(days))h+='<div class="fd-sec">PLANK · 30 DAYS</div>'+chartSVG(days,30).html;
   h+='<div class="fd-sec">'+now.toLocaleString("en",{month:"long"}).toUpperCase()+' '+now.getFullYear()+'</div>'+
      '<div class="cal-grid ro">'+calHTML(days,now.getFullYear(),now.getMonth())+'</div>';
   h+='<div class="fd-sec">MILESTONES</div><div class="badges fd-badges">';
@@ -989,21 +1058,40 @@ async function sendBuddyEvent(id,kind,okMsg){
 });
 
 /* ---------- day editor ---------- */
-let edDate=null,edEx=false,edMig=false;
+let edDate=null,edEx=false,edMig=false,edActs={};
 function openEditor(ds){
   edDate=ds;
   const e=state.days[ds]||{};
   edEx=!!e.ex; edMig=!!e.mig;
+  edActs=Object.assign({},e.acts||{});
+  if(e.p&&!edActs.plank)edActs.plank=e.p;
   $("edDate").textContent=new Date(ds+"T12:00:00").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric"});
-  $("edMin").value=e.p?Math.floor(e.p/60):"";
-  $("edSec").value=e.p?pad(e.p%60):"";
+  renderEdActs();
   refreshSeg();
   $("edWrap").classList.add("show");
+}
+function renderEdActs(){
+  const c=$("edActs");
+  let h="";
+  for(const id of Object.keys(edActs)){
+    const a=actById(id);
+    h+='<button class="achip" data-id="'+id+'">'+a.e+' '+a.name+
+       (edActs[id]?' · '+fmtAmt(id,edActs[id]):'')+' <span class="x">✕</span></button>';
+  }
+  h+='<button class="achip add" id="edActAdd">+ add</button>';
+  c.innerHTML=h;
+  c.querySelectorAll(".achip[data-id]").forEach(b=>{
+    b.onclick=()=>{delete edActs[b.dataset.id];renderEdActs();};
+  });
+  $("edActAdd").onclick=()=>openActPicker((id,secs)=>{
+    edActs[id]=(edActs[id]||0)+secs;
+    edEx=true;refreshSeg();renderEdActs();
+  });
 }
 function refreshSeg(){
   $("segEx").classList.toggle("on",edEx);
   $("segMig").classList.toggle("on",edMig);
-  $("edDur").style.display=edEx?"":"none";
+  $("edActsField").style.display=edEx?"":"none";
 }
 $("segEx").onclick=()=>{edEx=!edEx;refreshSeg();};
 $("segMig").onclick=()=>{edMig=!edMig;refreshSeg();};
@@ -1013,9 +1101,7 @@ $("edSave").onclick=()=>{
     const e={};
     if(edEx){
       e.ex=true;
-      const m=+($("edMin").value||0),s=+($("edSec").value||0);
-      const p=Math.max(0,Math.min(59,m))*60+Math.max(0,Math.min(59,s));
-      if(p>0)e.p=p;
+      if(Object.keys(edActs).length)e.acts=Object.assign({},edActs);
     }
     if(edMig)e.mig=true;
     state.days[edDate]=e;
@@ -1024,6 +1110,45 @@ $("edSave").onclick=()=>{
   $("edWrap").classList.remove("show");
   pop();
 };
+
+/* ---------- activity picker ---------- */
+let apPick=null,apCb=null;
+function openActPicker(cb){
+  apCb=cb;apPick=null;
+  renderApGrid();refreshApDur();
+  $("apGo").disabled=true;
+  $("apWrap").classList.add("show");
+}
+function renderApGrid(){
+  const g=$("apGrid");g.innerHTML="";
+  for(const a of ACTS){
+    const b=document.createElement("button");
+    b.className="act-cell"+(apPick===a.id?" on":"");
+    b.innerHTML='<span class="e">'+a.e+'</span><small>'+a.name+'</small>';
+    b.onclick=()=>{apPick=a.id;renderApGrid();refreshApDur();$("apGo").disabled=false;};
+    g.appendChild(b);
+  }
+}
+function refreshApDur(){
+  const f=$("apDurField");
+  if(!apPick){f.style.display="none";return;}
+  f.style.display="";
+  $("apDur").innerHTML=actById(apPick).sec
+    ?'<input id="apMin" type="number" min="0" max="59" inputmode="numeric" placeholder="0"><span>min</span>'+
+     '<input id="apSec" type="number" min="0" max="59" inputmode="numeric" placeholder="00"><span>sec</span>'
+    :'<input id="apMin" type="number" min="0" max="999" inputmode="numeric" placeholder="0" style="width:56px"><span>min</span>';
+}
+$("apGo").onclick=()=>{
+  if(!apPick)return;
+  const m=+($("apMin").value||0);
+  const secs=actById(apPick).sec
+    ?Math.max(0,Math.min(59,m))*60+Math.max(0,Math.min(59,+($("apSec").value||0)))
+    :Math.max(0,Math.min(999,m))*60;
+  $("apWrap").classList.remove("show");
+  const cb=apCb;apCb=null;
+  if(cb)cb(apPick,secs);
+};
+$("apWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("apWrap").classList.remove("show");});
 $("edWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("edWrap").classList.remove("show");});
 $("infoBtn").onclick=()=>$("infoWrap").classList.add("show");
 $("infoDone").onclick=()=>$("infoWrap").classList.remove("show");
@@ -1096,7 +1221,7 @@ $("pushCopyBtn").onclick=async()=>{
 $("resetBtn").onclick=()=>{
   if(confirm("Erase all data?"+(state.buddy?" Your buddy code and connections are removed too.":""))){
     if(state.buddy)rpc("buddy_delete",{p_uid:state.buddy.uid,p_secret:state.buddy.secret}).catch(()=>{});
-    state={v:3,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
+    state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
     save();render();
     $("setWrap").classList.remove("show");
   }
