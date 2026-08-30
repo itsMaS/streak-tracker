@@ -1,6 +1,6 @@
 /* Minimal offline cache so the installed PWA opens instantly, even without signal. */
-const CACHE = "streak-buddies-v3";
-const ASSETS = ["./", "index.html", "manifest.webmanifest"];
+const CACHE = "streak-buddies-v4";
+const ASSETS = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
