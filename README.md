@@ -1,5 +1,7 @@
 # Streak Buddies 🫏🦝🐭🐮🐼
 
+Live: https://itsmas.github.io/streak-tracker/
+
 A minimalist, cute exercise streak tracker. Five animal buddies cheer every
 workout, wander across the screen now and then, and make little sounds when
 poked.
