@@ -155,6 +155,44 @@
   .stat .display{font-size:24px;color:var(--accent)}
   .stat small{font-size:10px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
 
+  /* farm */
+  .farm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .farm-head h2{margin:0}
+  .coinpill{display:inline-flex;align-items:center;gap:5px;background:#FFF7E4;border:1.5px solid var(--sun);
+    border-radius:99px;padding:4px 12px;font-family:"Baloo 2";font-weight:800;font-size:15px;color:#B98A2B}
+  .coinpill.flash{animation:coinflash .6s ease}
+  @keyframes coinflash{30%{transform:scale(1.18)}}
+  .farm-iso{position:relative;user-select:none}
+  .farm-iso svg{width:100%;display:block}
+  #farmLayer{position:absolute;inset:0}
+  .farm-sprite{position:absolute;transform:translate(-50%,-82%);font-size:26px;line-height:1;cursor:pointer;
+    transition:left 1.6s ease-in-out,top 1.6s ease-in-out;filter:drop-shadow(0 2px 2px rgba(70,64,60,.18))}
+  .farm-sprite .in{display:inline-block}
+  .farm-sprite.walk .in{animation:waddle .38s ease-in-out infinite alternate}
+  .farm-sprite.flip .in{transform:scaleX(-1)}
+  .farm-sprite.flip.walk .in{animation:waddleflip .38s ease-in-out infinite alternate}
+  .farm-sprite.sleepy{filter:saturate(.55) opacity(.8) drop-shadow(0 2px 2px rgba(70,64,60,.18))}
+  .farm-sprite .bub{position:absolute;top:-13px;left:55%;font-size:12px;animation:bubup 1.6s ease forwards;pointer-events:none}
+  @keyframes bubup{from{opacity:0;transform:translateY(4px)}25%{opacity:1}to{opacity:0;transform:translateY(-10px)}}
+  .farm-empty{position:absolute;inset:0;display:grid;place-items:center;color:#8FA97E;font-size:12px;
+    text-align:center;line-height:1.7;pointer-events:none}
+  .shop{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .shop::-webkit-scrollbar{display:none}
+  .shop-cell{flex:none;width:86px;border:1.5px solid var(--line);background:var(--inset);border-radius:14px;
+    padding:8px 6px;text-align:center;cursor:pointer;position:relative;font-family:inherit}
+  .shop-cell .e{font-size:26px;display:block}
+  .shop-cell .nm{display:block;font-size:10px;color:var(--muted);font-family:"Nunito";font-weight:800;margin-top:2px}
+  .shop-cell .pr{display:block;font-family:"Baloo 2";font-weight:800;font-size:12px;color:#B98A2B;margin-top:3px}
+  .shop-cell .own{position:absolute;top:-6px;right:-4px;background:var(--accent);color:#fff;border-radius:99px;
+    font-size:10px;font-family:"Baloo 2";font-weight:800;padding:1px 6px}
+  .shop-cell:not(.locked):active{transform:scale(.95)}
+  .shop-cell.locked{cursor:default}
+  .shop-cell.locked .e{filter:grayscale(1) opacity(.35)}
+  .shop-cell.locked .pr{color:var(--muted)}
+  .shop-cell.broke .pr{color:#C0504A}
+  .pcoins{font-family:"Baloo 2";font-weight:800;font-size:24px;color:#B98A2B;margin-top:8px}
+  .fd-farm svg{width:100%;display:block}
+
   /* wandering animals */
   .walker{position:fixed;bottom:6px;left:0;font-size:34px;z-index:30;cursor:pointer;user-select:none;
     filter:drop-shadow(0 3px 3px rgba(70,64,60,.15))}
@@ -336,6 +374,14 @@
     <div class="stat"><div class="display" id="statBest">0</div><small>best</small></div>
     <div class="stat"><div class="display" id="statMonth">0</div><small>month</small></div>
   </div>
+
+  <div class="card" id="farmCard">
+    <div class="farm-head"><h2>Farm</h2><div class="coinpill" id="coinPill">🪙 <b id="coinNum">0</b></div></div>
+    <div class="farm-iso" id="farmIso"></div>
+    <div class="shop" id="shopBar"></div>
+    <div class="card-note">Logging a workout earns 🪙 10 × your streak (up to 30×) — once per day.
+      Locked animals open up at streak milestones; each extra copy of an animal costs 25% more.</div>
+  </div>
 </div>
 
 <div class="overlay" id="overlay">
@@ -347,6 +393,7 @@
     <div class="pbadge" id="partyBadge" hidden></div>
     <div class="pnum" id="partyNum">1</div>
     <div class="plabel">day streak</div>
+    <div class="pcoins" id="partyCoins" hidden></div>
     <div class="pclose">tap anywhere to close</div>
   </div>
 </div>
@@ -402,7 +449,9 @@
       <li><span class="i">📅</span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
       <li><span class="i">📈</span><span>The graph shows plank duration over time — it appears once you've logged a plank. Tap a dot for details.</span></li>
       <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
-      <li><span class="i">💛</span><span>Buddies: swap codes with friends to see each other's streaks, calendars and planks — and send cheers 📣 or nudges 👉.</span></li>
+      <li><span class="i">🪙</span><span>Logging a workout earns coins: 10 × your streak, up to 30×. Only today's log pays out (once per day) — backfilled days keep the streak honest but earn nothing.</span></li>
+      <li><span class="i">🚜</span><span>Spend coins on farm animals at the bottom. Some unlock once your best streak reaches 7, 14 or 30 days, and every extra copy of an animal costs 25% more. They wander when today is logged and doze when it isn't.</span></li>
+      <li><span class="i">💛</span><span>Buddies: swap codes with friends to see each other's streaks, calendars, planks and farms — and send cheers 📣 or nudges 👉.</span></li>
       <li><span class="i">🐾</span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
       <li><span class="i">😡</span><span>Angry raccoon: flip it on in Settings and a very cross raccoon appears on your lock screen at reminder time if today is still empty — even with the app closed.</span></li>
     </ul>
@@ -477,9 +526,24 @@ const ACTS=[
 ];
 const actById=id=>ACTS.find(a=>a.id===id)||{id,e:"✨",name:id};
 
+/* Farm economy: logging today's workout pays COIN_BASE × streak (capped),
+   once per calendar day (state.lastEarn). Backfills never pay, spends never
+   refund — the wallet can only be gamed by actually working out. */
+const COIN_BASE=10, COIN_CAP=30, FARM_CAP=20;
+const FARM_ANIMALS=[
+  {id:"chicken",e:"🐔",name:"Chicken",price:50,gate:0,snd:5},
+  {id:"rat",e:"🐀",name:"Rat",price:150,gate:0,snd:2},
+  {id:"raccoon",e:"🦝",name:"Raccoon",price:400,gate:7,snd:1},
+  {id:"panda",e:"🐼",name:"Panda",price:1200,gate:14,snd:4},
+  {id:"donkey",e:"🫏",name:"Donkey",price:5000,gate:30,snd:0}
+];
+const farmAnimalById=id=>FARM_ANIMALS.find(a=>a.id===id);
+const animalCost=(a,owned)=>Math.round(a.price*Math.pow(1.25,owned));
+
 /* ---------- state ---------- */
 const KEY="wiggle-squad-v1";
-let state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
+let state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[],
+  coins:0,farm:{},lastEarn:""};
 try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
 for(const k in state.days){
   const e=state.days[k];
@@ -580,6 +644,7 @@ function animalSound(i){
     case 2: note(1500,0,.06,.08,"sine",1.4); note(1750,.08,.06,.08,"sine",1.3); break;        /* squeak */
     case 3: note(150,0,.5,.12,"triangle",.7); break;                                          /* moo */
     case 4: note(210,0,.18,.1,"triangle",.85); note(165,.17,.25,.1,"triangle",.9); break;     /* grunt */
+    case 5: note(700,0,.05,.07,"square",.9); note(520,.06,.09,.08,"square",.75); note(880,.16,.12,.09,"square",.6); break; /* bawk */
   }
 }
 function buzz(p){try{navigator.vibrate&&navigator.vibrate(p);}catch(e){}}
@@ -656,8 +721,9 @@ function addTodayAct(id,secs){
   e.acts=e.acts||{};
   e.acts[id]=(e.acts[id]||0)+secs;
   state.days[t]=e;
+  const amt=first?earnCoins():0;
   save();render();queueSync();
-  if(first)celebrate(currentStreak());else pop();
+  if(first)celebrate(currentStreak(),amt);else pop();
 }
 function toggleMig(){
   const t=today(), e=state.days[t]||{};
@@ -674,13 +740,24 @@ function logWorkout(){
   const t=today(), e=state.days[t]||{};
   e.ex=true;
   state.days[t]=e;
+  const amt=earnCoins();
   save();render();queueSync();
-  celebrate(currentStreak());
+  celebrate(currentStreak(),amt);
+}
+function earnCoins(){
+  if(state.lastEarn===today())return 0;
+  const amt=COIN_BASE*Math.max(1,Math.min(currentStreak(),COIN_CAP));
+  state.lastEarn=today();
+  state.coins=(state.coins||0)+amt;
+  return amt;
 }
 
 /* ---------- celebration ---------- */
 let partyTimer=null;
-function celebrate(streak){
+function celebrate(streak,coins){
+  const pc=$("partyCoins");
+  pc.hidden=!coins;
+  if(coins)pc.textContent="+"+coins+" 🪙";
   const ms=MILESTONES.find(m=>m.n===streak);
   $("squadline").hidden=!ms;
   $("partyAnimal").style.display=ms?"none":"inline-block";
@@ -702,6 +779,178 @@ function celebrate(streak){
 function closeParty(){clearTimeout(partyTimer);$("overlay").classList.remove("show");}
 $("overlay").addEventListener("pointerup",closeParty);
 $("overlay").addEventListener("click",closeParty);
+
+/* ---------- farm ----------
+   Isometric grid drawn as SVG diamonds; animals are absolutely-positioned
+   emoji that stroll tile to tile. Purely cosmetic, but mood-aware: they
+   wander and hum once today is logged, and doze while it isn't. */
+const FGRID=6, FTW=56, FTH=28, FW=352, FH=196;
+const tileXY=(i,j)=>({x:FW/2+(i-j)*FTW/2, y:12+(i+j)*FTH/2});
+/* fixed pseudo-random spawn order so a farm always fills the same way
+   (also used to draw a buddy's farm identically on their side and yours) */
+const FARM_SPOTS=(()=>{
+  const arr=[];
+  for(let i=0;i<FGRID;i++)for(let j=0;j<FGRID;j++)arr.push([i,j]);
+  let s=42;
+  const rnd=()=>((s=(s*1103515245+12345)>>>0)/4294967296);
+  for(let k=arr.length-1;k>0;k--){const r=rnd()*(k+1)|0;const t=arr[k];arr[k]=arr[r];arr[r]=t;}
+  return arr;
+})();
+function farmTilesSVG(inner){
+  let s='<svg viewBox="0 0 '+FW+' '+FH+'">';
+  for(let j=0;j<FGRID;j++)for(let i=0;i<FGRID;i++){
+    const {x,y}=tileXY(i,j);
+    s+='<path d="M'+x+' '+y+' L'+(x+FTW/2)+' '+(y+FTH/2)+' L'+x+' '+(y+FTH)+' L'+(x-FTW/2)+' '+(y+FTH/2)+' Z" fill="'+
+      (((i+j)%2)?"#C9E7B6":"#BDE0A8")+'" stroke="#A9CE93" stroke-width="1"/>';
+  }
+  const deco=["🌼","🌾","🌷","🍄","🌼","🪨"];
+  for(let k=0;k<deco.length;k++){
+    const [i,j]=FARM_SPOTS[FARM_SPOTS.length-1-k];
+    const {x,y}=tileXY(i,j);
+    s+='<text x="'+x+'" y="'+(y+FTH*.82)+'" font-size="10" text-anchor="middle">'+deco[k]+'</text>';
+  }
+  return s+(inner||"")+'</svg>';
+}
+/* read-only farm for a buddy's detail sheet */
+function farmStaticSVG(counts){
+  const list=[];
+  for(const a of FARM_ANIMALS){
+    const n=Math.max(0,Math.min(FARM_CAP,Math.floor(+counts[a.id]||0)));
+    for(let k=0;k<n&&list.length<FARM_CAP;k++)list.push(a.e);
+  }
+  const placed=list.map((e,k)=>{
+    const [i,j]=FARM_SPOTS[k%FARM_SPOTS.length];
+    const {x,y}=tileXY(i,j);
+    return {e,x,y};
+  }).sort((a,b)=>a.y-b.y);
+  let inner="";
+  for(const p of placed)
+    inner+='<text x="'+p.x+'" y="'+(p.y+FTH*.72)+'" font-size="18" text-anchor="middle">'+p.e+'</text>';
+  return farmTilesSVG(inner);
+}
+
+let farmSprites=[];
+function farmList(){
+  const out=[];
+  for(const a of FARM_ANIMALS){
+    const n=(state.farm&&state.farm[a.id])||0;
+    for(let k=0;k<n&&out.length<FARM_CAP;k++)out.push(a.id);
+  }
+  return out;
+}
+const farmSleepy=()=>{const e=state.days[today()];return !(e&&e.ex);};
+function placeSprite(s){
+  const {x,y}=tileXY(s.i,s.j);
+  s.el.style.left=(x/FW*100)+"%";
+  s.el.style.top=((y+FTH*.72)/FH*100)+"%";
+  s.el.style.zIndex=2+s.i+s.j;
+}
+function farmSyncSprites(){
+  const layer=$("farmLayer");
+  if(!layer)return;
+  const want=farmList();
+  if(farmSprites.map(s=>s.sp).join()!==want.join()){
+    layer.innerHTML="";farmSprites=[];
+    want.forEach((sp,k)=>{
+      const a=farmAnimalById(sp);
+      const spot=FARM_SPOTS[k%FARM_SPOTS.length];
+      const el=document.createElement("div");
+      el.className="farm-sprite";
+      el.innerHTML='<span class="in">'+a.e+'</span>';
+      const s={sp,i:spot[0],j:spot[1],el};
+      placeSprite(s);
+      el.addEventListener("pointerdown",ev=>{ev.stopPropagation();pokeFarmAnimal(s);});
+      layer.appendChild(el);
+      farmSprites.push(s);
+    });
+  }
+  const sleepy=farmSleepy();
+  farmSprites.forEach(s=>s.el.classList.toggle("sleepy",sleepy));
+  $("farmEmptyHint").style.display=want.length?"none":"";
+}
+function moveSprite(s){
+  const dirs=[[1,0],[-1,0],[0,1],[0,-1],[1,-1],[-1,1]].filter(d=>{
+    const ni=s.i+d[0],nj=s.j+d[1];
+    return ni>=0&&ni<FGRID&&nj>=0&&nj<FGRID;
+  });
+  if(!dirs.length)return;
+  const taken=new Set(farmSprites.filter(x=>x!==s).map(x=>x.i+","+x.j));
+  const free=dirs.filter(d=>!taken.has((s.i+d[0])+","+(s.j+d[1])));
+  const d=(free.length?free:dirs)[Math.random()*(free.length?free.length:dirs.length)|0];
+  const oldX=tileXY(s.i,s.j).x;
+  s.i+=d[0];s.j+=d[1];
+  s.el.classList.toggle("flip",tileXY(s.i,s.j).x<oldX);
+  s.el.classList.add("walk");
+  placeSprite(s);
+  setTimeout(()=>s.el.classList.remove("walk"),1600);
+}
+function spriteBubble(s,txt){
+  const b=document.createElement("span");
+  b.className="bub";b.textContent=txt;
+  s.el.appendChild(b);
+  setTimeout(()=>b.remove(),1700);
+}
+function farmTick(){
+  if(document.hidden||!farmSprites.length)return;
+  const s=farmSprites[Math.random()*farmSprites.length|0];
+  if(farmSleepy()){
+    if(Math.random()<.5)spriteBubble(s,"💤");
+    else if(Math.random()<.3)moveSprite(s);
+  }else{
+    if(Math.random()<.75)moveSprite(s);
+    else spriteBubble(s,["❤️","🎵","✨"][Math.random()*3|0]);
+  }
+}
+setInterval(farmTick,2200);
+function pokeFarmAnimal(s){
+  animalSound(farmAnimalById(s.sp).snd);buzz(15);
+  const r=s.el.getBoundingClientRect();
+  burst(r.left+r.width/2,r.top,10,false,true);
+  spriteBubble(s,farmSleepy()?"💤":"❤️");
+}
+function flashCoins(){
+  const p=$("coinPill");
+  p.classList.remove("flash");void p.offsetWidth;p.classList.add("flash");
+}
+function renderFarm(){
+  $("coinNum").textContent=state.coins||0;
+  const best=Math.max(bestStreak(),currentStreak());
+  const bar=$("shopBar");bar.innerHTML="";
+  for(const a of FARM_ANIMALS){
+    const owned=(state.farm&&state.farm[a.id])||0;
+    const locked=best<a.gate;
+    const cost=animalCost(a,owned);
+    const el=document.createElement("button");
+    el.className="shop-cell"+(locked?" locked":((state.coins||0)<cost?" broke":""));
+    el.innerHTML='<span class="e">'+(locked?"🔒":a.e)+'</span><span class="nm">'+a.name+'</span>'+
+      '<span class="pr">'+(locked?a.gate+"-day streak":"🪙 "+cost)+'</span>'+
+      (owned?'<span class="own">×'+owned+'</span>':'');
+    el.onclick=()=>buyAnimal(a.id);
+    bar.appendChild(el);
+  }
+  farmSyncSprites();
+}
+function buyAnimal(id){
+  const a=farmAnimalById(id);
+  const owned=(state.farm&&state.farm[id])||0;
+  if(Math.max(bestStreak(),currentStreak())<a.gate){
+    toast("🔒 "+a.name+" unlocks at a "+a.gate+"-day streak");return;
+  }
+  if(farmList().length>=FARM_CAP){toast("The farm is full 🐾");return;}
+  const cost=animalCost(a,owned);
+  if((state.coins||0)<cost){toast("Need 🪙 "+cost+" — log workouts to earn!");return;}
+  state.coins-=cost;
+  state.farm=state.farm||{};
+  state.farm[id]=owned+1;
+  save();renderFarm();queueSync();
+  animalSound(a.snd);pop();buzz([30,40,60]);
+  flashCoins();
+  const r=$("farmIso").getBoundingClientRect();
+  burst(r.left+r.width/2,r.top+r.height/2,20,false,true);
+  toast(a.e+" "+a.name+" joined the farm!");
+}
+$("farmIso").innerHTML=farmTilesSVG()+'<div id="farmLayer"></div>'+
+  '<div class="farm-empty" id="farmEmptyHint">Log workouts to earn coins<br>and fill your farm 🐾</div>';
 
 /* ---------- plank chart ---------- */
 const RANGES=[["7D",7],["14D",14],["30D",30],["All",0]];
@@ -803,6 +1052,7 @@ function render(){
   $("plankCard").style.display=hasPlank(state.days)?"":"none";
   renderChart();
   renderBuddies();
+  renderFarm();
 
   const wk=$("week");wk.innerHTML="";
   const DOW=["S","M","T","W","T","F","S"];
@@ -894,7 +1144,8 @@ async function doSync(){
   clearTimeout(syncTimer);
   try{
     const res=await rpc("buddy_sync",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,
-      p_days:state.days,p_name:state.buddy.name});
+      p_days:state.days,p_name:state.buddy.name,
+      p_farm:{coins:state.coins||0,animals:state.farm||{}}});
     state.friends=res.friends||[];
     save();renderBuddies();
     handleBuddyEvents(res.events||[]);
@@ -1025,6 +1276,11 @@ function openFriend(id){
      '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+best+'</div><small>best</small></div>'+
      '<div class="stat" style="box-shadow:none;background:var(--inset)"><div class="display">'+exKeys.filter(d=>d.startsWith(mP)).length+'</div><small>month</small></div></div>';
   if(hasPlank(days))h+='<div class="fd-sec">PLANK · 30 DAYS</div>'+chartSVG(days,30).html;
+  const farmAnimals=(f.farm&&f.farm.animals)||{};
+  const farmCount=Math.min(FARM_CAP,
+    FARM_ANIMALS.reduce((n,a)=>n+Math.max(0,Math.min(FARM_CAP,Math.floor(+farmAnimals[a.id]||0))),0));
+  if(farmCount)h+='<div class="fd-sec">FARM · '+farmCount+' ANIMAL'+(farmCount>1?'S':'')+'</div>'+
+    '<div class="fd-farm">'+farmStaticSVG(farmAnimals)+'</div>';
   h+='<div class="fd-sec">'+now.toLocaleString("en",{month:"long"}).toUpperCase()+' '+now.getFullYear()+'</div>'+
      '<div class="cal-grid ro">'+calHTML(days,now.getFullYear(),now.getMonth())+'</div>';
   h+='<div class="fd-sec">MILESTONES</div><div class="badges fd-badges">';
@@ -1101,6 +1357,7 @@ function refreshSeg(){
 $("segEx").onclick=()=>{edEx=!edEx;refreshSeg();};
 $("segMig").onclick=()=>{edMig=!edMig;refreshSeg();};
 $("edSave").onclick=()=>{
+  const wasEx=!!(state.days[edDate]&&state.days[edDate].ex);
   if(!edEx&&!edMig){delete state.days[edDate];}
   else{
     const e={};
@@ -1111,8 +1368,12 @@ $("edSave").onclick=()=>{
     if(edMig)e.mig=true;
     state.days[edDate]=e;
   }
+  /* Logging *today* through the editor still pays out; backfills don't. */
+  let amt=0;
+  if(edDate===today()&&edEx&&!wasEx)amt=earnCoins();
   save();render();queueSync();
   $("edWrap").classList.remove("show");
+  if(amt){toast("+"+amt+" 🪙 earned");flashCoins();}
   pop();
 };
 
@@ -1240,7 +1501,8 @@ $("resetBtn").onclick=()=>{
       rpc("push_unregister",{p_endpoint:pushSub.endpoint}).catch(()=>{});
       pushSub.unsubscribe().catch(()=>{});pushSub=null;
     }
-    state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[]};
+    state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[],
+      coins:0,farm:{},lastEarn:""};
     save();render();
     $("setWrap").classList.remove("show");
   }
