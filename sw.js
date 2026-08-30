@@ -1,5 +1,5 @@
 /* Minimal offline cache so the installed PWA opens instantly, even without signal. */
-const CACHE = "wiggle-squad-v1";
+const CACHE = "streak-buddies-v2";
 const ASSETS = ["./", "index.html", "manifest.webmanifest"];
 
 self.addEventListener("install", (e) => {

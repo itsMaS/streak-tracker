@@ -1,9 +1,8 @@
-# The Midnight Menagerie 🫏🦝🐭🐮🐼
+# Streak Buddies 🫏🦝🐭🐮🐼
 
-A very dark horror exercise streak tracker — five ominous beasts (Hollow the
-Donkey, Grimm the Raccoon, Vermin the Rat, The Heifer, and Mourn the Panda)
-demand a daily offering of exercise. Feeding the streak brings ash-and-bat
-bursts, tolling bells, and milestone rites on the relic shelf.
+A minimalist, cute exercise streak tracker. Five animal buddies cheer every
+workout, wander across the screen now and then, and make little sounds when
+poked.
 
 ## Files
 
@@ -21,8 +20,9 @@ bursts, tolling bells, and milestone rites on the relic shelf.
 - Any past day is editable from the calendar or week strip: mark exercise
   (with plank time), migraine, or clear it
 - Streak counter, week strip, monthly calendar, milestone badges
-  (3/7/14/21/30/50/75/100) and stats — minimal text, horror is visual only
-- Visual celebrations: beast + particle bursts, low tolling sounds, haptics
+  (3/7/14/21/30/50/75/100) and stats — minimal text
+- Celebrations with confetti, haptics, and synthesized animal sounds;
+  buddies occasionally wander across the screen (tap them!)
 - Optional reminder notification at a configurable time (fires while the app
   is open or installed)
 - Data lives in `localStorage` on the phone — no accounts, no server
