@@ -1881,6 +1881,38 @@ setTimeout(spawnWalker,7000);
 $("calPrev").onclick=()=>{calCursor.setMonth(calCursor.getMonth()-1);renderCalendar();};
 $("calNext").onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalendar();};
 
+/* ---------- back button closes popups ----------
+   On Android the hardware back button would otherwise close the whole app
+   while a sheet or the celebration overlay is open. Whenever one opens we
+   push a history entry, so back just pops that entry and we close the
+   topmost popup. Closing a popup any other way (Done button, backdrop tap,
+   auto-timeout) consumes its entry via history.back() so the history stack
+   never drifts out of sync. */
+(function(){
+  const stack=[];   /* popups currently open, in opening order */
+  let ownBacks=0;   /* popstates caused by our own history.back() calls */
+  const mo=new MutationObserver(muts=>{
+    for(const m of muts){
+      const el=m.target,i=stack.indexOf(el);
+      if(el.classList.contains("show")){
+        if(i<0){stack.push(el);history.pushState({popup:stack.length},"");}
+      }else if(i>=0){
+        stack.splice(i,1);
+        ownBacks++;history.back();
+      }
+    }
+  });
+  document.querySelectorAll(".sheet-wrap").forEach(el=>mo.observe(el,{attributes:true,attributeFilter:["class"]}));
+  mo.observe($("overlay"),{attributes:true,attributeFilter:["class"]});
+  addEventListener("popstate",()=>{
+    if(ownBacks>0){ownBacks--;return;}
+    /* user pressed back: pop from the stack first so the observer above
+       sees the element as already handled and doesn't call history.back() */
+    const el=stack.pop();
+    if(el)el.classList.remove("show");
+  });
+})();
+
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
 render();
 doSync();
