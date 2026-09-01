@@ -352,6 +352,7 @@
   <header>
     <div class="wordmark">Streak 🐾</div>
     <div class="hbtns">
+      <button class="gear" id="installBtn" aria-label="Install app" style="display:none">📲</button>
       <button class="gear" id="infoBtn" aria-label="Help">❓</button>
       <button class="gear" id="dbgBtn" aria-label="Debug" style="display:none">🐞</button>
       <button class="gear" id="gearBtn" aria-label="Settings">⚙️</button>
@@ -1956,6 +1957,24 @@ $("calNext").onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalen
     const el=stack.pop();
     if(el)el.classList.remove("show");
   });
+})();
+
+/* ---------- install-as-app button ----------
+   Chrome fires beforeinstallprompt only when the page is installable and not
+   already installed, so the 📲 button appears just for browser-tab visitors.
+   iOS never fires it: there the button shows in Safari and explains the
+   Share → Add to Home Screen dance instead. */
+(function(){
+  const btn=$("installBtn");
+  if(matchMedia("(display-mode: standalone)").matches||navigator.standalone)return;
+  let deferred=null;
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;btn.style.display="";});
+  addEventListener("appinstalled",()=>{btn.style.display="none";deferred=null;toast("Installed! Find Streak on your home screen 🐾");});
+  if(/iPhone|iPad|iPod/.test(navigator.userAgent))btn.style.display="";
+  btn.onclick=()=>{
+    if(deferred){const p=deferred;deferred=null;btn.style.display="none";p.prompt();}
+    else toast("Tap Share ⬆️ then “Add to Home Screen” to install 📲");
+  };
 })();
 
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
