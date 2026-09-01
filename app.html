@@ -298,6 +298,7 @@
   .codepill{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--inset);
     border:1.5px dashed var(--accent);border-radius:12px;padding:9px;cursor:pointer;
     font-family:"Baloo 2";font-weight:800;letter-spacing:2px;color:var(--accent-deep);font-size:15px}
+  .codepill small{font-family:"Nunito";font-weight:800;font-size:11px;letter-spacing:0;color:var(--muted)}
   .addbtn{flex:none;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:9px 14px;
     font-family:"Nunito";font-weight:800;font-size:12px;color:var(--accent-deep);cursor:pointer}
   .bempty{color:var(--muted);font-size:12.5px;text-align:center;padding:4px 0 10px;line-height:1.6}
@@ -1385,7 +1386,7 @@ function renderBuddies(){
       '</div>';
   }
   h+='<div class="bfoot">'+
-     '<div class="codepill" id="codePill">'+state.buddy.code+' 📋</div>'+
+     '<div class="codepill" id="codePill">'+state.buddy.code+'<small>Share link 🔗</small></div>'+
      '<button class="addbtn" id="buddyAdd">+ Add</button></div>';
   c.innerHTML=h;
   c.querySelectorAll(".brow").forEach(el=>{
@@ -1397,9 +1398,8 @@ function renderBuddies(){
 
 async function shareCode(){
   const link=APP_URL+"?buddy="+state.buddy.code;
-  const msg="Add me on Streak Buddies 🐾 Open this link and I'll be added automatically: "+link;
-  if(navigator.share){try{await navigator.share({text:msg});}catch(e){}return;}
-  try{await navigator.clipboard.writeText(msg);toast("Invite link copied 📋");}
+  if(navigator.share){try{await navigator.share({url:link});}catch(e){}return;}
+  try{await navigator.clipboard.writeText(link);toast("Invite link copied 🔗");}
   catch(e){toast("Your invite link: "+link);}
 }
 
