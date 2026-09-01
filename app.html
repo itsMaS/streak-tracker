@@ -1298,6 +1298,9 @@ function renderCalendar(){
    The app stays local-first: all network work is best-effort and debounced. */
 const SB_URL="https://payvkfccgzwgsiflazuv.supabase.co";
 const SB_KEY="sb_publishable_H6YAB9LinIPgAUBlZUKFsw_PWeipvti";
+/* Invite links must point at the installable live app, not wherever this
+   fragment happens to be previewed. */
+const APP_URL="https://itsmas.github.io/streak-tracker/";
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const buddyAnimal=id=>{let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return SQUAD[h%SQUAD.length];};
 
@@ -1393,20 +1396,24 @@ function renderBuddies(){
 }
 
 async function shareCode(){
-  const msg="Add me on Streak Buddies 🐾 My code: "+state.buddy.code;
+  const link=APP_URL+"?buddy="+state.buddy.code;
+  const msg="Add me on Streak Buddies 🐾 Open this link and I'll be added automatically: "+link;
   if(navigator.share){try{await navigator.share({text:msg});}catch(e){}return;}
-  try{await navigator.clipboard.writeText(state.buddy.code);toast("Code copied 📋");}
-  catch(e){toast("Your code: "+state.buddy.code);}
+  try{await navigator.clipboard.writeText(msg);toast("Invite link copied 📋");}
+  catch(e){toast("Your invite link: "+link);}
 }
 
 let bsRename=false;
 function openBuddySetup(rename){
   bsRename=rename;
-  $("bsTitle").textContent=rename?"Your name":"Add buddies";
+  $("bsTitle").textContent=rename?"Your name":(pendingInvite?"Join your buddy":"Add buddies");
   $("bsIntro").style.display=rename?"none":"";
+  if(!rename)$("bsIntro").textContent=pendingInvite
+    ?"A buddy invited you! Pick a name and you'll be added to each other instantly."
+    :"Pick a name and you'll get a short code to share. Buddies who add each other's codes see each other's full streak — calendar, planks, badges.";
   $("bsName").value=rename?state.buddy.name:"";
   $("bsErr").textContent="";
-  $("bsGo").textContent=rename?"Save":"Get my code 🐾";
+  $("bsGo").textContent=rename?"Save":(pendingInvite?"Join 🐾":"Get my code 🐾");
   $("bsWrap").classList.add("show");
 }
 $("bsGo").onclick=async()=>{
@@ -1419,7 +1426,8 @@ $("bsGo").onclick=async()=>{
       const res=await rpc("buddy_register",{p_name:name});
       state.buddy={uid:res.uid,secret:res.secret,code:res.code,name:res.name};
       save();doSync();
-      toast("Share your code: "+res.code);
+      if(pendingInvite){const c=pendingInvite;pendingInvite=null;acceptInvite(c);}
+      else toast("Share your code: "+res.code);
     }
     $("bsWrap").classList.remove("show");renderBuddies();pop();
   }catch(e){$("bsErr").textContent="Couldn't connect — try again later";}
@@ -1447,6 +1455,43 @@ $("baGo").onclick=async()=>{
   }
   $("baGo").disabled=false;
 };
+
+/* ---------- invite links ----------
+   shareCode sends APP_URL?buddy=CODE; opening it auto-adds the sender —
+   immediately if this device already has a buddy account, otherwise right
+   after the name pick in the setup sheet. Friendship is mutual server-side,
+   so the sender gets the new buddy too on their next sync. */
+let pendingInvite=null;
+function takeInviteFromURL(){
+  let code="";
+  try{
+    const q=new URLSearchParams(location.search);
+    if(!q.has("buddy"))return;
+    code=(q.get("buddy")||"").trim().toUpperCase();
+    q.delete("buddy");
+    const rest=q.toString();
+    history.replaceState(null,"",location.pathname+(rest?"?"+rest:"")+location.hash);
+  }catch(e){return;}
+  if(!/^[A-Z0-9]{6}$/.test(code))return;
+  if(state.buddy&&state.buddy.code===code){toast("That's your own invite 🙃");return;}
+  if(state.buddy)acceptInvite(code);
+  else{pendingInvite=code;openBuddySetup(false);}
+}
+async function acceptInvite(code){
+  try{
+    const f=await rpc("buddy_add_friend",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,p_code:code});
+    state.friends=(state.friends||[]).filter(x=>x.id!==f.id).concat([f]);
+    save();renderBuddies();queueSync();
+    toast(buddyAnimal(f.id)+" "+f.name+" is now your buddy!");
+    burst(innerWidth/2,90,22,false,true);pop();buzz([30,40,60]);
+  }catch(e){
+    const m=String(e.message||"");
+    toast(m.includes("cannot_add_self")?"That's your own invite 🙃":
+      m.includes("code_not_found")?"This invite link isn't valid anymore":
+      m.includes("too_many")?"Buddy limit reached":
+      "Couldn't reach your buddy — add code "+code+" manually later");
+  }
+}
 
 function openFriend(id){
   const f=(state.friends||[]).find(x=>x.id===id);
@@ -1906,4 +1951,5 @@ $("calNext").onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalen
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
 render();
 doSync();
+takeInviteFromURL();
 </script>
