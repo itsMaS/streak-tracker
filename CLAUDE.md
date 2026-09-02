@@ -1,11 +1,14 @@
 # Claude notes
 
+> **THIS BRANCH (`staging`) IS ABANDONED — DO NOT USE (2026-09-02).**
+> The zoo/sprite rework here didn't work out; the user scrapped it and is
+> redoing the work on a different branch. Do not build on, merge, or push
+> to this branch. It is kept only as a reference for the SVG sprite art
+> (`ART` module in app.html) and the spritesheet slicer (`tools/`).
+
 - **Always push directly to `main`** (user preference, stated 2026-08-30).
   GitHub Pages deploys the live app from `main`, so work isn't live until
   it lands there. No PRs needed unless explicitly asked.
-  - **Temporary exception (2026-09-02): the zoo/sprite rework lives on the
-    `staging` branch** until the user okays merging it — push that work to
-    `staging`, not `main`.
 - **No emoji anywhere in the app** (user preference, stated 2026-09-02).
   All pictures are drawn SVG: animal sprites (`an-*`, donkey frames `dk-*`)
   and UI icons (`i-*`) live in the `ART` module at the top of app.html's
