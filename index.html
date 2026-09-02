@@ -22,6 +22,10 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0}
+  /* drawn sprite art (no-emoji policy): .spr = animal frames, .ico = UI icons.
+     Both size off the parent font-size so they drop in wherever emoji lived. */
+  .spr{width:1.3em;height:1.3em;display:inline-block;vertical-align:-.28em}
+  .ico{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.16em}
   body{
     background:var(--bg);
     color:var(--ink);
@@ -132,11 +136,15 @@
   .cal-grid .dow{font-size:10px;color:var(--muted);padding:4px 0}
   .cal-cell{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-size:12px;color:#C4BBB1;position:relative;cursor:pointer}
   .cal-cell.ex{background:var(--accent-soft);color:var(--accent-deep);font-weight:800}
-  .cal-cell.ex::after{content:"💪";position:absolute;font-size:7px;bottom:1px;right:2px}
+  .cal-cell.ex::after,.cal-cell.mig::after{content:"";position:absolute;width:7px;height:7px;bottom:1px;right:2px;
+    background:center/contain no-repeat}
+  .cal-cell.ex::after{background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%238E6FC9" d="M7 3.5h3.4c.9 0 1.5.8 1.3 1.6l-.9 4.2c2.1-1.4 5-1.2 6.7.6 2.6 2.7 1.8 7.3-1.7 9-1.3.6-2.7 1-4.2 1H8.4c-2.5 0-4.4-2-4.4-4.5V6.5c0-1.7 1.3-3 3-3Z"/></svg>')}
   .cal-cell.mig{background:var(--mig-soft);color:var(--mig);font-weight:800}
-  .cal-cell.mig::after{content:"🧠";position:absolute;font-size:7px;bottom:1px;right:2px}
+  .cal-cell.mig::after{background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%237FAFD4" d="M9.3 3.8a3.2 3.2 0 0 0-3.1 2.7A3.6 3.6 0 0 0 3.8 10c0 1.3.7 2.5 1.8 3.1a3.3 3.3 0 0 0 3 4.9h.6c.5 1.3 1.6 2.2 2.8 2.2s2.3-.9 2.8-2.2h.6a3.3 3.3 0 0 0 3-4.9 3.7 3.7 0 0 0 1.8-3.1 3.6 3.6 0 0 0-2.4-3.5 3.2 3.2 0 0 0-3.1-2.7c-.9 0-1.7.3-2.7 1-1-.7-1.8-1-2.7-1Z"/></svg>')}
   .cal-cell.ex.mig{background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--mig)}
-  .cal-cell.ex.mig::after{content:"💪🧠";font-size:6px}
+  .cal-cell.ex.mig::after{width:13px;height:6px;
+    background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%238E6FC9" d="M7 3.5h3.4c.9 0 1.5.8 1.3 1.6l-.9 4.2c2.1-1.4 5-1.2 6.7.6 2.6 2.7 1.8 7.3-1.7 9-1.3.6-2.7 1-4.2 1H8.4c-2.5 0-4.4-2-4.4-4.5V6.5c0-1.7 1.3-3 3-3Z"/></svg>') left/6px 6px no-repeat,
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%237FAFD4" d="M9.3 3.8a3.2 3.2 0 0 0-3.1 2.7A3.6 3.6 0 0 0 3.8 10c0 1.3.7 2.5 1.8 3.1a3.3 3.3 0 0 0 3 4.9h.6c.5 1.3 1.6 2.2 2.8 2.2s2.3-.9 2.8-2.2h.6a3.3 3.3 0 0 0 3-4.9 3.7 3.7 0 0 0 1.8-3.1 3.6 3.6 0 0 0-2.4-3.5 3.2 3.2 0 0 0-3.1-2.7c-.9 0-1.7.3-2.7 1-1-.7-1.8-1-2.7-1Z"/></svg>') right/6px 6px no-repeat}
   .cal-cell.today{outline:2px solid var(--sun)}
   .cal-cell.future{opacity:.3;cursor:default}
   .legend{margin-top:10px;font-size:11px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
@@ -173,6 +181,11 @@
   .farm-sprite.walk .in{animation:waddle .38s ease-in-out infinite alternate}
   .farm-sprite.flip .in{transform:scaleX(-1)}
   .farm-sprite.flip.walk .in{animation:waddleflip .38s ease-in-out infinite alternate}
+  /* frame-animated species (the donkey) swap SVG frames instead of waddling */
+  .farm-sprite.framed .in,.farm-sprite.framed.walk .in,.walker.framed .in{animation:none}
+  .farm-sprite .spr{width:1.45em;height:1.45em;vertical-align:baseline}
+  .walker .spr{width:1.4em;height:1.4em;vertical-align:baseline}
+  .mascot .spr{width:1.15em;height:1.15em;vertical-align:baseline}
   .farm-sprite.sleepy{filter:saturate(.55) opacity(.8) drop-shadow(0 2px 2px rgba(70,64,60,.18))}
   .farm-sprite.drag{transition:none;cursor:grabbing;z-index:999!important;
     transform:translate(-50%,-88%) scale(calc(var(--s,1)*1.18))}
@@ -350,17 +363,17 @@
 
 <div class="app">
   <header>
-    <div class="wordmark">Streak 🐾</div>
+    <div class="wordmark">Streak <svg class="ico" viewBox="0 0 24 24"><use href="#i-paw"/></svg></div>
     <div class="hbtns">
-      <button class="gear" id="installBtn" aria-label="Install app" style="display:none">📲</button>
-      <button class="gear" id="infoBtn" aria-label="Help">❓</button>
-      <button class="gear" id="dbgBtn" aria-label="Debug" style="display:none">🐞</button>
-      <button class="gear" id="gearBtn" aria-label="Settings">⚙️</button>
+      <button class="gear" id="installBtn" aria-label="Install app" style="display:none"><svg class="ico" viewBox="0 0 24 24"><use href="#i-install"/></svg></button>
+      <button class="gear" id="infoBtn" aria-label="Help"><svg class="ico" viewBox="0 0 24 24"><use href="#i-quest"/></svg></button>
+      <button class="gear" id="dbgBtn" aria-label="Debug" style="display:none"><svg class="ico" viewBox="0 0 24 24"><use href="#i-bug"/></svg></button>
+      <button class="gear" id="gearBtn" aria-label="Settings"><svg class="ico" viewBox="0 0 24 24"><use href="#i-gear"/></svg></button>
     </div>
   </header>
 
   <div class="card hero">
-    <div class="mascot" id="mascot">🐼</div>
+    <div class="mascot" id="mascot"></div>
     <div>
       <div class="hero-num" id="streakNum">0</div>
       <div class="hero-sub">day streak · best <b id="bestNum">0</b></div>
@@ -395,7 +408,7 @@
       <button class="cal-nav" id="calNext">▶</button>
     </div>
     <div class="cal-grid" id="calGrid"></div>
-    <div class="legend"><span>💪 workout</span><span>🧠 migraine — streak kept</span><span>tap a day to edit</span></div>
+    <div class="legend"><span><svg class="ico" viewBox="0 0 24 24" style="color:var(--accent-deep)"><use href="#i-muscle"/></svg> workout</span><span><svg class="ico" viewBox="0 0 24 24" style="color:var(--mig)"><use href="#i-brain"/></svg> migraine — streak kept</span><span>tap a day to edit</span></div>
   </div>
 
   <div class="card">
@@ -410,20 +423,18 @@
   </div>
 
   <div class="card" id="farmCard">
-    <div class="farm-head"><h2>Farm</h2><div class="coinpill" id="coinPill">🪙 <b id="coinNum">0</b></div></div>
+    <div class="farm-head"><h2>Farm</h2><div class="coinpill" id="coinPill"><svg class="ico" viewBox="0 0 24 24"><use href="#i-coin"/></svg> <b id="coinNum">0</b></div></div>
     <div class="farm-iso" id="farmIso"></div>
     <div class="shop" id="shopBar"></div>
-    <div class="card-note">Logging a workout earns 🪙 10 × your streak (up to 30×) — once per day.
+    <div class="card-note">Logging a workout earns <svg class="ico" viewBox="0 0 24 24"><use href="#i-coin"/></svg> 10 × your streak (up to 30×) — once per day.
       Locked animals open up at streak milestones; each extra copy of an animal costs 25% more.</div>
   </div>
 </div>
 
 <div class="overlay" id="overlay">
   <div class="party">
-    <div class="big" id="partyAnimal">🐼</div>
-    <div class="squadline" id="squadline" hidden>
-      <span>🫏</span><span>🦝</span><span>🐭</span><span>🐮</span><span>🐼</span>
-    </div>
+    <div class="big" id="partyAnimal"></div>
+    <div class="squadline" id="squadline" hidden></div>
     <div class="pbadge" id="partyBadge" hidden></div>
     <div class="pnum" id="partyNum">1</div>
     <div class="plabel">day streak</div>
@@ -446,7 +457,7 @@
     <div class="set-row"><label>Sound</label>
       <div class="toggle"><input type="checkbox" id="soundToggle" checked><span class="tr"></span></div>
     </div>
-    <div class="set-row"><label>Angry raccoon 🦝</label>
+    <div class="set-row"><label>Angry raccoon <svg class="spr" viewBox="0 0 120 120"><use href="#an-raccoon"/></svg></label>
       <div class="toggle"><input type="checkbox" id="pushToggle"><span class="tr"></span></div>
     </div>
     <div class="set-row"><label>Reset</label>
@@ -456,10 +467,10 @@
   </div>
 </div>
 
-<!-- debug menu (unlocked by tapping ⚙️ 10 times within 10 seconds) -->
+<!-- debug menu (unlocked by tapping the gear 10 times within 10 seconds) -->
 <div class="sheet-wrap" id="dbgWrap">
   <div class="sheet">
-    <h2>Debug 🐞</h2>
+    <h2>Debug <svg class="ico" viewBox="0 0 24 24"><use href="#i-bug"/></svg></h2>
     <div class="fd-sec">COINS · <span id="dbgCoins"></span></div>
     <div class="dbg-grid">
       <button class="dbg-btn" data-coins="-100">−100</button>
@@ -483,8 +494,8 @@
     </div>
     <div class="fd-sec">RACCOON PUSH</div>
     <div class="dbg-grid">
-      <button class="dbg-btn" id="dbgNagAngry">test angry 😡</button>
-      <button class="dbg-btn" id="dbgNagCalm">test calm 🎉</button>
+      <button class="dbg-btn" id="dbgNagAngry">test angry</button>
+      <button class="dbg-btn" id="dbgNagCalm">test calm</button>
     </div>
     <div class="fd-sec">FX & SYNC</div>
     <div class="dbg-grid">
@@ -495,7 +506,7 @@
     </div>
     <div class="fd-sec">STATE</div>
     <pre class="dbg-info" id="dbgInfo"></pre>
-    <button class="danger-btn" id="dbgHide" style="width:100%;margin-top:14px">Hide debug button (tap ⚙️ 10× to re-unlock)</button>
+    <button class="danger-btn" id="dbgHide" style="width:100%;margin-top:14px">Hide debug button (tap the gear 10× to re-unlock)</button>
     <button class="done-btn" id="dbgDone">Done</button>
   </div>
 </div>
@@ -505,8 +516,8 @@
   <div class="sheet">
     <h2 id="edDate"></h2>
     <div class="seg">
-      <button class="s-ex" id="segEx">💪<div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">workout</div></button>
-      <button class="s-mig" id="segMig">🧠<div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">migraine</div></button>
+      <button class="s-ex" id="segEx"><svg class="ico" viewBox="0 0 24 24" style="color:var(--accent-deep)"><use href="#i-muscle"/></svg><div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">workout</div></button>
+      <button class="s-mig" id="segMig"><svg class="ico" viewBox="0 0 24 24" style="color:var(--mig)"><use href="#i-brain"/></svg><div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">migraine</div></button>
     </div>
     <div class="field" id="edActsField">
       <small>Activities</small>
@@ -522,16 +533,16 @@
   <div class="sheet">
     <h2>How it works</h2>
     <ul class="info-list">
-      <li><span class="i">💪</span><span>Log a workout every day to grow the streak. Adding activities (plank, run, ride…) with how much you did is optional.</span></li>
-      <li><span class="i">🧠</span><span>Migraine day: the streak is kept safe but doesn't grow. You can still log a workout on a migraine day — then it counts.</span></li>
-      <li><span class="i">📅</span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
-      <li><span class="i">📈</span><span>The graph shows plank duration over time — it appears once you've logged a plank. Tap a dot for details.</span></li>
-      <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
-      <li><span class="i">🪙</span><span>Logging a workout earns coins: 10 × your streak, up to 30×. Only today's log pays out (once per day) — backfilled days keep the streak honest but earn nothing.</span></li>
-      <li><span class="i">🚜</span><span>Spend coins on farm animals at the bottom. Some unlock once your best streak reaches 7, 14 or 30 days, and every extra copy of an animal costs 25% more. They wander when today is logged and doze when it isn't.</span></li>
-      <li><span class="i">💛</span><span>Buddies: swap codes with friends to see each other's streaks, calendars, planks and farms — and send cheers 📣 or nudges 👉.</span></li>
-      <li><span class="i">🐾</span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
-      <li><span class="i">😡</span><span>Angry raccoon: flip it on in Settings and a very cross raccoon appears on your lock screen at reminder time if today is still empty — even with the app closed.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24" style="color:var(--accent-deep)"><use href="#i-muscle"/></svg></span><span>Log a workout every day to grow the streak. Adding activities (plank, run, ride…) with how much you did is optional.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24" style="color:var(--mig)"><use href="#i-brain"/></svg></span><span>Migraine day: the streak is kept safe but doesn't grow. You can still log a workout on a migraine day — then it counts.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24" style="color:var(--accent-deep)"><use href="#i-cal"/></svg></span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24" style="color:var(--accent-deep)"><use href="#i-chart"/></svg></span><span>The graph shows plank duration over time — it appears once you've logged a plank. Tap a dot for details.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24"><use href="#i-medal"/></svg></span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24"><use href="#i-coin"/></svg></span><span>Logging a workout earns coins: 10 × your streak, up to 30×. Only today's log pays out (once per day) — backfilled days keep the streak honest but earn nothing.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24" style="color:#6FA85B"><use href="#i-tractor"/></svg></span><span>Spend coins on farm animals at the bottom. Some unlock once your best streak reaches 7, 14 or 30 days, and every extra copy of an animal costs 25% more. They wander when today is logged and doze when it isn't.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24" style="color:#F2B04C"><use href="#i-heart"/></svg></span><span>Buddies: swap codes with friends to see each other's streaks, calendars, planks and farms — and send cheers <svg class="ico" viewBox="0 0 24 24" style="color:var(--accent-deep)"><use href="#i-mega"/></svg> or nudges <svg class="ico" viewBox="0 0 24 24" style="color:var(--accent-deep)"><use href="#i-point"/></svg>.</span></li>
+      <li><span class="i"><svg class="ico" viewBox="0 0 24 24" style="color:var(--accent)"><use href="#i-paw"/></svg></span><span>The buddies wander by sometimes. Tap them — they like it.</span></li>
+      <li><span class="i"><svg class="spr" viewBox="0 0 120 120"><use href="#an-raccoon"/></svg></span><span>Angry raccoon: flip it on in Settings and a very cross raccoon appears on your lock screen at reminder time if today is still empty — even with the app closed.</span></li>
     </ul>
     <button class="done-btn" id="infoDone">Done</button>
   </div>
@@ -542,7 +553,7 @@
   <div class="sheet">
     <h2 id="pnTitle">Name your animal</h2>
     <input class="tinput" id="pnName" maxlength="14" placeholder="Pick a name" autocomplete="off">
-    <button class="done-btn" id="pnGo">Save name 🏷️</button>
+    <button class="done-btn" id="pnGo">Save name <svg class="ico" viewBox="0 0 24 24"><use href="#i-tag"/></svg></button>
   </div>
 </div>
 
@@ -554,7 +565,7 @@
       Buddies who add each other's codes see each other's full streak — calendar, planks, badges.</div>
     <input class="tinput" id="bsName" maxlength="24" placeholder="Your name" autocomplete="off">
     <div class="err" id="bsErr"></div>
-    <button class="done-btn" id="bsGo">Get my code 🐾</button>
+    <button class="done-btn" id="bsGo">Get my code <svg class="ico" viewBox="0 0 24 24"><use href="#i-paw"/></svg></button>
   </div>
 </div>
 
@@ -566,7 +577,7 @@
     <input class="tinput" id="baCode" maxlength="6" placeholder="ABC123" autocomplete="off"
       style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-family:'Baloo 2'">
     <div class="err" id="baErr"></div>
-    <button class="done-btn" id="baGo">Add buddy 💛</button>
+    <button class="done-btn" id="baGo">Add buddy <svg class="ico" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button>
   </div>
 </div>
 
@@ -592,37 +603,392 @@
 
 <script>
 "use strict";
-const SQUAD=["🫏","🦝","🐭","🐮","🐼"];
+/* ---------- sprite art (no-emoji policy: every picture is drawn SVG) ---------- */
+const ART=(()=>{
+  const OUT="#5B4738",BODY="#A8988B",SHADE="#8F7F72",CREAM="#F7EEDD",
+        PINK="#F2ABB8",DARK="#6A5544",HOOF="#5E4B3B",BLUSH="#EFA9A0",
+        MOUTH="#7A4A44",TONGUE="#E98FA0",SICK="#C9CC96",TEAR="#7FB8E6";
+  const S=3.4;                      /* outline width at 120px frame scale */
+  const P=(d,f,o)=>'<path d="'+d+'" fill="'+f+'"'+(o?' stroke="'+OUT+'" stroke-width="'+S+'" stroke-linejoin="round"':'')+'/>';
+  const E=(cx,cy,rx,ry,f,o)=>'<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+f+'"'+(o?' stroke="'+OUT+'" stroke-width="'+S+'"':'')+'/>';
+  const C=(cx,cy,r,f)=>'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+f+'"/>';
+
+  /* a leg hanging from a hip pivot; far legs are shaded and sit behind */
+  const leg=(x,y,a,far,len)=>{
+    len=len||27;
+    return '<g transform="translate('+x+' '+y+') rotate('+a+')">'+
+      '<rect x="-5" y="-6" width="10" height="'+len+'" rx="5" fill="'+(far?SHADE:BODY)+
+        '" stroke="'+OUT+'" stroke-width="'+S+'"/>'+
+      '<path d="M-5 '+(len-11)+' h10 v6 a5 5 0 0 1 -5 5 a5 5 0 0 1 -5 -5 z" fill="'+(far?"#4E3E30":HOOF)+'"/>'+
+      '</g>';
+  };
+  /* tall donkey ear; inner pink shows on the near ear */
+  const ear=(x,y,a,inner)=>'<g transform="translate('+x+' '+y+') rotate('+a+')">'+
+      P("M0 2 C-8 -6 -8 -22 0 -28 C8 -22 8 -6 0 2 Z",BODY,1)+
+      (inner?P("M0 -3 C-4 -8 -4 -18 0 -22 C4 -18 4 -8 0 -3 Z",PINK):"")+
+    '</g>';
+  /* dark scruffy mane tuft */
+  const tuft=(x,y,k)=>'<g transform="translate('+x+' '+y+') scale('+(k||1)+')">'+
+      P("M-9 4 C-11 -6 -4 -10 0 -8 C2 -12 9 -10 9 -3 C13 -1 11 5 6 5 Z",DARK,1)+'</g>';
+  const tail=(x,y,droop)=>'<g transform="translate('+x+' '+y+')">'+
+      '<path d="M0 0 '+(droop?"C7 6 9 16 6 24":"C10 -2 14 6 11 14")+'" fill="none" stroke="'+OUT+
+        '" stroke-width="'+S+'" stroke-linecap="round"/>'+
+      (droop?E(6,26,4.5,6,DARK,1):E(12,17,4.5,6,DARK,1))+
+    '</g>';
+
+  /* side-view head; droop>0 tips it down (starving), exp switches the face */
+  const headSide=(exp,droop)=>{
+    let face="";
+    if(exp==="happy"){
+      face=C(37,40,3.2,OUT)+
+        '<path d="M18 52 q4 4 8 0" fill="none" stroke="'+OUT+'" stroke-width="2.6" stroke-linecap="round"/>'+
+        C(15,47,1.8,OUT)+C(44,49,4,BLUSH);
+    }else{ /* sad droop for the starving walk */
+      face=C(37,41,3,OUT)+
+        '<path d="M31 33 l9 3" fill="none" stroke="'+OUT+'" stroke-width="2.4" stroke-linecap="round"/>'+
+        '<path d="M17 53 q4 -3 8 0" fill="none" stroke="'+OUT+'" stroke-width="2.4" stroke-linecap="round"/>'+
+        C(15,47,1.8,OUT);
+    }
+    return '<g transform="rotate('+(droop||0)+' 44 56)">'+
+      ear(28,22,-14,1)+ear(45,23,16,0)+
+      E(32,42,21,19,BODY,1)+
+      E(18,49,13,10,CREAM,1)+
+      tuft(37,20,.9)+
+      face+
+    '</g>';
+  };
+
+  /* standing/walking donkey; legs = [nearFront,farFront,nearBack,farBack] angles */
+  const donkeyWalk=(legs,skinny)=>{
+    const by=skinny?74:72, ry=skinny?15:21, rx=skinny?30:32;
+    const ribs=skinny?
+      '<path d="M62 62 q-4 9 0 18 M72 61 q-4 10 0 20 M82 62 q-4 9 0 18" fill="none" stroke="'+SHADE+
+      '" stroke-width="2.4" stroke-linecap="round"/>':"";
+    return '<g transform="translate(0 8)">'+
+      leg(58,80,legs[1],1)+leg(84,80,legs[3],1)+
+      tail(98,62,skinny)+
+      E(68,by,rx,ry,BODY,1)+ribs+
+      (skinny?"":E(60,88,16,9,CREAM))+
+      leg(50,80,legs[0])+leg(92,80,legs[2])+
+      headSide(skinny?"sad":"happy",skinny?13:0)+
+    '</g>';
+  };
+
+  /* rolling on its back, laughing; k flips the wobble */
+  const donkeyHappy=k=>{
+    const legUp=(x,y,a)=>'<g transform="translate('+x+' '+y+') rotate('+a+')">'+
+      '<rect x="-5" y="-22" width="10" height="26" rx="5" fill="'+BODY+'" stroke="'+OUT+'" stroke-width="'+S+'"/>'+
+      '<path d="M-5 -22 a5 5 0 0 1 5 -5 a5 5 0 0 1 5 5 v6 h-10 z" fill="'+HOOF+'"/></g>';
+    return '<g transform="rotate('+(k?7:-7)+' 60 78)">'+
+      tail(28,92,0)+
+      E(62,80,30,22,BODY,1)+                       /* body, belly up */
+      E(66,74,18,11,CREAM)+                        /* belly patch */
+      legUp(50,64,k?-18:-30)+legUp(72,62,k?14:26)+
+      legUp(42,72,k?-38:-24)+legUp(82,70,k?30:16)+
+      '<g transform="translate(86 84) rotate(24)">'+ /* head thrown back */
+        ear(-8,-20,-30,1)+ear(10,-18,26,0)+
+        E(0,0,20,18,BODY,1)+
+        tuft(1,-20,.85)+
+        '<path d="M-8 -6 q4 -6 8 0 M6 -7 q4 -6 8 0" fill="none" stroke="'+OUT+'" stroke-width="2.8" stroke-linecap="round"/>'+
+        E(-2,10,12,9,CREAM,1)+
+        P("M-8 8 Q-2 20 6 8 Q-1 12 -8 8 Z",MOUTH)+
+        E(-1,13,4,2.5,TONGUE)+
+        C(-14,4,4,BLUSH)+C(12,2,4,BLUSH)+
+      '</g></g>';
+  };
+
+  /* lying down asleep; zz adds the drawn Z-trail */
+  const donkeyLie=zz=>{
+    const Z=(x,y,k)=>'<path transform="translate('+x+' '+y+') scale('+k+')" d="M0 0 h10 l-10 10 h10" fill="none" stroke="'+DARK+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+    return tail(96,86,1)+
+      E(66,92,34,18,BODY,1)+
+      '<path d="M46 104 q8 -8 18 0 M70 104 q8 -8 18 0" fill="none" stroke="'+OUT+'" stroke-width="2.6" stroke-linecap="round"/>'+
+      '<g transform="translate(6 34)">'+
+        ear(28,26,-20,1)+ear(46,24,14,0)+
+        E(33,46,21,18,BODY,1)+
+        E(19,53,13,10,CREAM,1)+
+        tuft(38,24,.9)+
+        '<path d="M32 42 q5 4 10 0" fill="none" stroke="'+OUT+'" stroke-width="2.8" stroke-linecap="round"/>'+
+        C(16,51,1.8,OUT)+
+      '</g>'+
+      (zz?Z(76,30,1)+Z(90,18,.7)+Z(100,10,.5):"");
+  };
+
+  /* front-view emote faces */
+  const donkeyFace=mood=>{
+    const sickMuzzle=mood==="sick";
+    let eyes="",extra="",mouth="";
+    if(mood==="happy"){
+      eyes='<path d="M38 56 q6 -8 12 0 M70 56 q6 -8 12 0" fill="none" stroke="'+OUT+'" stroke-width="3.2" stroke-linecap="round"/>';
+      mouth=P("M50 76 Q60 88 70 76 Q60 81 50 76 Z",MOUTH)+E(60,80,5,3,TONGUE);
+      extra=C(32,66,5,BLUSH)+C(88,66,5,BLUSH);
+    }else if(mood==="sad"){
+      eyes=C(44,58,3.4,OUT)+C(76,58,3.4,OUT)+
+        '<path d="M37 48 l12 2 M83 48 l-12 2" fill="none" stroke="'+OUT+'" stroke-width="2.6" stroke-linecap="round"/>';
+      mouth='<path d="M53 82 q7 -5 14 0" fill="none" stroke="'+OUT+'" stroke-width="2.8" stroke-linecap="round"/>';
+    }else if(mood==="cry"){
+      eyes=C(44,58,3.4,OUT)+C(76,58,3.4,OUT)+
+        '<path d="M36 47 l13 4 M84 47 l-13 4" fill="none" stroke="'+OUT+'" stroke-width="2.6" stroke-linecap="round"/>';
+      mouth='<path d="M52 83 q8 -6 16 0" fill="none" stroke="'+OUT+'" stroke-width="2.8" stroke-linecap="round"/>';
+      extra=P("M84 64 c0 -3 3 -8 3 -8 c0 0 3 5 3 8 a3 3 0 0 1 -6 0 Z",TEAR);
+    }else if(mood==="angry"){
+      eyes=C(44,59,3.4,OUT)+C(76,59,3.4,OUT)+
+        '<path d="M36 50 l14 4 M84 50 l-14 4" fill="none" stroke="'+OUT+'" stroke-width="3.4" stroke-linecap="round"/>';
+      mouth='<path d="M52 83 q8 -6 16 0" fill="none" stroke="'+OUT+'" stroke-width="2.8" stroke-linecap="round"/>';
+      const puff=x=>'<g transform="translate('+x+' 34)" fill="'+CREAM+'" stroke="'+OUT+'" stroke-width="2.6">'+
+        '<circle r="6"/><circle cx="7" cy="3" r="4.5"/><circle cx="-6" cy="4" r="4"/></g>';
+      extra=puff(12)+puff(108);
+    }else if(mood==="sick"){
+      eyes='<path d="M38 57 q6 3 12 0 M70 57 q6 3 12 0" fill="none" stroke="'+OUT+'" stroke-width="3" stroke-linecap="round"/>'+
+        '<path d="M37 47 q6 -4 12 -1 M83 47 q-6 -4 -12 -1" fill="none" stroke="'+OUT+'" stroke-width="2.4" stroke-linecap="round"/>';
+      mouth='<path d="M54 82 q6 -4 12 0" fill="none" stroke="'+OUT+'" stroke-width="2.6" stroke-linecap="round"/>'+
+        '<g transform="translate(60 84) rotate(12)">'+
+        '<rect x="-1" y="-2.5" width="22" height="5" rx="2.5" fill="#FFF" stroke="'+OUT+'" stroke-width="2"/>'+
+        '<rect x="8" y="-1.2" width="12" height="2.4" rx="1.2" fill="#E25B4E"/>'+
+        '<circle cx="-1" cy="0" r="4" fill="#E25B4E" stroke="'+OUT+'" stroke-width="2"/></g>';
+    }
+    return ear(34,26,-22,1)+ear(86,26,22,1)+
+      E(60,62,34,30,BODY,1)+
+      tuft(60,32,1.05)+
+      E(60,78,20,13,sickMuzzle?SICK:CREAM,1)+
+      C(53,74,1.8,OUT)+C(67,74,1.8,OUT)+
+      eyes+mouth+extra;
+  };
+
+  /* -------- the other farm/squad animals: single chibi side view each ------- */
+  const chicken=()=>{
+    const W="#FBF6EA",WD="#E9DCC2";
+    return '<g transform="translate(0 4)">'+
+      P("M82 60 C96 50 102 62 92 70 C102 72 96 84 84 78 Z",WD,1)+    /* tail */
+      P("M40 58 C24 60 22 84 40 94 C52 102 76 102 86 90 C96 78 90 56 70 54 C58 52 46 54 40 58 Z",W,1)+
+      P("M50 72 C40 70 40 84 54 88 C48 80 52 74 50 72 Z",WD,1)+      /* wing */
+      '<g transform="translate(56 100)"><rect x="-1.8" y="-4" width="3.6" height="12" fill="#E8A13D"/><path d="M-5 8 h10" stroke="#E8A13D" stroke-width="3.4" stroke-linecap="round" fill="none"/></g>'+
+      '<g transform="translate(72 100)"><rect x="-1.8" y="-4" width="3.6" height="12" fill="#E8A13D"/><path d="M-5 8 h10" stroke="#E8A13D" stroke-width="3.4" stroke-linecap="round" fill="none"/></g>'+
+      E(40,42,18,17,W,1)+                                            /* head */
+      P("M31 26 C28 16 36 15 37 23 C38 14 46 15 45 24 C50 18 54 24 48 28 Z","#E25B4E",1)+ /* comb */
+      P("M23 42 L12 47 L24 51 Z","#F2B04C",1)+                       /* beak */
+      P("M26 53 C22 60 30 62 32 56 Z","#E25B4E")+                    /* wattle */
+      C(36,40,3,OUT)+C(46,46,4,BLUSH)+
+    '</g>';
+  };
+  const rat=()=>{
+    const G="#C0BAC8",GD="#A6A0B2",PK="#E7A8B4";
+    return '<g transform="translate(0 6)">'+
+      '<path d="M94 82 C112 80 116 62 104 56" fill="none" stroke="'+PK+'" stroke-width="5" stroke-linecap="round"/>'+
+      P("M18 66 C18 46 40 38 60 42 C84 46 98 60 96 78 C94 94 74 100 54 98 C34 96 18 84 18 66 Z",G,1)+ /* teardrop body */
+      C(46,40,12,G)+'<circle cx="46" cy="40" r="12" fill="none" stroke="'+OUT+'" stroke-width="'+S+'"/>'+C(46,41,6.5,PK)+ /* ear */
+      P("M18 66 C10 68 8 74 14 78",GD)+                               /* snout shade */
+      E(56,98,8,4,GD)+E(78,96,8,4,GD)+                                /* feet */
+      C(13,70,3.4,PK)+                                                /* nose */
+      C(32,60,3,OUT)+
+      '<path d="M14 76 l-9 -1 M15 80 l-8 3 M50 84 q6 4 12 0" stroke="'+OUT+'" stroke-width="1.8" stroke-linecap="round" fill="none"/>'+
+    '</g>';
+  };
+  const raccoon=()=>{
+    const G="#9C9AA4",GD="#7C7A86",DK="#4C4650";
+    return '<g transform="translate(0 4)">'+
+      '<g transform="translate(96 74)">'+
+        P("M0 0 C14 -4 18 8 8 16 C2 20 -6 14 -4 6 Z",GD,1)+
+        '<path d="M2 2 l12 4 M-1 9 l13 3" stroke="'+DK+'" stroke-width="4" stroke-linecap="round" fill="none"/>'+
+      '</g>'+
+      E(62,78,28,22,G,1)+
+      leg(48,86,0,0,18)+leg(78,86,0,0,18)+
+      P("M28 26 L24 40 L38 36 Z",DK,1)+P("M62 26 L66 40 L52 36 Z",DK,1)+ /* ears */
+      E(45,50,23,19,G,1)+
+      P("M26 46 C30 40 40 42 44 48 C40 54 30 54 26 46 Z",DK)+        /* mask L */
+      P("M64 46 C60 40 50 42 46 48 C50 54 60 54 64 46 Z",DK)+        /* mask R */
+      E(45,60,13,9,CREAM,1)+
+      C(36,47,2.6,"#FFF")+C(54,47,2.6,"#FFF")+C(36,47,1.5,OUT)+C(54,47,1.5,OUT)+
+      C(45,57,2.6,DK)+
+      '<path d="M42 64 q3 3 6 0" fill="none" stroke="'+OUT+'" stroke-width="2" stroke-linecap="round"/>'+
+    '</g>';
+  };
+  const panda=()=>{
+    const W="#FBF8F2",BK="#3E3A38";
+    return '<g transform="translate(0 4)">'+
+      E(64,80,27,21,W,1)+
+      leg(50,88,0,0,16)+leg(80,88,0,0,16)+
+      C(30,32,9,BK)+C(62,32,9,BK)+                                    /* ears */
+      E(46,50,24,21,W,1)+
+      E(36,50,7,9,BK)+E(56,50,7,9,BK)+                                /* eye patches */
+      C(37,49,2.4,"#FFF")+C(55,49,2.4,"#FFF")+C(37,49,1.4,BK)+C(55,49,1.4,BK)+
+      E(46,61,4,3,BK)+
+      '<path d="M43 67 q3 3 6 0" fill="none" stroke="'+OUT+'" stroke-width="2" stroke-linecap="round"/>'+
+      C(28,60,4,BLUSH)+C(64,60,4,BLUSH)+
+    '</g>';
+  };
+  const cow=()=>{
+    const W="#F6EFE3",BR="#B98A5A";
+    return '<g transform="translate(0 2)">'+
+      '<path d="M96 66 C104 70 104 82 98 88" fill="none" stroke="'+OUT+'" stroke-width="3" stroke-linecap="round"/>'+E(99,90,4,5.5,BR,1)+
+      E(64,76,30,22,W,1)+
+      P("M56 60 C66 54 82 58 84 70 C80 80 62 80 56 72 Z",BR)+         /* patch */
+      leg(48,86,0,0,20)+leg(84,86,0,0,20)+
+      P("M22 30 C14 24 12 32 20 36 Z","#E8D6BC",1)+P("M60 30 C68 24 70 32 62 36 Z","#E8D6BC",1)+ /* horns */
+      E(28,36,8,6,BR,1)+E(54,36,8,6,BR,1)+                            /* ear-ish */
+      E(41,48,22,18,W,1)+
+      P("M28 40 C34 34 44 36 46 44 C42 50 32 50 28 40 Z",BR)+          /* head patch */
+      E(41,60,14,9,"#F2C4CC",1)+
+      C(36,59,2,OUT)+C(46,59,2,OUT)+
+      C(33,45,2.6,OUT)+C(49,45,2.6,OUT)+
+    '</g>';
+  };
+
+  /* frame table */
+  const WALKS=[[16,-10,-14,10],[-2,12,4,-12],[-18,6,16,-6]];
+  const sym={
+    "dk-walk1":donkeyWalk(WALKS[0]),"dk-walk2":donkeyWalk(WALKS[1]),"dk-walk3":donkeyWalk(WALKS[2]),
+    "dk-happy1":donkeyHappy(0),"dk-happy2":donkeyHappy(1),
+    "dk-starve1":donkeyWalk(WALKS[0],1),"dk-starve2":donkeyWalk(WALKS[1],1),"dk-starve3":donkeyWalk(WALKS[2],1),
+    "dk-lie":donkeyLie(0),"dk-sleep":donkeyLie(1),
+    "dk-face-happy":donkeyFace("happy"),"dk-face-sick":donkeyFace("sick"),"dk-face-sad":donkeyFace("sad"),
+    "dk-face-cry":donkeyFace("cry"),"dk-face-angry":donkeyFace("angry"),
+    "an-donkey":donkeyWalk([6,-4,-6,4]),
+    "an-chicken":chicken(),"an-rat":rat(),"an-raccoon":raccoon(),"an-panda":panda(),"an-cow":cow()
+  };
+  /* -------- UI icons, 24×24. Functional icons ride on currentColor; the
+     pictorial ones (badges, coin, party bits) carry their own colors. ------ */
+  const st=(d,w)=>'<path d="'+d+'" fill="none" stroke="currentColor" stroke-width="'+(w||2)+'" stroke-linecap="round" stroke-linejoin="round"/>';
+  const fl=d=>'<path d="'+d+'" fill="currentColor"/>';
+  const GOLD="#F7C948",GOLDD="#D99E2B";
+  const icons={
+    "i-paw":fl("M12 21c-3.3 0-5.6-1.7-5.6-4.1 0-1.6 1-3 2.4-4 1.1-.8 2.1-1.6 3.2-1.6s2.1.8 3.2 1.6c1.4 1 2.4 2.4 2.4 4 0 2.4-2.3 4.1-5.6 4.1Z")+
+      '<circle cx="5.3" cy="10.7" r="2" fill="currentColor"/><circle cx="9.4" cy="7.1" r="2.1" fill="currentColor"/><circle cx="14.6" cy="7.1" r="2.1" fill="currentColor"/><circle cx="18.7" cy="10.7" r="2" fill="currentColor"/>',
+    "i-muscle":fl("M7 3.5h3.4c.9 0 1.5.8 1.3 1.6l-.9 4.2c2.1-1.4 5-1.2 6.7.6 2.6 2.7 1.8 7.3-1.7 9-1.3.6-2.7 1-4.2 1H8.4c-2.5 0-4.4-2-4.4-4.5V6.5c0-1.7 1.3-3 3-3Z")+
+      '<path d="M11.5 11.5c1.5-1.2 3.6-1 4.8.3" fill="none" stroke="#FFF" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>',
+    "i-brain":fl("M9.3 3.8a3.2 3.2 0 0 0-3.1 2.7A3.6 3.6 0 0 0 3.8 10c0 1.3.7 2.5 1.8 3.1a3.3 3.3 0 0 0 3 4.9h.6c.5 1.3 1.6 2.2 2.8 2.2s2.3-.9 2.8-2.2h.6a3.3 3.3 0 0 0 3-4.9 3.7 3.7 0 0 0 1.8-3.1 3.6 3.6 0 0 0-2.4-3.5 3.2 3.2 0 0 0-3.1-2.7c-.9 0-1.7.3-2.7 1-1-.7-1.8-1-2.7-1Z")+
+      '<path d="M12 5.5v13.5M9 8.5c1 .8 1.5 1 3 1s2-.2 3-1M8.5 13.7c1.2.6 2 .8 3.5.8s2.3-.2 3.5-.8" fill="none" stroke="#FFF" stroke-width="1.3" stroke-linecap="round" opacity=".5"/>',
+    "i-coin":'<circle cx="12" cy="12" r="8.6" fill="'+GOLD+'" stroke="'+GOLDD+'" stroke-width="2"/>'+
+      '<path d="M12 7.6l1.3 2.6 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="'+GOLDD+'"/>',
+    "i-gear":'<path d="M12 3.2v4M12 16.8v4M4.4 7.6l3.5 2M16.1 14.4l3.5 2M4.4 16.4l3.5-2M16.1 9.6l3.5-2" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" fill="none"/>'+
+      '<circle cx="12" cy="12" r="5.6" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="#FFF"/>',
+    "i-quest":st("M8.6 8.6a3.4 3.4 0 1 1 5.3 2.9c-1.1.8-1.9 1.5-1.9 2.9",2.4)+'<circle cx="12" cy="18.6" r="1.7" fill="currentColor"/>',
+    "i-bug":'<circle cx="12" cy="6.3" r="2.7" fill="#5B4738"/>'+
+      '<path d="M8 4.5 6 3M16 4.5 18 3" stroke="#5B4738" stroke-width="1.6" stroke-linecap="round" fill="none"/>'+
+      '<ellipse cx="12" cy="13.5" rx="7.2" ry="6.8" fill="#E25B4E" stroke="#5B4738" stroke-width="1.8"/>'+
+      '<path d="M12 6.8v13.4" stroke="#5B4738" stroke-width="1.8"/>'+
+      '<circle cx="8.8" cy="11.5" r="1.3" fill="#5B4738"/><circle cx="15.2" cy="12.5" r="1.3" fill="#5B4738"/><circle cx="9.6" cy="16" r="1.3" fill="#5B4738"/><circle cx="14.6" cy="16.8" r="1.1" fill="#5B4738"/>',
+    "i-install":'<rect x="6.8" y="2.8" width="10.4" height="18.4" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/>'+
+      st("M12 7.5v6.2m0 0-2.4-2.4m2.4 2.4 2.4-2.4M10 18.2h4",2.1),
+    "i-lock":'<rect x="5.6" y="10.2" width="12.8" height="9.6" rx="2.6" fill="currentColor"/>'+
+      st("M8.4 10V7.9a3.6 3.6 0 0 1 7.2 0V10",2.2)+'<circle cx="12" cy="14.6" r="1.5" fill="#FFF" opacity=".85"/>',
+    "i-tag":st("M4 5.6C4 4.7 4.7 4 5.6 4h5c.4 0 .8.2 1.1.5l8 8c.6.6.6 1.6 0 2.2l-4.9 4.9c-.6.6-1.6.6-2.2 0l-8-8a1.6 1.6 0 0 1-.5-1.1Z",2)+
+      '<circle cx="8.6" cy="8.6" r="1.5" fill="currentColor"/>',
+    "i-link":st("M10.2 13.8l3.6-3.6M8.8 11.7l-2 2a3.4 3.4 0 0 0 4.8 4.8l2-2M15.2 12.3l2-2a3.4 3.4 0 0 0-4.8-4.8l-2 2",2.2),
+    "i-mega":fl("M3.8 10.2v3.6c0 .9.7 1.6 1.6 1.6h1.4l1 4.2c.1.6.7 1 1.3 1h.8c.8 0 1.4-.8 1.2-1.6l-.8-3.4 4.7 2.8V5.6L7.8 8.6H5.4c-.9 0-1.6.7-1.6 1.6Z")+
+      st("M17.5 9.3a3.8 3.8 0 0 1 0 5.4M19.8 6.8a7.2 7.2 0 0 1 0 10.4",2),
+    "i-point":fl("M9.5 6.8c-3.2 0-5.8 2.6-5.8 5.8s2.6 5.8 5.8 5.8h3.2c1.7 0 3.2-.6 4.4-1.7l.2-4.9h3.1c.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6H12Z")+
+      '<path d="M12.6 13.1h3.6M12.6 15.7h3.2" stroke="#FFF" stroke-width="1.4" stroke-linecap="round" opacity=".6" fill="none"/>'+
+      st("M15.8 5.2 17 3.2M18.6 6.4l1.8-1.2",1.8),
+    "i-heart":fl("M12 20.5C6.5 16.6 3.2 13.4 3.2 9.7 3.2 7.1 5.2 5 7.7 5c1.7 0 3.3 1 4.3 2.6C13 6 14.6 5 16.3 5c2.5 0 4.5 2.1 4.5 4.7 0 3.7-3.3 6.9-8.8 10.8Z"),
+    "i-star":fl("M12 3.2l2.6 5.3 5.8.8-4.2 4 1 5.8L12 16.3l-5.2 2.8 1-5.8-4.2-4 5.8-.8Z"),
+    "i-flower":'<g fill="#F9C9DC" stroke="#EFA9C4" stroke-width="1">'+
+      '<circle cx="12" cy="6.3" r="3.5"/><circle cx="17.4" cy="10.2" r="3.5"/><circle cx="15.3" cy="16.6" r="3.5"/><circle cx="8.7" cy="16.6" r="3.5"/><circle cx="6.6" cy="10.2" r="3.5"/></g>'+
+      '<circle cx="12" cy="12" r="3.1" fill="#FFD98E" stroke="#EDBE64" stroke-width="1"/>',
+    "i-spark":fl("M12 2.8c.9 4.6 2.7 6.9 7.3 7.8-4.6.9-6.4 3.2-7.3 7.8-.9-4.6-2.7-6.9-7.3-7.8 4.6-.9 6.4-3.2 7.3-7.8Z")+
+      fl("M18.9 15.4c.4 2 1.2 3 3.2 3.4-2 .4-2.8 1.4-3.2 3.4-.4-2-1.2-3-3.2-3.4 2-.4 2.8-1.4 3.2-3.4Z"),
+    "i-seed":'<path d="M12 20.8v-7.5" stroke="#6FA85B" stroke-width="2.2" stroke-linecap="round" fill="none"/>'+
+      '<path d="M12 13.3C12 8.2 9 5.4 4.2 5.4c0 5.1 3 7.9 7.8 7.9Z" fill="#8FC776"/>'+
+      '<path d="M12 11.2c0-3.7 2.2-5.8 5.8-5.8 0 3.7-2.2 5.8-5.8 5.8Z" fill="#6FA85B"/>',
+    "i-rainbow":'<path d="M3.8 16.5a8.2 8.2 0 0 1 16.4 0" fill="none" stroke="#E25B4E" stroke-width="2.1" stroke-linecap="round"/>'+
+      '<path d="M7 16.5a5 5 0 0 1 10 0" fill="none" stroke="#F2B04C" stroke-width="2.1" stroke-linecap="round"/>'+
+      '<path d="M10.2 16.5a1.8 1.8 0 0 1 3.6 0" fill="none" stroke="#7ECBB0" stroke-width="2.1" stroke-linecap="round"/>'+
+      '<circle cx="3.9" cy="18.3" r="1.7" fill="#FFF" stroke="#D8E6F2" stroke-width="1"/><circle cx="20.1" cy="18.3" r="1.7" fill="#FFF" stroke="#D8E6F2" stroke-width="1"/>',
+    "i-trophy":'<path d="M8 3.6h8v5.6a4 4 0 0 1-8 0Z" fill="'+GOLD+'" stroke="'+GOLDD+'" stroke-width="1.7"/>'+
+      '<path d="M8 5H5.2c0 3 1.1 4.6 3.1 5.2M16 5h2.8c0 3-1.1 4.6-3.1 5.2" fill="none" stroke="'+GOLDD+'" stroke-width="1.7"/>'+
+      '<path d="M12 13.5v3.2" stroke="'+GOLDD+'" stroke-width="2"/>'+
+      '<path d="M8.2 20.8c0-1.9 1.7-3.2 3.8-3.2s3.8 1.3 3.8 3.2Z" fill="'+GOLDD+'"/>',
+    "i-crown":'<path d="M3.8 7.8l4.2 3.1 4-6 4 6 4.2-3.1-1.6 11.4H5.4Z" fill="'+GOLD+'" stroke="'+GOLDD+'" stroke-width="1.7" stroke-linejoin="round"/>'+
+      '<circle cx="12" cy="14.6" r="1.4" fill="'+GOLDD+'"/><circle cx="8" cy="15.2" r="1" fill="'+GOLDD+'"/><circle cx="16" cy="15.2" r="1" fill="'+GOLDD+'"/>',
+    "i-gem":'<path d="M7 4.2h10l4 5.1-9 10.9L3 9.3Z" fill="#8FD0F0" stroke="#5AA8D8" stroke-width="1.7" stroke-linejoin="round"/>'+
+      '<path d="M3.4 9.3h17.2M9.4 9.3 12 19.6 14.6 9.3M7 4.2l2.4 5.1M17 4.2l-2.4 5.1" fill="none" stroke="#5AA8D8" stroke-width="1.3"/>',
+    "i-cal":'<rect x="3.8" y="5.4" width="16.4" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="2"/>'+
+      st("M3.8 10h16.4M8.4 3.2v4M15.6 3.2v4",2)+'<circle cx="12" cy="15" r="1.7" fill="currentColor"/>',
+    "i-chart":st("M4.2 4v15.8H20",2.2)+st("M7.6 15.2l3.4-4 3 2.6 4.4-5.8",2.2)+
+      '<circle cx="11" cy="11.2" r="1.4" fill="currentColor"/><circle cx="14" cy="13.8" r="1.4" fill="currentColor"/><circle cx="18.4" cy="8" r="1.4" fill="currentColor"/>',
+    "i-medal":'<path d="M8.6 3.4 10.4 9M15.4 3.4 13.6 9" stroke="#7FAFD4" stroke-width="2.6" stroke-linecap="round" fill="none"/>'+
+      '<circle cx="12" cy="14.4" r="5.7" fill="'+GOLD+'" stroke="'+GOLDD+'" stroke-width="1.7"/>'+
+      '<path d="M12 11.7l1 2 2.2.3-1.6 1.6.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.6 2.2-.3Z" fill="'+GOLDD+'"/>',
+    "i-tractor":'<circle cx="7.3" cy="16.2" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/>'+
+      '<circle cx="7.3" cy="16.2" r="1.2" fill="currentColor"/><circle cx="17.7" cy="17.4" r="2.9" fill="none" stroke="currentColor" stroke-width="2"/>'+
+      st("M7.3 12.1V6.8h5.6l2 5.6M11.5 16.2h3.3M20.8 17.4v-2.9l-5.9-1.9M9.7 6.8V4.6",2),
+    "i-zzz":st("M3.6 9.4h4.8l-4.8 5h4.8M11.4 6.2h4l-4 4.2h4M18.2 3.8h3.2l-3.2 3.4h3.2",2.1),
+    "i-note":st("M9.4 18.3V6l9.2-2.2v12.3",2.1)+
+      '<ellipse cx="6.8" cy="18.4" rx="2.7" ry="2.2" fill="currentColor"/><ellipse cx="16" cy="16.2" rx="2.7" ry="2.2" fill="currentColor"/>',
+    "i-party":'<path d="M4 20.5 8.4 8.2l7.4 7.4Z" fill="#F2B04C" stroke="#D99E2B" stroke-width="1.5" stroke-linejoin="round"/>'+
+      '<path d="M9.5 9.3l4.4 4.4" stroke="#FFE9A8" stroke-width="1.6" stroke-linecap="round" fill="none"/>'+
+      '<path d="M13.2 6.8c.8-2.2 2.8-2.2 3.8-4.4" stroke="#7ECBB0" stroke-width="1.8" stroke-linecap="round" fill="none"/>'+
+      '<circle cx="18.6" cy="9.4" r="1.4" fill="#A78BDB"/><circle cx="15.2" cy="4" r="1.2" fill="#E25B4E"/><circle cx="20.6" cy="5" r="1.1" fill="#F9C9DC"/><circle cx="20" cy="13.6" r="1.1" fill="#7FAFD4"/>',
+    /* activity pictograms */
+    "i-act-plank":'<circle cx="5.4" cy="9.6" r="2" fill="currentColor"/>'+
+      st("M7.4 10.6l11.2 2.6M9.6 11.2 9 15.4M12.6 11.9l-.7 4M18.6 13.2l1.6 3.6",2.1)+
+      st("M3.4 19.4h17.2",1.8),
+    "i-act-fitness":'<circle cx="12" cy="4.6" r="2" fill="currentColor"/>'+
+      st("M12 7.2v6M12 9.2 6.6 5.4M12 9.2l5.4-3.8M12 13.2l-4.4 6.4M12 13.2l4.4 6.4",2.1),
+    "i-act-strength":st("M4 12h16",2.2)+
+      '<rect x="4.6" y="7.6" width="3.2" height="8.8" rx="1.2" fill="currentColor"/>'+
+      '<rect x="16.2" y="7.6" width="3.2" height="8.8" rx="1.2" fill="currentColor"/>',
+    "i-act-run":'<circle cx="14.8" cy="4.6" r="2" fill="currentColor"/>'+
+      st("M14.2 7.2l-3.6 3.8 3 3-1.6 5.4M10.6 11 6.8 10.4M13.6 13.9l4.2 1.3M14.2 7.2l4.2 2.4M4.4 20.2l3.8-.8 1.6-2.6",2.1),
+    "i-act-walk":'<circle cx="12.6" cy="4.4" r="2" fill="currentColor"/>'+
+      st("M12.4 7v5.4M12.4 9.4 9 12.2M12.4 9.4l3.4 1.6 2 2.6M12.4 12.4l-2.6 7.4M12.4 12.4l2.2 3.4.6 4",2.1),
+    "i-act-cycle":'<circle cx="6.4" cy="16.2" r="3.6" fill="none" stroke="currentColor" stroke-width="1.9"/>'+
+      '<circle cx="17.6" cy="16.2" r="3.6" fill="none" stroke="currentColor" stroke-width="1.9"/>'+
+      st("M6.4 16.2 9.8 9h4.8l3 7.2M9.8 9 12.4 16.2H6.4M8.6 6.8h2.4M14 6.8l.6 2.2",1.9),
+    "i-act-swim":'<circle cx="13.8" cy="7.2" r="2" fill="currentColor"/>'+
+      st("M3.8 10.4 9 8l3.2 2.8 4.4 1.2",2.1)+
+      st("M3.2 16.4c2 2 3.9 2 5.9 0s3.9-2 5.9 0 3.8 2 5.8 0",2),
+    "i-act-yoga":'<circle cx="12" cy="4.6" r="2" fill="currentColor"/>'+
+      st("M12 7.2v6.2M12 9.4 7 12M12 9.4l5 2.6M12 13.4l-4.6 3.2 -3 .8M12 13.4l4.6 3.2 3 .8M5.4 20.2c2.4-2.8 10.8-2.8 13.2 0",2),
+    "i-act-sport":'<circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="2"/>'+
+      fl("M12 8.6l3.2 2.3-1.2 3.8h-4L8.8 10.9Z")+
+      st("M12 3.6v5M8.8 10.9 4.2 9.4M15.2 10.9l4.6-1.5M10.8 14.7 8.2 18.9M13.2 14.7l2.6 4.2",1.7)
+  };
+  let defs="";
+  for(const id in sym)defs+='<symbol id="'+id+'" viewBox="0 0 120 120">'+sym[id]+'</symbol>';
+  for(const id in icons)defs+='<symbol id="'+id+'" viewBox="0 0 24 24">'+icons[id]+'</symbol>';
+  return {defs:'<svg width="0" height="0" style="position:absolute" aria-hidden="true">'+defs+'</svg>',
+          ids:Object.keys(sym),iconIds:Object.keys(icons)};
+})();
+const spr=(id,cls)=>'<svg class="spr'+(cls?" "+cls:"")+'" viewBox="0 0 120 120" aria-hidden="true"><use href="#'+id+'"/></svg>';
+const ic=(id,cls)=>'<svg class="ico'+(cls?" "+cls:"")+'" viewBox="0 0 24 24" aria-hidden="true"><use href="#'+id+'"/></svg>';
+/* frame-driven sprite: its <use> carries data-dk so the donkey clock can swap frames */
+const sprF=f=>'<svg class="spr" viewBox="0 0 120 120" aria-hidden="true"><use data-dk="1" href="#'+f+'"/></svg>';
+document.body.insertAdjacentHTML("afterbegin",ART.defs);
+
+/* squad entries are animal sprite ids (an-<id>); order matches animalSound() */
+const SQUAD=["donkey","raccoon","rat","cow","panda"];
 const MILESTONES=[
-  {n:3,e:"🌱"},{n:7,e:"⭐"},{n:14,e:"🐾"},{n:21,e:"🌸"},
-  {n:30,e:"🌈"},{n:50,e:"🏆"},{n:75,e:"👑"},{n:100,e:"💎"}
+  {n:3,ic:"i-seed"},{n:7,ic:"i-star",c:"#F7C948"},{n:14,ic:"i-paw",c:"#A78BDB"},{n:21,ic:"i-flower"},
+  {n:30,ic:"i-rainbow"},{n:50,ic:"i-trophy"},{n:75,ic:"i-crown"},{n:100,ic:"i-gem"}
 ];
+const msIcon=m=>'<span class="e"'+(m.c?' style="color:'+m.c+'"':'')+'>'+ic(m.ic)+"</span>";
 /* Activity catalog. "sec" = duration entered as min:sec (plank holds are short);
    everything else is entered in whole minutes. Durations are stored in seconds. */
 const ACTS=[
-  {id:"plank",e:"🪵",name:"Plank",sec:true},
-  {id:"fitness",e:"🤸",name:"Indoor fitness"},
-  {id:"strength",e:"🏋️",name:"Strength"},
-  {id:"run",e:"🏃",name:"Running"},
-  {id:"walk",e:"🚶",name:"Walking"},
-  {id:"cycle",e:"🚴",name:"Cycling"},
-  {id:"swim",e:"🏊",name:"Swimming"},
-  {id:"yoga",e:"🧘",name:"Yoga"},
-  {id:"sport",e:"⚽",name:"Sports"},
-  {id:"other",e:"✨",name:"Other"}
+  {id:"plank",ic:"i-act-plank",name:"Plank",sec:true},
+  {id:"fitness",ic:"i-act-fitness",name:"Indoor fitness"},
+  {id:"strength",ic:"i-act-strength",name:"Strength"},
+  {id:"run",ic:"i-act-run",name:"Running"},
+  {id:"walk",ic:"i-act-walk",name:"Walking"},
+  {id:"cycle",ic:"i-act-cycle",name:"Cycling"},
+  {id:"swim",ic:"i-act-swim",name:"Swimming"},
+  {id:"yoga",ic:"i-act-yoga",name:"Yoga"},
+  {id:"sport",ic:"i-act-sport",name:"Sports"},
+  {id:"other",ic:"i-spark",name:"Other"}
 ];
-const actById=id=>ACTS.find(a=>a.id===id)||{id,e:"✨",name:id};
+const actById=id=>ACTS.find(a=>a.id===id)||{id,ic:"i-spark",name:id};
 
 /* Farm economy: logging today's workout pays COIN_BASE × streak (capped),
    once per calendar day (state.lastEarn). Backfills never pay, spends never
    refund — the wallet can only be gamed by actually working out. */
 const COIN_BASE=10, COIN_CAP=30, FARM_CAP=20;
 const FARM_ANIMALS=[
-  {id:"chicken",e:"🐔",name:"Chicken",price:50,gate:0,snd:5,txt:["cluck","bawk!","cluck cluck","pok pok"]},
-  {id:"rat",e:"🐀",name:"Rat",price:150,gate:0,snd:2,txt:["squeak","squeak!","eeek"]},
-  {id:"raccoon",e:"🦝",name:"Raccoon",price:400,gate:7,snd:1,txt:["chitter","churr","*rummage*"]},
-  {id:"panda",e:"🐼",name:"Panda",price:1200,gate:14,snd:4,txt:["mrrp","*munch*","hrmph"]},
-  {id:"donkey",e:"🫏",name:"Donkey",price:5000,gate:30,snd:0,txt:["hee-haw!","eeyore…","hrrr"]}
+  {id:"chicken",name:"Chicken",price:50,gate:0,snd:5,txt:["cluck","bawk!","cluck cluck","pok pok"]},
+  {id:"rat",name:"Rat",price:150,gate:0,snd:2,txt:["squeak","squeak!","eeek"]},
+  {id:"raccoon",name:"Raccoon",price:400,gate:7,snd:1,txt:["chitter","churr","*rummage*"]},
+  {id:"panda",name:"Panda",price:1200,gate:14,snd:4,txt:["mrrp","*munch*","hrmph"]},
+  {id:"donkey",name:"Donkey",price:5000,gate:30,snd:0,frames:1,txt:["hee-haw!","eeyore…","hrrr"]}
 ];
 const farmAnimalById=id=>FARM_ANIMALS.find(a=>a.id===id);
 const animalCost=(a,owned)=>Math.round(a.price*Math.pow(1.25,owned));
@@ -742,7 +1108,9 @@ let parts=[],rafId=null;
 function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;}
 addEventListener("resize",resize);resize();
 const CONF_COLORS=["#A78BDB","#FFD98E","#7ECBB0","#7FAFD4","#A8D8F0","#D9C8F5"];
-const CONF_EMOJI=["💖","⭐","🌸","✨"];
+/* drawn confetti shapes (see tick()) instead of emoji particles */
+const CONF_SHAPES=["heart","star","spark","dot"];
+const CONF_SHAPE_COLORS={heart:"#F48FB1",star:"#FFD98E",spark:"#D9C8F5",dot:"#7ECBB0"};
 function burst(x,y,n,big,soft){
   if(matchMedia("(prefers-reduced-motion: reduce)").matches)n=Math.min(n,12);
   for(let i=0;i<n;i++){
@@ -751,7 +1119,7 @@ function burst(x,y,n,big,soft){
       vx:Math.cos(a)*sp*devicePixelRatio,vy:(Math.sin(a)*sp-5)*devicePixelRatio,
       rot:Math.random()*Math.PI,vr:(Math.random()-.5)*.25,life:1,decay:.008+Math.random()*.012,
       size:(6+Math.random()*8)*devicePixelRatio,
-      emoji:Math.random()<(soft?.5:.2)?CONF_EMOJI[Math.random()*CONF_EMOJI.length|0]:null,
+      shape:Math.random()<(soft?.5:.2)?CONF_SHAPES[Math.random()*CONF_SHAPES.length|0]:null,
       color:CONF_COLORS[Math.random()*CONF_COLORS.length|0]});
   }
   if(!rafId)tick();
@@ -762,7 +1130,26 @@ function tick(){
   for(const p of parts){
     p.x+=p.vx;p.y+=p.vy;p.vy+=.25*devicePixelRatio;p.vx*=.985;p.rot+=p.vr;p.life-=p.decay;
     ctx.save();ctx.globalAlpha=Math.max(p.life,0);ctx.translate(p.x,p.y);ctx.rotate(p.rot);
-    if(p.emoji){ctx.font=(p.size*1.6)+"px serif";ctx.textAlign="center";ctx.fillText(p.emoji,0,0);}
+    if(p.shape){
+      const s=p.size*.9;
+      ctx.fillStyle=CONF_SHAPE_COLORS[p.shape]||p.color;
+      ctx.beginPath();
+      if(p.shape==="heart"){
+        ctx.moveTo(0,s*.35);
+        ctx.bezierCurveTo(-s*1.1,-s*.45,-s*.35,-s*1.05,0,-s*.35);
+        ctx.bezierCurveTo(s*.35,-s*1.05,s*1.1,-s*.45,0,s*.35);
+      }else if(p.shape==="star"){
+        for(let k=0;k<10;k++){
+          const r=k%2?s*.38:s*.9,a=k/10*Math.PI*2-Math.PI/2;
+          ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);
+        }
+      }else if(p.shape==="spark"){
+        ctx.moveTo(0,-s);ctx.quadraticCurveTo(s*.16,-s*.16,s,0);
+        ctx.quadraticCurveTo(s*.16,s*.16,0,s);ctx.quadraticCurveTo(-s*.16,s*.16,-s,0);
+        ctx.quadraticCurveTo(-s*.16,-s*.16,0,-s);
+      }else ctx.arc(0,0,s*.45,0,Math.PI*2);
+      ctx.closePath();ctx.fill();
+    }
     else{ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);}
     ctx.restore();
   }
@@ -779,23 +1166,23 @@ function renderToday(){
         '<div class="field"><small>Activities (optional)</small><div class="act-chips">'+
           '<button class="achip add" id="actAdd">+ add activity</button>'+
         '</div></div>'+
-        '<div class="mig-box'+(migOn?" on":"")+'" id="migBox"><span class="ic">🧠</span><small>Migraine</small><span class="hint">keeps streak</span></div>'+
+        '<div class="mig-box'+(migOn?" on":"")+'" id="migBox"><span class="ic" style="color:var(--mig)">'+ic("i-brain")+'</span><small>Migraine</small><span class="hint">keeps streak</span></div>'+
       '</div>'+
-      '<button class="logbtn" id="logBtn">Log workout 💪</button>'+
+      '<button class="logbtn" id="logBtn">Log workout '+ic("i-muscle")+'</button>'+
       (migOn?'<div class="card-note">Migraine marked — today is streak-safe. A workout still counts if you log one.</div>':'');
     $("migBox").onclick=toggleMig;
     $("logBtn").onclick=logWorkout;
     $("actAdd").onclick=()=>openActPicker(addTodayAct);
   }else{
     const acts=e.acts||{},ids=Object.keys(acts);
-    let chips=ids.length?"":'<span class="schip ex">💪</span>';
+    let chips=ids.length?"":'<span class="schip ex" style="color:var(--accent-deep)">'+ic("i-muscle")+'</span>';
     for(const id of ids){
       const a=actById(id);
-      chips+='<span class="schip act">'+a.e+(acts[id]?' <b>'+fmtAmt(id,acts[id])+'</b>':'')+'</span>';
+      chips+='<span class="schip act" style="color:var(--accent-deep)">'+ic(a.ic)+(acts[id]?' <b>'+fmtAmt(id,acts[id])+'</b>':'')+'</span>';
     }
     c.innerHTML=
       '<div class="logged"><div class="status-chips">'+chips+
-        (migOn?'<span class="schip mig">🧠</span>':'')+
+        (migOn?'<span class="schip mig" style="color:var(--mig)">'+ic("i-brain")+'</span>':'')+
       '</div><button class="editbtn" id="todayEdit" aria-label="Edit today">✎</button></div>';
     $("todayEdit").onclick=()=>openEditor(t);
   }
@@ -844,15 +1231,19 @@ let partyTimer=null;
 function celebrate(streak,coins){
   const pc=$("partyCoins");
   pc.hidden=!coins;
-  if(coins)pc.textContent="+"+coins+" 🪙";
+  if(coins)pc.innerHTML="+"+coins+" "+ic("i-coin");
   const ms=MILESTONES.find(m=>m.n===streak);
   $("squadline").hidden=!ms;
   $("partyAnimal").style.display=ms?"none":"inline-block";
   $("partyBadge").hidden=!ms;
-  if(ms){$("partyBadge").textContent=ms.e;fanfare();buzz([40,60,40,60,120]);}
+  if(ms){
+    $("partyBadge").innerHTML=msIcon(ms);
+    $("squadline").innerHTML=SQUAD.map(id=>"<span>"+spr("an-"+id)+"</span>").join("");
+    fanfare();buzz([40,60,40,60,120]);
+  }
   else{
     const i=Math.random()*SQUAD.length|0;
-    $("partyAnimal").textContent=SQUAD[i];
+    $("partyAnimal").innerHTML=spr("an-"+SQUAD[i]);
     pop();setTimeout(()=>animalSound(i),250);buzz([30,40,60]);
   }
   $("partyNum").textContent=streak;
@@ -944,13 +1335,15 @@ function farmStaticSVG(counts){
   const list=[];
   for(const a of FARM_ANIMALS){
     const n=Math.max(0,Math.min(FARM_CAP,Math.floor(+counts[a.id]||0)));
-    for(let k=0;k<n&&list.length<FARM_CAP;k++)list.push(a.e);
+    for(let k=0;k<n&&list.length<FARM_CAP;k++)list.push(a.id);
   }
-  const placed=list.map((e,k)=>Object.assign({e},spawnXY(k))).sort((a,b)=>a.y-b.y);
+  const placed=list.map((id,k)=>Object.assign({id},spawnXY(k))).sort((a,b)=>a.y-b.y);
   let inner="";
-  for(const p of placed)
-    inner+='<text x="'+p.x+'" y="'+p.y+'" font-size="'+(24*depthScale(p.y)).toFixed(1)+
-      '" text-anchor="middle">'+p.e+'</text>';
+  for(const p of placed){
+    const w=(30*depthScale(p.y)).toFixed(1);
+    inner+='<use href="#an-'+p.id+'" x="'+(p.x-w/2).toFixed(1)+'" y="'+(p.y-w*.95).toFixed(1)+
+      '" width="'+w+'" height="'+w+'"/>';
+  }
   return farmSceneSVG(inner);
 }
 
@@ -994,8 +1387,9 @@ function farmSyncSprites(){
     state.pets.forEach(pet=>{
       const a=farmAnimalById(pet.sp);
       const el=document.createElement("div");
-      el.className="farm-sprite";
-      el.innerHTML='<span class="tag"></span><span class="in"><span class="core">'+a.e+'</span></span>';
+      el.className="farm-sprite"+(a.frames?" framed":"");
+      el.innerHTML='<span class="tag"></span><span class="in"><span class="core">'+
+        (a.frames?sprF("dk-walk1"):spr("an-"+a.id))+'</span></span>';
       const s={pet,el};
       placeSprite(s);
       el.addEventListener("pointerdown",ev=>spriteDown(s,ev));
@@ -1024,7 +1418,8 @@ function moveSprite(s){
 }
 function spriteBubble(s,txt,say){
   const b=document.createElement("span");
-  b.className="bub"+(say?" say":"");b.textContent=txt;
+  b.className="bub"+(say?" say":"");
+  if(say)b.textContent=txt;else b.innerHTML=txt; /* non-say bubbles are our own icon markup */
   s.el.appendChild(b);
   setTimeout(()=>b.remove(),say?2000:1700);
 }
@@ -1034,22 +1429,56 @@ function farmTick(){
   if(s.el.classList.contains("drag"))return;
   const a=farmAnimalById(s.pet.sp);
   if(farmSleepy()){
-    if(Math.random()<.5)spriteBubble(s,"💤");
+    if(Math.random()<.5)spriteBubble(s,'<span style="color:var(--muted)">'+ic("i-zzz")+'</span>');
     else if(Math.random()<.3)moveSprite(s);
   }else{
     const r=Math.random();
     if(r<.6)moveSprite(s);
     else if(r<.9)spriteBubble(s,a.txt[Math.random()*a.txt.length|0],true);
-    else spriteBubble(s,["❤️","🎵","✨"][Math.random()*3|0]);
+    else spriteBubble(s,[
+      '<span style="color:#F48FB1">'+ic("i-heart")+'</span>',
+      '<span style="color:var(--accent-deep)">'+ic("i-note")+'</span>',
+      '<span style="color:#D9A94C">'+ic("i-spark")+'</span>'][Math.random()*3|0]);
   }
 }
 setInterval(farmTick,2200);
+
+/* ---------- donkey frame animation ----------
+   The donkey is the frame-animated species (from the donkey spritesheet):
+   its <use> nodes carry data-dk and this shared clock swaps their frames by
+   the sprite's state — walking, petted (rolls on its back laughing), dozing
+   when today isn't logged, and starving-skinny once the streak is broken. */
+const DK={walk:["dk-walk1","dk-walk2","dk-walk3","dk-walk2"],
+          starve:["dk-starve1","dk-starve2","dk-starve3","dk-starve2"],
+          happy:["dk-happy1","dk-happy2"],doze:["dk-sleep","dk-lie"]};
+const donkeyFasting=()=>farmSleepy()&&currentStreak()===0;
+let dkTick=0;
+setInterval(()=>{
+  if(document.hidden)return;
+  const nodes=document.querySelectorAll("use[data-dk]");
+  if(!nodes.length)return;
+  dkTick++;
+  const fasting=donkeyFasting();
+  nodes.forEach(u=>{
+    const el=u.closest(".farm-sprite,.walker");
+    let f;
+    if(!el)f=DK.walk[dkTick%4];
+    else if(el.classList.contains("petted"))f=DK.happy[dkTick%2];
+    else if(el.classList.contains("walker"))f=DK.walk[dkTick%4];
+    else if(el.classList.contains("walk")||el.classList.contains("drag"))
+      f=(fasting?DK.starve:DK.walk)[dkTick%4];
+    else if(fasting)f="dk-starve1";                    /* streak broken: too hungry to sleep */
+    else if(el.classList.contains("sleepy"))f=DK.doze[(dkTick>>3)%2];
+    else f="dk-walk1";
+    u.setAttribute("href","#"+f);
+  });
+},170);
 /* tap = pet: it rolls onto its back and shows hearts */
 function petAnimal(s){
   animalSound(farmAnimalById(s.pet.sp).snd);buzz(15);
   s.el.classList.remove("petted");void s.el.offsetWidth;s.el.classList.add("petted");
   setTimeout(()=>s.el.classList.remove("petted"),1550);
-  for(let k=0;k<3;k++)setTimeout(()=>spriteBubble(s,"❤️"),k*280);
+  for(let k=0;k<3;k++)setTimeout(()=>spriteBubble(s,'<span style="color:#F48FB1">'+ic("i-heart")+'</span>'),k*280);
   const r=s.el.getBoundingClientRect();
   burst(r.left+r.width/2,r.top,8,false,true);
 }
@@ -1090,7 +1519,7 @@ let namingPet=null;
 function openPetName(pet,isNew){
   namingPet=pet;
   const a=farmAnimalById(pet.sp);
-  $("pnTitle").textContent=(isNew?"Name your new "+a.name:"Rename "+(pet.n||"your "+a.name))+" "+a.e;
+  $("pnTitle").textContent=isNew?"Name your new "+a.name:"Rename "+(pet.n||"your "+a.name);
   $("pnName").value=pet.n||"";
   $("pnWrap").classList.add("show");
   setTimeout(()=>{try{$("pnName").focus();}catch(e){}},60);
@@ -1116,8 +1545,8 @@ function renderFarm(){
     const cost=animalCost(a,owned);
     const el=document.createElement("button");
     el.className="shop-cell"+(locked?" locked":((state.coins||0)<cost?" broke":""));
-    el.innerHTML='<span class="e">'+(locked?"🔒":a.e)+'</span><span class="nm">'+a.name+'</span>'+
-      '<span class="pr">'+(locked?a.gate+"-day streak":"🪙 "+cost)+'</span>'+
+    el.innerHTML='<span class="e">'+(locked?'<span style="color:#C4BBB1">'+ic("i-lock")+"</span>":spr("an-"+a.id))+'</span><span class="nm">'+a.name+'</span>'+
+      '<span class="pr">'+(locked?a.gate+"-day streak":ic("i-coin")+" "+cost)+'</span>'+
       (owned?'<span class="own">×'+owned+'</span>':'');
     el.onclick=()=>buyAnimal(a.id);
     bar.appendChild(el);
@@ -1128,11 +1557,11 @@ function buyAnimal(id){
   const a=farmAnimalById(id);
   const owned=(state.farm&&state.farm[id])||0;
   if(Math.max(bestStreak(),currentStreak())<a.gate){
-    toast("🔒 "+a.name+" unlocks at a "+a.gate+"-day streak");return;
+    toast(a.name+" unlocks at a "+a.gate+"-day streak","i-lock");return;
   }
-  if(farmList().length>=FARM_CAP){toast("The farm is full 🐾");return;}
+  if(farmList().length>=FARM_CAP){toast("The farm is full","i-paw");return;}
   const cost=animalCost(a,owned);
-  if((state.coins||0)<cost){toast("Need 🪙 "+cost+" — log workouts to earn!");return;}
+  if((state.coins||0)<cost){toast("Need "+cost+" coins — log workouts to earn!","i-coin");return;}
   state.coins-=cost;
   state.farm=state.farm||{};
   state.farm[id]=owned+1;
@@ -1143,12 +1572,12 @@ function buyAnimal(id){
   flashCoins();
   const r=$("farmIso").getBoundingClientRect();
   burst(r.left+r.width/2,r.top+r.height/2,20,false,true);
-  toast(a.e+" "+a.name+" joined the farm!");
+  toast(a.name+" joined the farm!","an-"+a.id);
   openPetName(pet,true);
 }
 $("farmIso").innerHTML=farmSceneSVG()+'<div id="farmLayer"></div>'+
-  '<div class="rename-drop" id="renameDrop">🏷️ Drop here to rename</div>'+
-  '<div class="farm-empty" id="farmEmptyHint">Log workouts to earn coins<br>and fill your farm 🐾</div>';
+  '<div class="rename-drop" id="renameDrop">'+ic("i-tag")+' Drop here to rename</div>'+
+  '<div class="farm-empty" id="farmEmptyHint">Log workouts to earn coins<br>and fill your farm</div>';
 
 /* ---------- plank chart ---------- */
 const RANGES=[["7D",7],["14D",14],["30D",30],["All",0]];
@@ -1244,7 +1673,7 @@ function render(){
   const cur=currentStreak(),best=Math.max(bestStreak(),cur);
   $("streakNum").textContent=cur;
   $("bestNum").textContent=best;
-  $("mascot").textContent=SQUAD[dayOfYear()%SQUAD.length];
+  $("mascot").innerHTML=spr("an-"+SQUAD[dayOfYear()%SQUAD.length]);
   renderToday();
   /* the plank progress card only appears once a plank has been logged */
   $("plankCard").style.display=hasPlank(state.days)?"":"none";
@@ -1259,7 +1688,8 @@ function render(){
     const ds=iso(d),e=state.days[ds];
     const el=document.createElement("div");
     el.className="day-dot"+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(i===0?" today":"");
-    const stamp=e?(e.ex?SQUAD[(d.getDate()+d.getMonth())%SQUAD.length]:"🧠"):"·";
+    const stamp=e?(e.ex?spr("an-"+SQUAD[(d.getDate()+d.getMonth())%SQUAD.length]):
+      '<span style="color:var(--mig)">'+ic("i-brain")+'</span>'):"·";
     el.innerHTML='<div class="c">'+stamp+'</div><small>'+DOW[d.getDay()]+'</small>';
     el.querySelector(".c").onclick=()=>openEditor(ds);
     wk.appendChild(el);
@@ -1272,7 +1702,7 @@ function render(){
     const won=best>=m.n;
     const el=document.createElement("div");
     el.className="badge"+(won?" won":"");
-    el.innerHTML='<span class="e">'+(won?m.e:"🔒")+'</span><small>'+m.n+'</small>';
+    el.innerHTML=(won?msIcon(m):'<span class="e" style="color:#C4BBB1">'+ic("i-lock")+'</span>')+'<small>'+m.n+'</small>';
     bd.appendChild(el);
   }
 
@@ -1314,6 +1744,7 @@ const SB_KEY="sb_publishable_H6YAB9LinIPgAUBlZUKFsw_PWeipvti";
    fragment happens to be previewed. */
 const APP_URL="https://itsmas.github.io/streak-tracker/";
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+/* stable animal id for a buddy, derived from their uid */
 const buddyAnimal=id=>{let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return SQUAD[h%SQUAD.length];};
 
 async function rpc(fn,args){
@@ -1331,9 +1762,13 @@ async function rpc(fn,args){
   return t?JSON.parse(t):null;
 }
 
-function toast(msg){
+/* icon is one of our own symbol ids ("i-*" icon or "an-*"/"dk-*" sprite);
+   msg stays textContent so user-supplied names can't inject markup */
+function toast(msg,icon){
   const t=document.createElement("div");
-  t.className="toast";t.textContent=msg;
+  t.className="toast";
+  if(icon)t.innerHTML=(icon.indexOf("i-")===0?ic(icon):spr(icon))+" ";
+  t.appendChild(document.createTextNode(msg));
   $("toasts").appendChild(t);
   setTimeout(()=>{t.classList.add("out");setTimeout(()=>t.remove(),450);},5200);
 }
@@ -1363,10 +1798,10 @@ function handleBuddyEvents(evts){
     const who=f?f.name:"A buddy";
     setTimeout(()=>{
       if(ev.kind==="cheer"){
-        toast(buddyAnimal(ev.from)+" "+who+" cheers you on! 📣");
+        toast(who+" cheers you on!","an-"+buddyAnimal(ev.from));
         burst(innerWidth/2,90,18,false,true);pop();buzz([30,40,60]);
       }else{
-        toast(buddyAnimal(ev.from)+" "+who+" nudges you — log today? 👉");buzz(20);
+        toast(who+" nudges you — log today?","an-"+buddyAnimal(ev.from));buzz(20);
       }
     },i*1100);
   });
@@ -1375,8 +1810,8 @@ function handleBuddyEvents(evts){
 function renderBuddies(){
   const c=$("buddyBody");
   if(!state.buddy){
-    c.innerHTML='<div class="bempty">Swap codes with friends to see each other’s streaks,<br>cheer 📣 and nudge 👉 each other.</div>'+
-      '<button class="done-btn" style="margin-top:0" id="buddyConnect">Add buddies 🐾</button>'+
+    c.innerHTML='<div class="bempty">Swap codes with friends to see each other’s streaks,<br>cheer '+ic("i-mega")+' and nudge '+ic("i-point")+' each other.</div>'+
+      '<button class="done-btn" style="margin-top:0" id="buddyConnect">Add buddies '+ic("i-paw")+'</button>'+
       '<div class="card-note">No account needed — you just get a code to share.</div>';
     $("buddyConnect").onclick=()=>openBuddySetup(false);
     return;
@@ -1390,14 +1825,14 @@ function renderBuddies(){
   for(const f of rows){
     const me=f.id==="me";
     h+='<div class="brow'+(me?" me":"")+'" data-id="'+f.id+'">'+
-      '<span class="av">'+(me?SQUAD[dayOfYear()%SQUAD.length]:buddyAnimal(f.id))+'</span>'+
+      '<span class="av">'+spr("an-"+(me?SQUAD[dayOfYear()%SQUAD.length]:buddyAnimal(f.id)))+'</span>'+
       '<span class="bn">'+esc(f.name)+(me?'<small>you</small>':"")+'</span>'+
-      '<span class="bt">'+(f.e?(f.e.ex?"💪":"🧠"):"·")+'</span>'+
+      '<span class="bt">'+(f.e?(f.e.ex?'<span style="color:var(--accent-deep)">'+ic("i-muscle")+"</span>":'<span style="color:var(--mig)">'+ic("i-brain")+"</span>"):"·")+'</span>'+
       '<span class="bs">'+f.streak+'</span>'+
       '</div>';
   }
   h+='<div class="bfoot">'+
-     '<div class="codepill" id="codePill">'+state.buddy.code+'<small>Share link 🔗</small></div>'+
+     '<div class="codepill" id="codePill">'+state.buddy.code+'<small>Share link '+ic("i-link")+'</small></div>'+
      '<button class="addbtn" id="buddyAdd">+ Add</button></div>';
   c.innerHTML=h;
   c.querySelectorAll(".brow").forEach(el=>{
@@ -1410,7 +1845,7 @@ function renderBuddies(){
 async function shareCode(){
   const link=APP_URL+"?buddy="+state.buddy.code;
   if(navigator.share){try{await navigator.share({url:link});}catch(e){}return;}
-  try{await navigator.clipboard.writeText(link);toast("Invite link copied 🔗");}
+  try{await navigator.clipboard.writeText(link);toast("Invite link copied","i-link");}
   catch(e){toast("Your invite link: "+link);}
 }
 
@@ -1424,7 +1859,7 @@ function openBuddySetup(rename){
     :"Pick a name and you'll get a short code to share. Buddies who add each other's codes see each other's full streak — calendar, planks, badges.";
   $("bsName").value=rename?state.buddy.name:"";
   $("bsErr").textContent="";
-  $("bsGo").textContent=rename?"Save":(pendingInvite?"Join 🐾":"Get my code 🐾");
+  $("bsGo").innerHTML=(rename?"Save":(pendingInvite?"Join":"Get my code"))+" "+ic("i-paw");
   $("bsWrap").classList.add("show");
 }
 $("bsGo").onclick=async()=>{
@@ -1460,7 +1895,7 @@ $("baGo").onclick=async()=>{
     const m=String(e.message||"");
     $("baErr").textContent=
       m.includes("code_not_found")?"No buddy with that code":
-      m.includes("cannot_add_self")?"That's your own code 🙃":
+      m.includes("cannot_add_self")?"That's your own code":
       m.includes("too_many")?"Buddy limit reached":
       "Couldn't connect — try again later";
   }
@@ -1484,7 +1919,7 @@ function takeInviteFromURL(){
     history.replaceState(null,"",location.pathname+(rest?"?"+rest:"")+location.hash);
   }catch(e){return;}
   if(!/^[A-Z0-9]{6}$/.test(code))return;
-  if(state.buddy&&state.buddy.code===code){toast("That's your own invite 🙃");return;}
+  if(state.buddy&&state.buddy.code===code){toast("That's your own invite");return;}
   if(state.buddy)acceptInvite(code);
   else{pendingInvite=code;openBuddySetup(false);}
 }
@@ -1497,7 +1932,7 @@ async function acceptInvite(code){
     burst(innerWidth/2,90,22,false,true);pop();buzz([30,40,60]);
   }catch(e){
     const m=String(e.message||"");
-    toast(m.includes("cannot_add_self")?"That's your own invite 🙃":
+    toast(m.includes("cannot_add_self")?"That's your own invite":
       m.includes("code_not_found")?"This invite link isn't valid anymore":
       m.includes("too_many")?"Buddy limit reached":
       "Couldn't reach your buddy — add code "+code+" manually later");
@@ -1510,7 +1945,7 @@ function openFriend(id){
   const days=f.days||{},cur=currentStreak(days),best=Math.max(bestStreak(days),cur);
   const t=today(),mP=t.slice(0,7),now=new Date();
   const exKeys=Object.keys(days).filter(k=>days[k].ex);
-  let h='<div class="fd-hero"><span class="av">'+buddyAnimal(id)+'</span>'+
+  let h='<div class="fd-hero"><span class="av">'+spr("an-"+buddyAnimal(id))+'</span>'+
     '<div><div class="fd-num">'+cur+'</div>'+
     '<div class="fd-sub">'+esc(f.name)+' · day streak · best <b>'+best+'</b></div></div></div>';
   h+='<div class="stats" style="margin-top:12px">'+
@@ -1528,19 +1963,19 @@ function openFriend(id){
   h+='<div class="fd-sec">MILESTONES</div><div class="badges fd-badges">';
   for(const m of MILESTONES){
     const won=best>=m.n;
-    h+='<div class="badge'+(won?" won":"")+'"><span class="e">'+(won?m.e:"🔒")+'</span><small>'+m.n+'</small></div>';
+    h+='<div class="badge'+(won?" won":"")+'">'+(won?msIcon(m):'<span class="e" style="color:#C4BBB1">'+ic("i-lock")+'</span>')+'<small>'+m.n+'</small></div>';
   }
   h+='</div>';
   const loggedToday=!!(days[t]&&days[t].ex);
   h+='<div class="fd-actions">'+
-     '<button class="done-btn" id="fdCheer">Cheer 📣</button>'+
-     (loggedToday?"":'<button class="done-btn nudge-btn" id="fdNudge">Nudge 👉</button>')+
+     '<button class="done-btn" id="fdCheer">Cheer '+ic("i-mega")+'</button>'+
+     (loggedToday?"":'<button class="done-btn nudge-btn" id="fdNudge">Nudge '+ic("i-point")+'</button>')+
      '</div>'+
      '<button class="unfriend" id="fdRemove">remove buddy</button>';
   $("fdSheet").innerHTML=h;
   $("fdWrap").classList.add("show");
-  $("fdCheer").onclick=()=>sendBuddyEvent(id,"cheer","📣 Cheered "+f.name+"!");
-  const n=$("fdNudge");if(n)n.onclick=()=>sendBuddyEvent(id,"nudge","👉 Nudged "+f.name+"!");
+  $("fdCheer").onclick=()=>sendBuddyEvent(id,"cheer","Cheered "+f.name+"!","i-mega");
+  const n=$("fdNudge");if(n)n.onclick=()=>sendBuddyEvent(id,"nudge","Nudged "+f.name+"!","i-point");
   $("fdRemove").onclick=async()=>{
     if(!confirm("Remove "+f.name+" from your buddies?"))return;
     try{await rpc("buddy_unfriend",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,p_fid:id});}catch(e){}
@@ -1549,10 +1984,10 @@ function openFriend(id){
     $("fdWrap").classList.remove("show");
   };
 }
-async function sendBuddyEvent(id,kind,okMsg){
+async function sendBuddyEvent(id,kind,okMsg,okIcon){
   try{
     await rpc("buddy_send_event",{p_uid:state.buddy.uid,p_secret:state.buddy.secret,p_to:id,p_kind:kind});
-    toast(okMsg);pop();buzz(15);
+    toast(okMsg,okIcon);pop();buzz(15);
     $("fdWrap").classList.remove("show");
   }catch(e){toast("Couldn't send — offline?");}
 }
@@ -1578,7 +2013,7 @@ function renderEdActs(){
   let h="";
   for(const id of Object.keys(edActs)){
     const a=actById(id);
-    h+='<button class="achip" data-id="'+id+'">'+a.e+' '+a.name+
+    h+='<button class="achip" data-id="'+id+'">'+ic(a.ic)+' '+a.name+
        (edActs[id]?' · '+fmtAmt(id,edActs[id]):'')+' <span class="x">✕</span></button>';
   }
   h+='<button class="achip add" id="edActAdd">+ add</button>';
@@ -1615,7 +2050,7 @@ $("edSave").onclick=()=>{
   if(edDate===today()&&edEx&&!wasEx)amt=earnCoins();
   save();render();queueSync();
   $("edWrap").classList.remove("show");
-  if(amt){toast("+"+amt+" 🪙 earned");flashCoins();}
+  if(amt){toast("+"+amt+" coins earned","i-coin");flashCoins();}
   pop();
 };
 
@@ -1632,7 +2067,7 @@ function renderApGrid(){
   for(const a of ACTS){
     const b=document.createElement("button");
     b.className="act-cell"+(apPick===a.id?" on":"");
-    b.innerHTML='<span class="e">'+a.e+'</span><small>'+a.name+'</small>';
+    b.innerHTML='<span class="e" style="color:var(--accent-deep)">'+ic(a.ic)+'</span><small>'+a.name+'</small>';
     b.onclick=()=>{apPick=a.id;renderApGrid();refreshApDur();$("apGo").disabled=false;};
     g.appendChild(b);
   }
@@ -1742,7 +2177,7 @@ $("pushToggle").onchange=async e=>{
     alert("Couldn't set up the raccoon: "+(err&&err.message||err));return;
   }
   refreshPushUI();
-  toast("🦝 The raccoon is watching — it checks around "+state.remTime);
+  toast("The raccoon is watching — it checks around "+state.remTime,"an-raccoon");
 };
 $("resetBtn").onclick=()=>{
   if(confirm("Erase all data?"+(state.buddy?" Your buddy code and connections are removed too.":""))){
@@ -1760,7 +2195,7 @@ $("resetBtn").onclick=()=>{
 };
 
 /* ---------- debug menu ----------
-   Hidden dev tools: 10 taps on the gear within 10 seconds reveal a 🐞
+   Hidden dev tools: 10 taps on the gear within 10 seconds reveal a bug
    button next to it (persisted in state.debug until hidden again). */
 let dbgTaps=[];
 function dbgTap(){
@@ -1772,7 +2207,7 @@ function dbgTap(){
     state.debug=true;save();
     $("dbgBtn").style.display="";
     $("setWrap").classList.remove("show");
-    toast("🐞 Debug mode unlocked");
+    toast("Debug mode unlocked","i-bug");
     fanfare();buzz([40,60,40]);
   }
 }
@@ -1782,7 +2217,7 @@ $("dbgDone").onclick=()=>$("dbgWrap").classList.remove("show");
 $("dbgWrap").addEventListener("click",e=>{if(e.target===e.currentTarget)$("dbgWrap").classList.remove("show");});
 
 async function refreshDbg(){
-  $("dbgCoins").textContent="🪙 "+(state.coins||0);
+  $("dbgCoins").textContent=(state.coins||0)+" coins";
   let reg=null,sub=null;
   try{
     reg=await navigator.serviceWorker.getRegistration();
@@ -1804,7 +2239,7 @@ $("dbgWrap").querySelectorAll("[data-coins]").forEach(b=>{
   b.onclick=()=>{state.coins=Math.max(0,(state.coins||0)+ +b.dataset.coins);dbgDone();flashCoins();};
 });
 $("dbgCoinZero").onclick=()=>{state.coins=0;dbgDone();};
-$("dbgEarnReset").onclick=()=>{state.lastEarn="";dbgDone("Today's payout re-armed 🪙");};
+$("dbgEarnReset").onclick=()=>{state.lastEarn="";dbgDone("Today's payout re-armed");};
 $("dbgWrap").querySelectorAll("[data-back]").forEach(b=>{
   b.onclick=()=>{
     const d=new Date();
@@ -1813,17 +2248,17 @@ $("dbgWrap").querySelectorAll("[data-back]").forEach(b=>{
       const k=iso(d), e=state.days[k]||{};
       e.ex=true;state.days[k]=e;
     }
-    dbgDone("Backfilled "+b.dataset.back+" days 💪");
+    dbgDone("Backfilled "+b.dataset.back+" days");
   };
 });
 $("dbgBreak").onclick=()=>{
   const d=new Date();d.setDate(d.getDate()-1);
   delete state.days[iso(d)];
-  dbgDone("Yesterday cleared — streak broken 💔");
+  dbgDone("Yesterday cleared — streak broken");
 };
 $("dbgFarmFill").onclick=()=>{
   state.farm={chicken:8,rat:5,raccoon:4,panda:2,donkey:1};
-  dbgDone("Farm filled 🐾");
+  dbgDone("Farm filled");
 };
 $("dbgFarmClear").onclick=()=>{state.farm={};dbgDone("Farm cleared");};
 /* Shows the exact notification sw.js builds when a real push lands. */
@@ -1834,29 +2269,29 @@ async function dbgNag(angry){
   let reg=null;
   try{reg=await navigator.serviceWorker.getRegistration();}catch(e){}
   if(!reg){toast("No service worker yet — reload once");return;}
-  if(angry)await reg.showNotification("THE RACCOON IS ANGRY 😡",{
+  if(angry)await reg.showNotification("THE RACCOON IS ANGRY",{
     body:"Nothing logged today. Do your workout before midnight!",
     icon:"icons/icon-192.png",image:"icons/angry.png",tag:"angry-raccoon",
     requireInteraction:true,vibrate:[200,100,200,100,400]});
-  else await reg.showNotification("Streak safe 🎉",{
+  else await reg.showNotification("Streak safe!",{
     body:"Today is logged. The raccoon is at peace.",
     icon:"icons/icon-192.png",tag:"angry-raccoon",silent:true});
-  toast("Notification sent 🦝");
+  toast("Notification sent","an-raccoon");
 }
 $("dbgNagAngry").onclick=()=>dbgNag(true);
 $("dbgNagCalm").onclick=()=>dbgNag(false);
 $("dbgParty").onclick=()=>celebrate(currentStreak()||1,COIN_BASE*Math.max(1,Math.min(currentStreak()||1,COIN_CAP)));
 $("dbgMilestone").onclick=()=>celebrate(MILESTONES[Math.random()*MILESTONES.length|0].n);
-$("dbgWalker").onclick=()=>{spawnWalker(true);toast("Walker incoming 🐾");};
+$("dbgWalker").onclick=()=>{spawnWalker(true);toast("Walker incoming","i-paw");};
 $("dbgSync").onclick=()=>{
   if(!state.buddy){toast("Not connected to buddies");return;}
-  doSync().then(()=>{toast("Synced 🐾");refreshDbg();});
+  doSync().then(()=>{toast("Synced","i-paw");refreshDbg();});
 };
 $("dbgHide").onclick=()=>{
   state.debug=false;save();
   $("dbgBtn").style.display="none";
   $("dbgWrap").classList.remove("show");
-  toast("Debug hidden — tap ⚙️ 10× to re-unlock");
+  toast("Debug hidden — tap the gear 10× to re-unlock","i-gear");
 };
 
 /* ---------- reminder ---------- */
@@ -1961,7 +2396,7 @@ $("calNext").onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalen
 
 /* ---------- install-as-app button ----------
    Chrome fires beforeinstallprompt only when the page is installable and not
-   already installed, so the 📲 button appears just for browser-tab visitors.
+   already installed, so the install button appears just for browser-tab visitors.
    iOS never fires it: there the button shows in Safari and explains the
    Share → Add to Home Screen dance instead. */
 (function(){
@@ -1969,11 +2404,11 @@ $("calNext").onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalen
   if(matchMedia("(display-mode: standalone)").matches||navigator.standalone)return;
   let deferred=null;
   addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;btn.style.display="";});
-  addEventListener("appinstalled",()=>{btn.style.display="none";deferred=null;toast("Installed! Find Streak on your home screen 🐾");});
+  addEventListener("appinstalled",()=>{btn.style.display="none";deferred=null;toast("Installed! Find Streak on your home screen","i-paw");});
   if(/iPhone|iPad|iPod/.test(navigator.userAgent))btn.style.display="";
   btn.onclick=()=>{
     if(deferred){const p=deferred;deferred=null;btn.style.display="none";p.prompt();}
-    else toast("Tap Share ⬆️ then “Add to Home Screen” to install 📲");
+    else toast("Tap Share (the up-arrow) then “Add to Home Screen” to install","i-install");
   };
 })();
 

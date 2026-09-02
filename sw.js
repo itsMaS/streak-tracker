@@ -1,5 +1,5 @@
 /* Minimal offline cache so the installed PWA opens instantly, even without signal. */
-const CACHE = "streak-buddies-v16";
+const CACHE = "streak-buddies-v17";
 const ASSETS = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/angry.png"];
 
 self.addEventListener("install", (e) => {
@@ -63,14 +63,14 @@ self.addEventListener("push", (e) => {
     /* A workout OR a migraine day counts as handled — the streak is safe. */
     const done = !!(days && days[today]);
     if (done) {
-      await self.registration.showNotification("Streak safe 🎉", {
+      await self.registration.showNotification("Streak safe!", {
         body: "Today is logged. The raccoon is at peace.",
         icon: "icons/icon-192.png",
         tag: "angry-raccoon",
         silent: true
       });
     } else {
-      await self.registration.showNotification("THE RACCOON IS ANGRY 😡", {
+      await self.registration.showNotification("THE RACCOON IS ANGRY", {
         body: "Nothing logged today. Do your workout before midnight!",
         icon: "icons/icon-192.png",
         image: "icons/angry.png",

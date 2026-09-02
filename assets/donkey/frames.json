@@ -1,0 +1,16 @@
+{
+  "comment": "Grid map for the chibi donkey spritesheet (5 columns x 3 rows). Names match the in-app SVG frame ids (dk-<name>).",
+  "cols": 5,
+  "rows": 3,
+  "frames": [
+    ["walk1", "walk2", "walk3", "happy1", "happy2"],
+    ["starve1", "starve2", "starve3", "lie", "sleep"],
+    ["face-happy", "face-sick", "face-sad", "face-cry", "face-angry"]
+  ],
+  "animations": {
+    "walk": {"frames": ["walk1", "walk2", "walk3", "walk2"], "fps": 6, "loop": true},
+    "starve": {"frames": ["starve1", "starve2", "starve3", "starve2"], "fps": 5, "loop": true},
+    "happy": {"frames": ["happy1", "happy2"], "fps": 5, "loop": true},
+    "doze": {"frames": ["sleep", "lie"], "fps": 0.7, "loop": true}
+  }
+}
