@@ -14,6 +14,8 @@ poked.
 - `index.html` — generated; ready for GitHub Pages / any static host
 - `manifest.webmanifest`, `sw.js` — PWA install + offline support when self-hosted;
   the service worker also shows the angry-raccoon push notification
+- `PWA_SETUP.md`: brief on how the web + installable setup is wired (manifest,
+  service worker, icons, and the pitfalls that broke installability once)
 - `supabase/` — backend reference: `schema.sql` (buddy + push tables/RPCs),
   `functions/send-nags/` (daily raccoon push sender), `DEPLOY_NAGS.md`
   (server setup brief)
@@ -63,6 +65,9 @@ shared again) — the streak data itself can keep living on the device.
 Host the repo with GitHub Pages (Settings → Pages → deploy from `main`), open the
 URL in Chrome, then **⋮ → Add to Home screen**. It installs like an app, works
 offline, and can show notifications.
+
+`PWA_SETUP.md` documents the whole browser-plus-install arrangement, including
+the head/manifest and PNG-icon requirements that Chrome enforces silently.
 
 ## Angry raccoon (lock-screen nag) 😡🦝
 
