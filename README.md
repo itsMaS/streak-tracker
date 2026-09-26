@@ -24,6 +24,22 @@ poked.
 
 - Daily log with optional plank duration (min:sec) and a migraine checkbox —
   a migraine day is skipped without breaking the streak, but doesn't increase it
+- Recovery day: the day after a migraine can be marked as recovery (one per
+  migraine). Like a migraine day it keeps the streak without growing it;
+  removing the migraine clears the recovery day after it
+- Migraine tab (bottom tab bar): days migraine-free, one-tap today log, optional
+  details per migraine (severity, duration, medication + whether it helped,
+  triggers incl. custom ones, symptoms, note), migraine days per month chart,
+  diary, patterns (top triggers, weekday, active vs quieter weeks), an
+  acute-medication overuse heads-up (8+ days in 30) and a nudge to fill in
+  details for a recent migraine
+- Doctor report: print / save-as-PDF summary for a neurologist (period presets
+  or custom dates, optional name + date of birth): key numbers, month-by-day
+  calendar grid, per-month table with a 10+ acute-medication-days flag,
+  medication effect, triggers, symptoms and the full diary
+- Backup: save everything to a JSON file and restore it later
+- Migraine details live in `state.migLog` and never leave the phone; buddy sync
+  only carries the migraine / recovery day flags
 - Plank line chart over time with 7D / 14D / 30D / All ranges and tap tooltips
 - Any past day is editable from the calendar or week strip: mark exercise
   (with plank time), migraine, or clear it

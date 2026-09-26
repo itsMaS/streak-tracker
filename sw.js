@@ -1,5 +1,5 @@
 /* Minimal offline cache so the installed PWA opens instantly, even without signal. */
-const CACHE = "streak-buddies-v18";
+const CACHE = "streak-buddies-v19";
 const ASSETS = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/angry.png"];
 
 self.addEventListener("install", (e) => {
@@ -60,7 +60,7 @@ self.addEventListener("push", (e) => {
     const d = new Date();
     const pad = (n) => String(n).padStart(2, "0");
     const today = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
-    /* A workout OR a migraine day counts as handled — the streak is safe. */
+    /* A workout, migraine or recovery day counts as handled — the streak is safe. */
     const done = !!(days && days[today]);
     if (done) {
       await self.registration.showNotification("Streak safe 🎉", {

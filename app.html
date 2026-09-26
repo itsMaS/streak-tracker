@@ -7,6 +7,7 @@
     --accent:#A78BDB; --accent-deep:#8E6FC9; --accent-soft:#F0EAFB;
     --mig:#7FAFD4; --mig-soft:#EAF3FA;
     --mint:#7ECBB0; --sun:#FFD98E;
+    --rec:#7ECBB0; --rec-soft:#E8F6F0;
     --line:#F0EAE2; --inset:#FAF6F0;
     --radius:22px;
   }
@@ -18,7 +19,7 @@
     font-family:"Nunito",system-ui,sans-serif;font-weight:700;
     min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;
   }
-  .app{max-width:430px;margin:0 auto;padding:16px 16px 70px;position:relative;z-index:1}
+  .app{max-width:430px;margin:0 auto;padding:16px 16px 100px;position:relative;z-index:1}
   .display{font-family:"Baloo 2","Nunito",sans-serif;font-weight:800}
 
   header{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 12px}
@@ -209,7 +210,7 @@
   .fd-farm svg{width:100%;display:block}
 
   /* wandering animals */
-  .walker{position:fixed;bottom:6px;left:0;font-size:34px;z-index:30;cursor:pointer;user-select:none;
+  .walker{position:fixed;bottom:calc(64px + env(safe-area-inset-bottom));left:0;font-size:34px;z-index:30;cursor:pointer;user-select:none;
     filter:drop-shadow(0 3px 3px rgba(70,64,60,.15))}
   .walker .in{display:inline-block;animation:waddle .38s ease-in-out infinite alternate}
   @keyframes waddle{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-4px) rotate(4deg)}}
@@ -336,6 +337,158 @@
   .unfriend{margin-top:12px;width:100%;background:none;border:none;color:#C4BBB1;font-size:11px;cursor:pointer;font-family:"Nunito";font-weight:700}
   .ro .cal-cell{cursor:default}
 
+  /* recovery day (the day after a migraine) */
+  .mig-box .ic svg{width:19px;height:19px;display:block;color:#4F86B5}
+  .mig-box.rec .ic svg{color:#4E9A80}
+  .mig-box.rec.on{border-color:var(--rec);background:var(--rec-soft)}
+  .mig-box.rec.on .hint{color:#4E9A80}
+  .schip.rec{border-color:#BFE5D6;background:var(--rec-soft);color:#4E9A80}
+  .schip.rec svg{width:16px;height:16px;vertical-align:-3px}
+  .day-dot .c svg{width:19px;height:19px}
+  .day-dot.rec .c{background:var(--rec-soft);border:1.5px solid #BFE5D6;color:#4E9A80}
+  .day-dot.ex.rec .c{background:var(--accent-soft);border:1.5px solid var(--rec)}
+  .cal-cell.rec{background:var(--rec-soft);color:#4E9A80;font-weight:800}
+  .cal-cell.rec::after{content:"";position:absolute;width:8px;height:8px;bottom:2px;right:2px;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234E9A80' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6v13M3 16h18v3M21 16v-3a3 3 0 0 0-3-3h-7v6'/%3E%3Ccircle cx='7' cy='12' r='2'/%3E%3C/svg%3E") no-repeat center/contain}
+  .cal-cell.ex.rec{background:var(--accent-soft);color:var(--accent-deep);box-shadow:inset 0 0 0 1.5px var(--rec)}
+  .cal-cell.ex.rec::after{content:"💪";background:none;width:auto;height:auto;bottom:1px}
+  .legend svg{width:12px;height:12px;vertical-align:-2px;color:#4E9A80}
+  .seg button svg{width:22px;height:22px;display:block;margin:0 auto;color:#4E9A80}
+  .seg button.on.s-rec{border-color:#BFE5D6;background:var(--rec-soft)}
+  .brow .bt svg{width:15px;height:15px;color:#4E9A80;vertical-align:-2px}
+  .info-list .i svg{width:17px;height:17px;vertical-align:-3px}
+  .linkbtn{border:none;background:none;padding:0;cursor:pointer;font-family:"Nunito";font-weight:800;
+    font-size:11px;color:#4F86B5;text-decoration:underline;text-underline-offset:2px}
+
+  /* tab bar */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:35;display:flex;justify-content:center;gap:8px;
+    background:rgba(255,255,255,.94);backdrop-filter:blur(8px);box-shadow:0 -4px 16px rgba(70,64,60,.08);
+    padding:6px 16px calc(6px + env(safe-area-inset-bottom))}
+  .tab{flex:1;max-width:200px;border:none;background:none;border-radius:14px;padding:6px 0 4px;cursor:pointer;
+    color:var(--muted);font-family:"Nunito";font-weight:800;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .tab svg{width:22px;height:22px}
+  .tab small{font-size:10.5px}
+  .tab.on{color:var(--accent-deep);background:var(--accent-soft)}
+  .tab.mig.on{color:#4F86B5;background:var(--mig-soft)}
+  .tab:active{transform:scale(.96)}
+
+  /* migraine tab */
+  .mf-ico{flex:none;width:64px;height:64px;color:#F2C45A}
+  .mf-ico svg{width:100%;height:100%}
+  .mf-ico.storm{color:var(--mig)}
+  .mig-num{color:#4F86B5}
+  .mig-today{display:flex;gap:10px}
+  .mig-today .mig-box{flex:1;padding:12px 8px}
+  .mig-today .mig-box .ic svg{width:24px;height:24px}
+  .mig-today .mig-box small{font-size:11px}
+  .mig-today .mig-box .hint{font-size:9.5px}
+  .soft-btn{width:100%;margin-top:10px;border:1.5px solid #B8D4EA;background:var(--mig-soft);color:#4F86B5;cursor:pointer;
+    font-family:"Baloo 2";font-weight:800;font-size:15px;padding:10px;border-radius:14px}
+  .alert{display:flex;gap:10px;align-items:flex-start;background:#FFF7E4;border:1.5px solid var(--sun);border-radius:18px;
+    padding:12px 14px;margin-top:14px;font-size:12.5px;line-height:1.5}
+  .alert>svg{flex:none;width:20px;height:20px;color:#B98A2B;margin-top:1px}
+  .alert.info{background:var(--mig-soft);border-color:#B8D4EA}
+  .alert.info>svg{color:#4F86B5}
+  .alert .acts{display:flex;gap:8px;margin-top:8px}
+  .alert .acts button{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:5px 12px;
+    font-family:"Nunito";font-weight:800;font-size:12px;color:var(--ink);cursor:pointer}
+  .alert .acts button.pri{border-color:#B8D4EA;color:#4F86B5}
+  .sw{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+  .drow{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1.5px dashed var(--line);cursor:pointer}
+  .drow:last-of-type{border-bottom:none}
+  .drow .dd{flex:none;width:40px;text-align:center;font-family:"Baloo 2";font-weight:800;font-size:19px;line-height:1}
+  .drow .dd small{display:block;font-family:"Nunito";font-size:9.5px;color:var(--muted);margin-top:2px}
+  .drow .dm{flex:1;min-width:0;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .drow .chev{flex:none;color:#D8D0C6;font-size:18px}
+  .sevpill{display:inline-block;border-radius:99px;padding:1px 8px;font-size:10.5px;margin-right:6px;background:var(--inset);color:var(--muted)}
+  .sevpill.s1{background:#E3EEF8;color:#4F86B5}
+  .sevpill.s2{background:#BFD9EE;color:#2F5F88}
+  .sevpill.s3{background:#4F86B5;color:#fff}
+  .more-btn{display:block;margin:8px auto 0;border:none;background:none;color:var(--muted);font-family:"Nunito";
+    font-weight:800;font-size:12px;cursor:pointer}
+  .pat h3{font-family:"Baloo 2";font-weight:800;font-size:12px;color:var(--muted);margin:14px 0 6px;letter-spacing:.3px}
+  .pat h3:first-child{margin-top:0}
+  .hbar{display:flex;align-items:center;gap:8px;font-size:12px;margin:5px 0}
+  .hbar .nm{width:96px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hbar .tr{flex:1;height:10px;background:var(--inset);border-radius:99px;overflow:hidden}
+  .hbar .tr i{display:block;height:100%;background:var(--mig);border-radius:99px}
+  .hbar .n{width:24px;text-align:right;color:var(--muted)}
+  .wkbars{display:flex;gap:6px;align-items:flex-end;height:64px}
+  .wkbars .wb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .wkbars .wb i{display:block;width:100%;max-width:26px;border-radius:7px 7px 3px 3px;background:#DCE7F0;min-height:3px}
+  .wkbars .wb.hi i{background:var(--mig)}
+  .wkbars .wb small{font-size:10px;color:var(--muted);margin-top:4px}
+  .pat-note{font-size:12px;line-height:1.55;background:var(--inset);border-radius:12px;padding:9px 11px;margin-top:8px}
+  .pat-note b{color:#4F86B5}
+  .tool{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;padding:10px 2px;
+    border-bottom:1.5px dashed var(--line);cursor:pointer;text-align:left;font-family:"Nunito";font-weight:800;color:var(--ink);font-size:14px}
+  .tool:last-child{border-bottom:none}
+  .tool .ti{flex:none;width:36px;height:36px;border-radius:12px;background:var(--mig-soft);color:#4F86B5;display:grid;place-items:center}
+  .tool .ti svg{width:20px;height:20px}
+  .tool small{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-top:1px}
+  .tool .chev{margin-left:auto;color:#D8D0C6;font-size:18px}
+
+  /* migraine details / meds / report sheets */
+  .mchips{display:flex;flex-wrap:wrap;gap:6px}
+  .mchip{border:1.5px solid var(--line);background:var(--card);color:var(--muted);border-radius:99px;padding:6px 12px;
+    font-family:"Nunito";font-weight:800;font-size:12.5px;cursor:pointer}
+  .mchip.on{border-color:var(--mig);background:var(--mig-soft);color:#4F86B5}
+  .mchip.sev2.on{background:#BFD9EE;color:#2F5F88}
+  .mchip.sev3.on{background:#4F86B5;border-color:#4F86B5;color:#fff}
+  .mchip.add{border-style:dashed}
+  .medrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .eff{display:flex;gap:4px}
+  .eff button{border:1.5px solid var(--line);background:var(--inset);border-radius:99px;padding:3px 9px;cursor:pointer;
+    font-family:"Nunito";font-weight:800;font-size:11px;color:var(--muted)}
+  .eff button.on.y{border-color:var(--mint);background:#E8F6F0;color:#4E9A80}
+  .eff button.on.p{border-color:var(--sun);background:#FFF7E4;color:#B98A2B}
+  .eff button.on.n{border-color:#F3C1BB;background:#FDEEEC;color:#C0504A}
+  .md-add{display:flex;gap:8px;margin-top:8px}
+  .md-add .tinput{flex:1;padding:8px 11px;font-size:13px}
+  textarea.tinput{resize:vertical;min-height:64px;font-size:14px;font-weight:700}
+  .mrow{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1.5px dashed var(--line);font-size:14px}
+  .mrow small{color:var(--muted);font-size:11px;margin-left:auto}
+  .mrow button{border:none;background:none;color:#C4BBB1;font-size:13px;cursor:pointer;padding:2px 4px}
+  .rp-dates{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--muted)}
+  .rp-dates .tinput{flex:1;padding:8px 10px;font-size:13px}
+
+  /* doctor report: only ever visible on paper / in the saved PDF */
+  #report{display:none}
+  @media print{
+    @page{margin:12mm}
+    html,body{background:#fff!important}
+    .app,.tabbar,.sheet-wrap,.overlay,#confetti,#toasts,.walker{display:none!important}
+    #report{display:block!important}
+  }
+  #report{font-family:"Nunito",system-ui,sans-serif;font-weight:600;color:#2E2A27;font-size:10.5pt;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #report h1{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:20pt;margin:0}
+  #report h2{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:12.5pt;margin:18px 0 6px;color:#4F86B5;break-after:avoid}
+  #report .meta{color:#6B635C;font-size:9.5pt;margin-top:2px}
+  #report .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+  #report .kpi{border:1px solid #DDE6EE;border-radius:8px;padding:8px}
+  #report .kpi b{display:block;font-family:"Baloo 2",sans-serif;font-size:16pt;line-height:1.1}
+  #report .kpi small{font-size:8.5pt;color:#6B635C}
+  #report p{margin:6px 0;font-size:9.5pt}
+  #report table{width:100%;border-collapse:collapse;font-size:9pt}
+  #report th{text-align:left;font-weight:800;color:#6B635C;border-bottom:1.5px solid #CFC8BD;padding:4px 5px}
+  #report td{border-bottom:1px solid #EEE8E0;padding:4px 5px;vertical-align:top}
+  #report tr{break-inside:avoid}
+  #report .warn{color:#C0504A;font-weight:800}
+  #report table.grid{table-layout:fixed}
+  #report .grid th,#report .grid td{padding:0;text-align:center;border:1px solid #fff;font-size:7pt;height:15px;color:#2E2A27}
+  #report .grid .mo{width:52px;text-align:left;padding-right:4px;white-space:nowrap;font-size:8pt;border:none}
+  #report .grid .c-s3{background:#4F86B5;color:#fff}
+  #report .grid .c-s2{background:#7FAFD4;color:#fff}
+  #report .grid .c-s1{background:#BFD9EE}
+  #report .grid .c-m{background:#DCE7F0}
+  #report .grid .c-r{background:#CDEEDF;color:#3E7F68}
+  #report .grid .c-x{background:#EFE8FA;color:#8E6FC9}
+  #report .grid .c-e{background:#F5F2EE}
+  #report .legend-r{font-size:8.5pt;color:#6B635C;margin-top:6px;display:flex;gap:12px;flex-wrap:wrap}
+  #report .legend-r i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+  #report .foot{margin-top:18px;font-size:8pt;color:#8A8178}
+
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
   }
@@ -343,7 +496,7 @@
 
 <div class="app">
   <header>
-    <div class="wordmark">Streak 🐾</div>
+    <div class="wordmark" id="wordmark">Streak 🐾</div>
     <div class="hbtns">
       <button class="gear" id="installBtn" aria-label="Install app" style="display:none">📲</button>
       <button class="gear" id="infoBtn" aria-label="Help">❓</button>
@@ -352,6 +505,7 @@
     </div>
   </header>
 
+  <div id="streakView">
   <div class="card hero">
     <div class="mascot" id="mascot">🐼</div>
     <div>
@@ -388,7 +542,7 @@
       <button class="cal-nav" id="calNext">▶</button>
     </div>
     <div class="cal-grid" id="calGrid"></div>
-    <div class="legend"><span>💪 workout</span><span>🧠 migraine — streak kept</span><span>tap a day to edit</span></div>
+    <div class="legend"><span>💪 workout</span><span>🧠 migraine — streak kept</span><span><i data-ico="bed"></i> recovery - streak kept</span><span>tap a day to edit</span></div>
   </div>
 
   <div class="card">
@@ -409,7 +563,45 @@
     <div class="card-note">Logging a workout earns 🪙 10 × your streak (up to 30×) — once per day.
       Locked animals open up at streak milestones; each extra copy of an animal costs 25% more.</div>
   </div>
+  </div>
+
+  <!-- migraine diary tab: flags live in state.days, details in state.migLog (never synced) -->
+  <div id="migView" hidden>
+    <div class="card hero">
+      <div class="mf-ico" id="mfIco"></div>
+      <div>
+        <div class="hero-num mig-num" id="mfNum">0</div>
+        <div class="hero-sub" id="mfSub"></div>
+      </div>
+    </div>
+    <div id="migAlerts"></div>
+    <div class="card">
+      <h2>Today</h2>
+      <div id="migToday"></div>
+    </div>
+    <div class="card">
+      <h2>Migraine days per month</h2>
+      <div id="migMonths"></div>
+    </div>
+    <div class="card">
+      <h2>Diary</h2>
+      <div id="migDiary"></div>
+    </div>
+    <div class="card">
+      <h2>Patterns</h2>
+      <div class="pat" id="migPatterns"></div>
+    </div>
+    <div class="card">
+      <h2>Doctor &amp; backup</h2>
+      <div id="migTools"></div>
+    </div>
+  </div>
 </div>
+
+<nav class="tabbar">
+  <button class="tab" data-tab="streak"><i data-ico="flame"></i><small>Streak</small></button>
+  <button class="tab mig" data-tab="mig"><i data-ico="storm"></i><small>Migraine</small></button>
+</nav>
 
 <div class="overlay" id="overlay">
   <div class="party">
@@ -500,12 +692,13 @@
     <div class="seg">
       <button class="s-ex" id="segEx">💪<div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">workout</div></button>
       <button class="s-mig" id="segMig">🧠<div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">migraine</div></button>
+      <button class="s-rec" id="segRec"><i data-ico="bed"></i><div style="font-size:10px;font-family:'Nunito';font-weight:800;color:var(--muted);margin-top:3px">recovery</div></button>
     </div>
     <div class="field" id="edActsField">
       <small>Activities</small>
       <div class="act-chips" id="edActs"></div>
     </div>
-    <div class="card-note">Toggle both off to clear the day.</div>
+    <div class="card-note">Toggle all off to clear the day. <button class="linkbtn" id="edDet">Migraine details</button></div>
     <button class="done-btn" id="edSave">Save</button>
   </div>
 </div>
@@ -517,6 +710,8 @@
     <ul class="info-list">
       <li><span class="i">💪</span><span>Log a workout every day to grow the streak. Adding activities (plank, run, ride…) with how much you did is optional.</span></li>
       <li><span class="i">🧠</span><span>Migraine day: the streak is kept safe but doesn't grow. You can still log a workout on a migraine day — then it counts.</span></li>
+      <li><span class="i" data-ico="bed"></span><span>Recovery day: the day after a migraine can be marked as recovery. Like a migraine day it keeps the streak safe without growing it. One per migraine.</span></li>
+      <li><span class="i" data-ico="storm"></span><span>Migraine tab: optional details (severity, meds, triggers, notes), patterns, a doctor report you can save as PDF, and a backup file. Details stay on this phone and are never shared with buddies.</span></li>
       <li><span class="i">📅</span><span>Tap any past day in the calendar or week row to add, change, or clear it.</span></li>
       <li><span class="i">📈</span><span>The graph shows plank duration over time — it appears once you've logged a plank. Tap a dot for details.</span></li>
       <li><span class="i">🏅</span><span>Milestones unlock at 3, 7, 14, 21, 30, 50, 75 and 100 days.</span></li>
@@ -581,6 +776,57 @@
   </div>
 </div>
 
+<!-- migraine details (all optional) -->
+<div class="sheet-wrap" id="mdWrap">
+  <div class="sheet">
+    <h2 id="mdTitle"></h2>
+    <div class="sheet-note">Everything here is optional and stays on this phone.</div>
+    <div class="fd-sec">SEVERITY</div><div class="mchips" id="mdSev"></div>
+    <div class="fd-sec">HOW LONG</div><div class="mchips" id="mdDur"></div>
+    <div class="fd-sec">MEDICATION</div><div id="mdMeds"></div>
+    <div class="fd-sec">TRIGGERS</div><div class="mchips" id="mdTrig"></div>
+    <div class="md-add"><input class="tinput" id="mdTrigNew" maxlength="24" placeholder="Add your own trigger" autocomplete="off"><button class="addbtn" id="mdTrigAdd">+ Add</button></div>
+    <div class="fd-sec">SYMPTOMS</div><div class="mchips" id="mdSym"></div>
+    <div class="fd-sec">NOTE</div>
+    <textarea class="tinput" id="mdNote" maxlength="500" rows="3" placeholder="Anything worth remembering"></textarea>
+    <button class="done-btn" id="mdSave">Save</button>
+  </div>
+</div>
+
+<!-- medication list -->
+<div class="sheet-wrap" id="medWrap">
+  <div class="sheet">
+    <h2>My medications</h2>
+    <div class="sheet-note">Acute medicines (taken during an attack) show up as quick taps in migraine details.
+      Preventive ones are listed on the doctor report.</div>
+    <div id="medList"></div>
+    <div class="md-add"><input class="tinput" id="medName" maxlength="40" placeholder="e.g. Sumatriptan 50 mg" autocomplete="off"><button class="addbtn" id="medAdd">+ Add</button></div>
+    <div class="mchips" id="medKind" style="margin-top:8px"></div>
+    <button class="done-btn" id="medDone">Done</button>
+  </div>
+</div>
+
+<!-- doctor report -->
+<div class="sheet-wrap" id="rpWrap">
+  <div class="sheet">
+    <h2>Doctor report</h2>
+    <div class="sheet-note">A printable summary for your neurologist. On the next screen choose "Save as PDF".</div>
+    <div class="fd-sec">PERIOD</div>
+    <div class="mchips" id="rpRange"></div>
+    <div class="rp-dates" id="rpCustom" hidden>
+      <input class="tinput" type="date" id="rpFrom"><span>to</span><input class="tinput" type="date" id="rpTo">
+    </div>
+    <div class="fd-sec">ON THE REPORT (OPTIONAL)</div>
+    <input class="tinput" id="rpName" maxlength="60" placeholder="Your name" autocomplete="off">
+    <div class="rp-dates"><span>Born</span><input class="tinput" type="date" id="rpDob"></div>
+    <div class="sheet-note" id="rpSummary" style="margin:12px 0 0"></div>
+    <button class="done-btn" id="rpGo">Create PDF</button>
+  </div>
+</div>
+<input type="file" id="bkFile" accept="application/json,.json" hidden>
+
+<div id="report"></div>
+
 <div id="toasts"></div>
 
 <script>
@@ -609,6 +855,20 @@ const ACTS=[
   {id:"other",e:"✨",name:"Other"}
 ];
 const actById=id=>ACTS.find(a=>a.id===id)||{id,e:"✨",name:id};
+/* Drawn line icons for the migraine / recovery UI (no emoji in new UI). */
+const svgI=p=>'<svg class="act-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+const ICO={
+  bed:svgI('<path d="M3 6v13M3 16h18v3M21 16v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="12" r="2"/>'),
+  storm:svgI('<path d="M7 16a4 4 0 1 1 .9-7.9A5 5 0 0 1 17.5 9 3.5 3.5 0 0 1 17 16"/><path d="M12.5 12.5l-2 3.5h3l-2 3.5"/>'),
+  flame:svgI('<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 2.5-5 .3 1.8 1.2 2.8 2.2 3C11 8.5 11 5.5 12 3z"/>'),
+  sun:svgI('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  pill:svgI('<path d="M10.5 20.5l-7-7a4.95 4.95 0 0 1 7-7l7 7a4.95 4.95 0 0 1-7 7z"/><path d="M8.5 8.5l7 7"/>'),
+  doc:svgI('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>'),
+  down:svgI('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
+  up:svgI('<path d="M12 16V5M7 10l5-5 5 5M5 20h14"/>'),
+  alert:svgI('<path d="M12 3L2 20h20z"/><path d="M12 10v4M12 17h.01"/>'),
+  note:svgI('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>')
+};
 
 /* Farm economy: logging today's workout pays COIN_BASE × streak (capped),
    once per calendar day (state.lastEarn). Backfills never pay, spends never
@@ -626,22 +886,32 @@ const animalCost=(a,owned)=>Math.round(a.price*Math.pow(1.25,owned));
 
 /* ---------- state ---------- */
 const KEY="wiggle-squad-v1";
-let state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[],
-  coins:0,farm:{},pets:[],lastEarn:""};
+/* migLog/meds/trigCustom/profile are the migraine diary: local only, never synced */
+const freshState=()=>({v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[],
+  coins:0,farm:{},pets:[],lastEarn:"",tab:"streak",
+  migLog:{},meds:[],trigCustom:[],profile:{name:"",dob:""},lastExport:"",lastBackup:"",nudgeSkip:{}});
+let state=freshState();
 try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
-for(const k in state.days){
-  const e=state.days[k];
-  if(e===true) state.days[k]={ex:true};
-  else if(e&&e.t==="ex"){ state.days[k]={ex:true}; if(e.p)state.days[k].p=e.p; }
-  else if(e&&e.t==="mig") state.days[k]={mig:true};
+function normalizeState(){
+  for(const k in state.days){
+    const e=state.days[k];
+    if(e===true) state.days[k]={ex:true};
+    else if(e&&e.t==="ex"){ state.days[k]={ex:true}; if(e.p)state.days[k].p=e.p; }
+    else if(e&&e.t==="mig") state.days[k]={mig:true};
+  }
+  /* v4: the old plank field becomes just another catalog activity (e.acts.plank) */
+  for(const k in state.days){
+    const e=state.days[k];
+    if(e&&e.p){ e.acts=Object.assign({plank:e.p},e.acts||{}); delete e.p; }
+  }
+  const f=freshState();
+  for(const k of ["migLog","nudgeSkip","profile"])
+    if(!state[k]||typeof state[k]!=="object"||Array.isArray(state[k]))state[k]=f[k];
+  for(const k of ["meds","trigCustom"])if(!Array.isArray(state[k]))state[k]=[];
+  state.v=4;
 }
-/* v4: the old plank field becomes just another catalog activity (e.acts.plank) */
-for(const k in state.days){
-  const e=state.days[k];
-  if(e&&e.p){ e.acts=Object.assign({plank:e.p},e.acts||{}); delete e.p; }
-}
-state.v=4;
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}mirrorDays();}
+normalizeState();
+function save(){cleanOrphanRec();try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}mirrorDays();}
 /* Mirror the day log into IndexedDB — the service worker reads it there when a
    push arrives, to decide whether the raccoon should be angry (localStorage is
    invisible to service workers). */
@@ -667,6 +937,8 @@ const iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
 const today=()=>iso(new Date());
 const dayOfYear=()=>{const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);};
 const fmtDur=s=>Math.floor(s/60)+":"+pad(s%60);
+const shiftDay=(ds,n)=>{const d=new Date(ds+"T12:00:00");d.setDate(d.getDate()+n);return iso(d);};
+const daysBetween=(a,b)=>Math.round((new Date(b+"T12:00:00")-new Date(a+"T12:00:00"))/864e5);
 /* e.p fallback covers buddies still syncing from an older app version */
 const plankSecs=e=>(e&&e.acts&&e.acts.plank)||(e&&e.p)||0;
 const hasPlank=days=>Object.keys(days).some(k=>plankSecs(days[k])>0);
@@ -677,7 +949,7 @@ function fmtAmt(id,s){
   return h?h+"h"+(m%60?" "+(m%60)+"m":""):m+"m";
 }
 
-/* ---------- streak: workout counts, migraine-only bridges, empty breaks ---------- */
+/* ---------- streak: workout counts, migraine / recovery-only bridges, empty breaks ---------- */
 function currentStreak(days=state.days){
   const d=new Date();
   if(!days[today()]) d.setDate(d.getDate()-1);
@@ -769,7 +1041,9 @@ function tick(){
 /* ---------- today card ---------- */
 function renderToday(){
   const t=today(), e=state.days[t]||{}, c=$("todayCard");
-  const migOn=!!e.mig;
+  const migOn=!!e.mig, recOn=!!e.rec, recOK=recAllowed(t);
+  const recBox=(recOK||recOn)
+    ?'<div class="mig-box rec'+(recOn?" on":"")+'" id="recBox"><span class="ic">'+ICO.bed+'</span><small>Recovery</small><span class="hint">keeps streak</span></div>':'';
   if(!e.ex){
     c.innerHTML=
       '<div class="logrow">'+
@@ -777,10 +1051,15 @@ function renderToday(){
           '<button class="achip add" id="actAdd">+ add activity</button>'+
         '</div></div>'+
         '<div class="mig-box'+(migOn?" on":"")+'" id="migBox"><span class="ic">🧠</span><small>Migraine</small><span class="hint">keeps streak</span></div>'+
+        recBox+
       '</div>'+
       '<button class="logbtn" id="logBtn">Log workout 💪</button>'+
-      (migOn?'<div class="card-note">Migraine marked — today is streak-safe. A workout still counts if you log one.</div>':'');
+      (migOn?'<div class="card-note">Migraine marked — today is streak-safe. A workout still counts if you log one. '+
+        '<button class="linkbtn" id="migDet">'+(state.migLog[t]?"Edit details":"Add details")+'</button></div>':'')+
+      (recOn?'<div class="card-note">Recovery day - streak-safe after yesterday\'s migraine. A workout still counts if you log one.</div>':'');
     $("migBox").onclick=toggleMig;
+    if($("recBox"))$("recBox").onclick=toggleRec;
+    if($("migDet"))$("migDet").onclick=()=>openMigDetails(t);
     $("logBtn").onclick=logWorkout;
     $("actAdd").onclick=()=>openActPicker(addTodayAct);
   }else{
@@ -793,6 +1072,7 @@ function renderToday(){
     c.innerHTML=
       '<div class="logged"><div class="status-chips">'+chips+
         (migOn?'<span class="schip mig">🧠</span>':'')+
+        (recOn?'<span class="schip rec">'+ICO.bed+'</span>':'')+
       '</div><button class="editbtn" id="todayEdit" aria-label="Edit today">✎</button></div>';
     $("todayEdit").onclick=()=>openEditor(t);
   }
@@ -810,14 +1090,19 @@ function addTodayAct(id,secs){
   if(first)celebrate(currentStreak(),amt);else pop();
 }
 function toggleMig(){
-  const t=today(), e=state.days[t]||{};
-  if(e.mig){ delete e.mig; if(!e.ex) delete state.days[t]; else state.days[t]=e; }
-  else{
-    e.mig=true; state.days[t]=e;
+  const t=today(), on=!(state.days[t]&&state.days[t].mig);
+  setDayFlag(t,"mig",on);
+  if(on){
     const b=$("migBox").getBoundingClientRect();
     burst(b.left+b.width/2,b.top,16,false,true);
     note(392,0,.15,.08);buzz(20);
   }
+  save();render();queueSync();
+}
+function toggleRec(){
+  const t=today(), on=!(state.days[t]&&state.days[t].rec);
+  setDayFlag(t,"rec",on);
+  if(on){note(330,0,.18,.07);buzz(15);}
   save();render();queueSync();
 }
 function logWorkout(){
@@ -1266,8 +1551,8 @@ function render(){
     const d=new Date(mon);d.setDate(mon.getDate()+i);
     const ds=iso(d),e=state.days[ds],fut=ds>ts;
     const el=document.createElement("div");
-    el.className="day-dot"+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(ds===ts?" today":"")+(fut?" future":"");
-    const stamp=fut?"":(e?(e.ex?SQUAD[(d.getDate()+d.getMonth())%SQUAD.length]:"🧠"):"·");
+    el.className="day-dot"+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(e&&e.rec?" rec":"")+(ds===ts?" today":"")+(fut?" future":"");
+    const stamp=fut?"":(e?(e.ex?SQUAD[(d.getDate()+d.getMonth())%SQUAD.length]:(e.rec?ICO.bed:"🧠")):"·");
     el.innerHTML='<div class="c">'+stamp+'</div><small>'+DOW[i]+'</small>';
     if(!fut)el.querySelector(".c").onclick=()=>openEditor(ds);
     wk.appendChild(el);
@@ -1289,6 +1574,9 @@ function render(){
   $("statBest").textContent=best;
   const mP=today().slice(0,7);
   $("statMonth").textContent=exKeys.filter(d=>d.startsWith(mP)).length;
+
+  renderMig();
+  applyTab();
 }
 function calHTML(days,y,m){
   const t=today();
@@ -1298,7 +1586,7 @@ function calHTML(days,y,m){
   for(let i=0;i<first;i++)h+="<div></div>";
   for(let day=1;day<=len;day++){
     const ds=y+"-"+pad(m+1)+"-"+pad(day),e=days[ds];
-    h+='<div class="cal-cell'+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(ds===t?" today":"")+(ds>t?" future":"")+'" data-ds="'+ds+'">'+day+'</div>';
+    h+='<div class="cal-cell'+(e&&e.ex?" ex":"")+(e&&e.mig?" mig":"")+(e&&e.rec?" rec":"")+(ds===t?" today":"")+(ds>t?" future":"")+'" data-ds="'+ds+'">'+day+'</div>';
   }
   return h;
 }
@@ -1400,7 +1688,7 @@ function renderBuddies(){
     h+='<div class="brow'+(me?" me":"")+'" data-id="'+f.id+'">'+
       '<span class="av">'+(me?SQUAD[dayOfYear()%SQUAD.length]:buddyAnimal(f.id))+'</span>'+
       '<span class="bn">'+esc(f.name)+(me?'<small>you</small>':"")+'</span>'+
-      '<span class="bt">'+(f.e?(f.e.ex?"💪":"🧠"):"·")+'</span>'+
+      '<span class="bt">'+(f.e?(f.e.ex?"💪":(f.e.rec?ICO.bed:"🧠")):"·")+'</span>'+
       '<span class="bs">'+f.streak+'</span>'+
       '</div>';
   }
@@ -1569,11 +1857,11 @@ async function sendBuddyEvent(id,kind,okMsg){
 });
 
 /* ---------- day editor ---------- */
-let edDate=null,edEx=false,edMig=false,edActs={};
+let edDate=null,edEx=false,edMig=false,edRec=false,edActs={};
 function openEditor(ds){
   edDate=ds;
   const e=state.days[ds]||{};
-  edEx=!!e.ex; edMig=!!e.mig;
+  edEx=!!e.ex; edMig=!!e.mig; edRec=!!e.rec;
   edActs=Object.assign({},e.acts||{});
   if(e.p&&!edActs.plank)edActs.plank=e.p;
   $("edDate").textContent=new Date(ds+"T12:00:00").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric"});
@@ -1602,13 +1890,18 @@ function renderEdActs(){
 function refreshSeg(){
   $("segEx").classList.toggle("on",edEx);
   $("segMig").classList.toggle("on",edMig);
+  $("segRec").classList.toggle("on",edRec);
+  /* recovery is only offered the day after a migraine */
+  $("segRec").style.display=(edRec||recAllowed(edDate))?"":"none";
+  $("edDet").style.display=edMig?"":"none";
   $("edActsField").style.display=edEx?"":"none";
 }
 $("segEx").onclick=()=>{edEx=!edEx;refreshSeg();};
-$("segMig").onclick=()=>{edMig=!edMig;refreshSeg();};
-$("edSave").onclick=()=>{
+$("segMig").onclick=()=>{edMig=!edMig;if(edMig)edRec=false;refreshSeg();};
+$("segRec").onclick=()=>{edRec=!edRec;if(edRec)edMig=false;refreshSeg();};
+function saveEditor(){
   const wasEx=!!(state.days[edDate]&&state.days[edDate].ex);
-  if(!edEx&&!edMig){delete state.days[edDate];}
+  if(!edEx&&!edMig&&!edRec){delete state.days[edDate];}
   else{
     const e={};
     if(edEx){
@@ -1616,6 +1909,7 @@ $("edSave").onclick=()=>{
       if(Object.keys(edActs).length)e.acts=Object.assign({},edActs);
     }
     if(edMig)e.mig=true;
+    else if(edRec)e.rec=true;
     state.days[edDate]=e;
   }
   /* Logging *today* through the editor still pays out; backfills don't. */
@@ -1624,8 +1918,520 @@ $("edSave").onclick=()=>{
   save();render();queueSync();
   $("edWrap").classList.remove("show");
   if(amt){toast("+"+amt+" 🪙 earned");flashCoins();}
+}
+$("edSave").onclick=()=>{saveEditor();pop();};
+$("edDet").onclick=()=>{const ds=edDate;saveEditor();openMigDetails(ds);};
+
+/* ---------- migraine diary ----------
+   The mig / rec flags live in state.days: the streak, the raccoon push and
+   buddy sync all need them. Everything else about a migraine (severity,
+   duration, meds, triggers, symptoms, note) lives in state.migLog keyed by
+   date, which never leaves the phone — buddy_sync only uploads state.days.
+   A recovery day is only valid the day after a migraine (one per migraine);
+   save() clears any that lost their migraine. */
+const SEVS=[{v:1,name:"Mild"},{v:2,name:"Moderate"},{v:3,name:"Severe"}];
+const DURS=[{id:"lt4",name:"< 4h"},{id:"4to12",name:"4-12h"},{id:"12to24",name:"12-24h"},{id:"d1to3",name:"1-3 days"}];
+const TRIGGERS=[
+  {id:"sleep",name:"Poor sleep"},{id:"stress",name:"Stress"},{id:"alcohol",name:"Alcohol"},
+  {id:"meal",name:"Skipped meal"},{id:"water",name:"Dehydration"},{id:"weather",name:"Weather"},
+  {id:"screen",name:"Screen time"},{id:"period",name:"Period"},{id:"caffeine",name:"Caffeine"}
+];
+const SYMPTOMS=[
+  {id:"aura",name:"Aura"},{id:"nausea",name:"Nausea"},{id:"vomit",name:"Vomiting"},
+  {id:"light",name:"Light sensitive"},{id:"sound",name:"Sound sensitive"},{id:"oneside",name:"One-sided"}
+];
+const EFFECTS=[{id:"y",name:"helped"},{id:"p",name:"partly"},{id:"n",name:"didn't help"}];
+const OVERUSE_WARN=8, OVERUSE_MONTH=10;
+const SEV_COL=["#DCE7F0","#BFD9EE","#7FAFD4","#4F86B5"];
+
+const recAllowed=ds=>{const p=state.days[shiftDay(ds,-1)];return !!(p&&p.mig);};
+/* migraine and recovery exclude each other; an emptied day is removed */
+function setDayFlag(ds,flag,on){
+  const e=state.days[ds]||{};
+  if(on){e[flag]=true;delete e[flag==="mig"?"rec":"mig"];}
+  else delete e[flag];
+  if(e.ex||e.mig||e.rec)state.days[ds]=e;else delete state.days[ds];
+}
+function cleanOrphanRec(){
+  let n=0;
+  for(const k of Object.keys(state.days)){
+    const e=state.days[k];
+    if(!e||!e.rec||(!e.mig&&recAllowed(k)))continue;
+    delete e.rec;n++;
+    if(!e.ex&&!e.mig)delete state.days[k];
+  }
+  if(n)toast("Recovery day cleared - no migraine the day before");
+}
+const allTriggers=()=>TRIGGERS.concat(state.trigCustom||[]);
+const trigName=id=>(allTriggers().find(x=>x.id===id)||{name:id}).name;
+const symName=id=>(SYMPTOMS.find(x=>x.id===id)||{name:id}).name;
+const durName=id=>(DURS.find(x=>x.id===id)||{name:""}).name;
+const medById=id=>state.meds.find(m=>m.id===id)||{id,name:"(removed)",kind:"acute"};
+const fmtDay=(ds,o)=>new Date(ds+"T12:00:00").toLocaleDateString("en-GB",o||{day:"numeric",month:"short",year:"numeric"});
+const migKeys=(from,to)=>Object.keys(state.days).filter(k=>k>=from&&k<=to&&state.days[k].mig).sort();
+const flagCount=(f,from,to)=>Object.keys(state.days).filter(k=>k>=from&&k<=to&&state.days[k][f]).length;
+function lastMig(){
+  const t=today();let l=null;
+  for(const k in state.days)if(state.days[k].mig&&k<=t&&(!l||k>l))l=k;
+  return l;
+}
+/* days in [from,to] on which an acute med was logged for a migraine */
+function acuteDays(from,to){
+  const acute=new Set(state.meds.filter(m=>m.kind!=="prev").map(m=>m.id));
+  return migKeys(from,to).filter(k=>Object.keys((state.migLog[k]||{}).meds||{}).some(id=>acute.has(id))).length;
+}
+/* the most recent migraine in the last 3 days that has no details yet */
+function nudgeDay(){
+  const t=today();
+  for(let i=1;i<=3;i++){
+    const ds=shiftDay(t,-i),e=state.days[ds];
+    if(e&&e.mig&&!state.migLog[ds]&&!state.nudgeSkip[ds])return ds;
+  }
+  return null;
+}
+
+/* ---------- tabs ---------- */
+function applyTab(){
+  const mig=state.tab==="mig";
+  $("streakView").hidden=mig;$("migView").hidden=!mig;
+  $("wordmark").textContent=mig?"Migraine diary":"Streak 🐾";
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===(mig?"mig":"streak")));
+}
+document.querySelectorAll(".tab").forEach(b=>{
+  b.onclick=()=>{
+    if(state.tab===b.dataset.tab)return;
+    state.tab=b.dataset.tab;save();applyTab();scrollTo(0,0);
+  };
+});
+
+/* ---------- migraine tab ---------- */
+let diaryAll=false;
+function renderMig(){
+  const t=today(),last=lastMig(),since=last?daysBetween(last,t):null;
+  $("mfIco").className="mf-ico"+(since===0?" storm":"");
+  $("mfIco").innerHTML=since===0?ICO.storm:ICO.sun;
+  $("mfNum").textContent=since===null?"-":since;
+  const from30=shiftDay(t,-29);
+  $("mfSub").innerHTML=(since===0?"migraine today · go easy":since===null?"no migraines logged":since===1?"day migraine-free":"days migraine-free")+
+    '<br><b>'+flagCount("mig",from30,t)+'</b> migraine · <b>'+flagCount("rec",from30,t)+'</b> recovery in 30 days';
+  renderMigAlerts();
+  renderMigToday();
+  $("migMonths").innerHTML=migMonthsHTML();
+  renderDiary();
+  renderPatterns();
+  renderTools();
+}
+function renderMigAlerts(){
+  const t=today(),acute=acuteDays(shiftDay(t,-29),t),nd=nudgeDay();
+  let h="";
+  if(acute>=OVERUSE_WARN)h+='<div class="alert">'+ICO.alert+'<div>Acute medication on <b>'+acute+' of the last 30 days</b>. '+
+    'Taking it on 10 or more days a month can make headaches more frequent (medication-overuse headache) - worth raising with your doctor.</div></div>';
+  if(nd)h+='<div class="alert info">'+ICO.note+'<div>Add details for '+fmtDay(nd,{weekday:"long"})+'\'s migraine? Only if you feel like it.'+
+    '<div class="acts"><button class="pri" id="ndGo">Add details</button><button id="ndSkip">Not now</button></div></div></div>';
+  $("migAlerts").innerHTML=h;
+  if(nd){
+    $("ndGo").onclick=()=>openMigDetails(nd);
+    $("ndSkip").onclick=()=>{
+      const keep={},cut=shiftDay(today(),-7);
+      for(const k in state.nudgeSkip)if(k>=cut)keep[k]=1;
+      keep[nd]=1;state.nudgeSkip=keep;save();renderMig();
+    };
+  }
+}
+function renderMigToday(){
+  const t=today(),e=state.days[t]||{},recOK=recAllowed(t);
+  let h='<div class="mig-today">'+
+    '<div class="mig-box'+(e.mig?" on":"")+'" id="mtMig"><span class="ic">'+ICO.storm+'</span><small>Migraine</small>'+
+      '<span class="hint">'+(e.mig?"marked":"tap to mark")+'</span></div>';
+  if(recOK||e.rec)h+='<div class="mig-box rec'+(e.rec?" on":"")+'" id="mtRec"><span class="ic">'+ICO.bed+'</span><small>Recovery</small>'+
+      '<span class="hint">'+(e.rec?"marked":"after yesterday")+'</span></div>';
+  h+='</div>';
+  if(e.mig)h+='<button class="soft-btn" id="mtDet">'+(state.migLog[t]?"Edit details":"Add details (optional)")+'</button>';
+  else h+='<div class="card-note">One tap is enough - details can wait until you feel better. Both keep the streak safe.</div>';
+  $("migToday").innerHTML=h;
+  /* quiet on purpose: no confetti or sounds in the migraine tab */
+  $("mtMig").onclick=()=>{setDayFlag(t,"mig",!e.mig);save();render();queueSync();};
+  if($("mtRec"))$("mtRec").onclick=()=>{setDayFlag(t,"rec",!e.rec);save();render();queueSync();};
+  if($("mtDet"))$("mtDet").onclick=()=>openMigDetails(t);
+}
+function migMonthsHTML(){
+  const now=new Date(),rows=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1),p=d.getFullYear()+"-"+pad(d.getMonth()+1),c=[0,0,0,0];
+    for(const k in state.days)if(k.startsWith(p)&&state.days[k].mig)c[(state.migLog[k]||{}).sev||0]++;
+    rows.push({lab:d.toLocaleString("en",{month:"short"}),c,tot:c[0]+c[1]+c[2]+c[3]});
+  }
+  if(!rows.some(r=>r.tot))return '<div class="chart-empty">no migraines in the last 6 months</div>';
+  const W=340,H=140,T=18,B=20,ih=H-T-B,max=Math.max(4,...rows.map(r=>r.tot)),slot=W/6,bw=30;
+  let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'">'+
+    '<line x1="0" y1="'+(T+ih)+'" x2="'+W+'" y2="'+(T+ih)+'" stroke="#F0EAE2"/>';
+  rows.forEach((r,i)=>{
+    const x=i*slot+(slot-bw)/2;let y=T+ih;
+    for(const sv of [3,2,1,0]){
+      if(!r.c[sv])continue;
+      const h=r.c[sv]/max*ih;y-=h;
+      s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw+'" height="'+h.toFixed(1)+'" rx="3" fill="'+SEV_COL[sv]+'"/>';
+    }
+    if(r.tot)s+='<text x="'+(x+bw/2)+'" y="'+(y-5).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#46403C" font-family="Nunito,sans-serif">'+r.tot+'</text>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="#A39A91" font-family="Nunito,sans-serif">'+r.lab+'</text>';
+  });
+  s+='</svg>';
+  return s+'<div class="legend">'+[3,2,1,0].map(v=>'<span><i class="sw" style="background:'+SEV_COL[v]+'"></i>'+(v?SEVS[v-1].name:"No rating")+'</span>').join("")+'</div>';
+}
+function renderDiary(){
+  const all=migKeys("0000",today()).reverse(),c=$("migDiary");
+  if(!all.length){c.innerHTML='<div class="bempty">Migraine days you log show up here.</div>';return;}
+  const list=diaryAll?all:all.slice(0,6);
+  let h="";
+  for(const k of list){
+    const x=state.migLog[k],d=new Date(k+"T12:00:00"),bits=[];
+    if(x){
+      if(x.dur)bits.push(durName(x.dur));
+      const meds=Object.keys(x.meds||{}).map(id=>medById(id).name);
+      if(meds.length)bits.push(meds.join(", "));
+      if((x.trig||[]).length)bits.push(x.trig.map(trigName).join(", "));
+      if(x.note)bits.push(x.note);
+    }
+    h+='<div class="drow" data-ds="'+k+'"><div class="dd">'+d.getDate()+'<small>'+d.toLocaleString("en",{month:"short"})+'</small></div>'+
+      '<div class="dm"><span class="sevpill s'+((x&&x.sev)||0)+'">'+(x&&x.sev?SEVS[x.sev-1].name:x?"unrated":"no details")+'</span>'+
+      esc(bits.join(" · ")||(x?"":"tap to add details"))+'</div><span class="chev">›</span></div>';
+  }
+  if(all.length>6)h+='<button class="more-btn" id="diaryMore">'+(diaryAll?"Show less":"Show all "+all.length)+'</button>';
+  c.innerHTML=h;
+  c.querySelectorAll(".drow").forEach(el=>el.onclick=()=>openMigDetails(el.dataset.ds));
+  if($("diaryMore"))$("diaryMore").onclick=()=>{diaryAll=!diaryAll;renderDiary();};
+}
+/* weeks with 3+ workouts vs the rest, over up to 26 complete Mon-Sun weeks */
+function exerciseLink(){
+  const keys=Object.keys(state.days).sort();
+  if(!keys.length)return null;
+  const mon=new Date();mon.setDate(mon.getDate()-((mon.getDay()+6)%7)-7);
+  const act=[],quiet=[];
+  for(let i=0;i<26;i++){
+    const ws=iso(mon);
+    if(shiftDay(ws,6)<keys[0])break;
+    let ex=0,mig=0;
+    for(let j=0;j<7;j++){const e=state.days[shiftDay(ws,j)];if(e&&e.ex)ex++;if(e&&e.mig)mig++;}
+    (ex>=3?act:quiet).push(mig);
+    mon.setDate(mon.getDate()-7);
+  }
+  const avg=a=>a.reduce((s,x)=>s+x,0)/a.length;
+  return act.length<2||quiet.length<2?{need:true}:{act:avg(act),quiet:avg(quiet),na:act.length,nq:quiet.length};
+}
+function renderPatterns(){
+  const all=migKeys("0000",today()),c=$("migPatterns");
+  if(all.length<3){c.innerHTML='<div class="bempty">Patterns appear after a few logged migraines.</div>';return;}
+  let h='<h3>TOP TRIGGERS</h3>';
+  const tc={};
+  all.forEach(k=>((state.migLog[k]||{}).trig||[]).forEach(id=>tc[id]=(tc[id]||0)+1));
+  const top=Object.entries(tc).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(top.length){
+    for(const [id,n] of top)h+='<div class="hbar"><span class="nm">'+esc(trigName(id))+'</span><span class="tr"><i style="width:'+
+      Math.round(n/top[0][1]*100)+'%"></i></span><span class="n">'+n+'</span></div>';
+  }else h+='<div class="card-note" style="margin-top:0">Tag triggers in migraine details to see them ranked here.</div>';
+  const dw=[0,0,0,0,0,0,0];
+  all.forEach(k=>dw[(new Date(k+"T12:00:00").getDay()+6)%7]++);
+  const mx=Math.max(...dw),avgd=all.length/7,names=["Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays","Sundays"];
+  const peak=mx>=2&&mx>=avgd*1.5?dw.indexOf(mx):-1;
+  h+='<h3>BY WEEKDAY</h3><div class="wkbars">'+dw.map((n,i)=>'<div class="wb'+(i===peak?" hi":"")+'"><i style="height:'+
+    (mx?Math.round(n/mx*100):0)+'%"></i><small>'+"MTWTFSS"[i]+'</small></div>').join("")+'</div>';
+  if(peak>=0)h+='<div class="pat-note">Most often on <b>'+names[peak]+'</b> ('+mx+' of '+all.length+').</div>';
+  const xl=exerciseLink();
+  h+='<h3>EXERCISE</h3>';
+  if(!xl||xl.need)h+='<div class="card-note" style="margin-top:0">Needs a few more weeks of logs to compare active and quieter weeks.</div>';
+  else{
+    const verdict=xl.act<xl.quiet*.8?"Fewer migraines in active weeks.":
+      xl.act>xl.quiet*1.25?"More migraines in active weeks - worth keeping an eye on.":"No clear difference so far.";
+    h+='<div class="pat-note">Weeks with 3+ workouts: <b>'+xl.act.toFixed(1)+'</b> migraine days/week ('+xl.na+' weeks)<br>'+
+      'Quieter weeks: <b>'+xl.quiet.toFixed(1)+'</b> migraine days/week ('+xl.nq+' weeks)<br>'+verdict+'</div>';
+  }
+  c.innerHTML=h;
+}
+function renderTools(){
+  const acute=state.meds.filter(m=>!m.off).length;
+  const tool=(ico,act,title,sub)=>'<button class="tool" data-act="'+act+'"><span class="ti">'+ICO[ico]+'</span><span>'+title+
+    '<small>'+sub+'</small></span><span class="chev">›</span></button>';
+  $("migTools").innerHTML=
+    tool("doc","rp","Doctor report (PDF)",state.lastExport?"Last made "+fmtDay(state.lastExport):"Summary, calendar, meds and diary")+
+    tool("pill","med","My medications",acute?acute+" saved":"Add the medicines you use")+
+    tool("down","bk","Save backup",state.lastBackup?"Last saved "+fmtDay(state.lastBackup):"Download all your data as a file")+
+    tool("up","rs","Restore backup","Load a backup file");
+  $("migTools").querySelectorAll(".tool").forEach(b=>{
+    b.onclick=()=>({rp:openReport,med:openMeds,bk:exportBackup,rs:()=>$("bkFile").click()})[b.dataset.act]();
+  });
+}
+
+/* ---------- migraine details sheet ---------- */
+let mdDate=null,md=null;
+const mchip=(label,on,attrs,cls)=>'<button class="mchip'+(cls?" "+cls:"")+(on?" on":"")+'" '+attrs+'>'+label+'</button>';
+function openMigDetails(ds){
+  mdDate=ds;
+  md=JSON.parse(JSON.stringify(state.migLog[ds]||{}));
+  md.meds=md.meds||{};md.trig=md.trig||[];md.sym=md.sym||[];
+  $("mdTitle").textContent="Migraine · "+fmtDay(ds,{weekday:"short",day:"numeric",month:"short"});
+  $("mdNote").value=md.note||"";
+  $("mdTrigNew").value="";
+  renderMd();
+  $("mdWrap").classList.add("show");
+}
+function renderMd(){
+  $("mdSev").innerHTML=SEVS.map(x=>mchip(x.name,md.sev===x.v,'data-v="'+x.v+'"',"sev"+x.v)).join("");
+  $("mdDur").innerHTML=DURS.map(x=>mchip(x.name,md.dur===x.id,'data-id="'+x.id+'"')).join("");
+  const meds=state.meds.filter(m=>m.kind!=="prev"&&(!m.off||m.id in md.meds));
+  let h="";
+  for(const m of meds){
+    const on=m.id in md.meds;
+    h+='<div class="medrow">'+mchip(esc(m.name),on,'data-med="'+m.id+'"')+(on?'<span class="eff">'+
+      EFFECTS.map(f=>'<button class="'+f.id+(md.meds[m.id]===f.id?" on":"")+'" data-eff="'+f.id+'" data-for="'+m.id+'">'+f.name+'</button>').join("")+
+      '</span>':'')+'</div>';
+  }
+  h+='<div class="mchips"><button class="mchip add" id="mdMedMng">'+(meds.length?"Manage medications":"+ Add your medications")+'</button></div>';
+  $("mdMeds").innerHTML=h;
+  $("mdMedMng").onclick=openMeds;
+  $("mdTrig").innerHTML=allTriggers().map(x=>mchip(esc(x.name),md.trig.includes(x.id),'data-id="'+x.id+'"')).join("");
+  $("mdSym").innerHTML=SYMPTOMS.map(x=>mchip(x.name,md.sym.includes(x.id),'data-id="'+x.id+'"')).join("");
+}
+const toggleIn=(arr,id)=>{const i=arr.indexOf(id);if(i<0)arr.push(id);else arr.splice(i,1);};
+$("mdSev").onclick=e=>{const b=e.target.closest("[data-v]");if(!b)return;const v=+b.dataset.v;md.sev=md.sev===v?0:v;renderMd();};
+$("mdDur").onclick=e=>{const b=e.target.closest("[data-id]");if(!b)return;md.dur=md.dur===b.dataset.id?"":b.dataset.id;renderMd();};
+$("mdTrig").onclick=e=>{const b=e.target.closest("[data-id]");if(!b)return;toggleIn(md.trig,b.dataset.id);renderMd();};
+$("mdSym").onclick=e=>{const b=e.target.closest("[data-id]");if(!b)return;toggleIn(md.sym,b.dataset.id);renderMd();};
+$("mdMeds").onclick=e=>{
+  const f=e.target.closest("[data-eff]");
+  if(f){const id=f.dataset.for;md.meds[id]=md.meds[id]===f.dataset.eff?"":f.dataset.eff;renderMd();return;}
+  const b=e.target.closest("[data-med]");
+  if(b){const id=b.dataset.med;if(id in md.meds)delete md.meds[id];else md.meds[id]="";renderMd();}
+};
+$("mdTrigAdd").onclick=()=>{
+  const name=$("mdTrigNew").value.trim().slice(0,24);
+  if(!name)return;
+  let x=allTriggers().find(t=>t.name.toLowerCase()===name.toLowerCase());
+  if(!x){x={id:"c"+Date.now().toString(36),name};state.trigCustom.push(x);save();}
+  if(!md.trig.includes(x.id))md.trig.push(x.id);
+  $("mdTrigNew").value="";renderMd();
+};
+$("mdTrigNew").onkeydown=e=>{if(e.key==="Enter")$("mdTrigAdd").click();};
+$("mdSave").onclick=()=>{
+  const x={},note=$("mdNote").value.trim().slice(0,500);
+  if(md.sev)x.sev=md.sev;
+  if(md.dur)x.dur=md.dur;
+  if(Object.keys(md.meds).length)x.meds=md.meds;
+  if(md.trig.length)x.trig=md.trig;
+  if(md.sym.length)x.sym=md.sym;
+  if(note)x.note=note;
+  if(Object.keys(x).length)state.migLog[mdDate]=x;else delete state.migLog[mdDate];
+  save();render();
+  $("mdWrap").classList.remove("show");
   pop();
 };
+
+/* ---------- medication list ---------- */
+let medKind="acute";
+function openMeds(){
+  medKind="acute";$("medName").value="";
+  renderMeds();
+  $("medWrap").classList.add("show");
+}
+function renderMeds(){
+  const list=state.meds.filter(m=>!m.off);
+  $("medList").innerHTML=list.length?list.map(m=>'<div class="mrow">'+esc(m.name)+'<small>'+(m.kind==="prev"?"preventive":"acute")+
+    '</small><button data-id="'+m.id+'" aria-label="Remove">✕</button></div>').join(""):'<div class="bempty">No medications yet.</div>';
+  $("medKind").innerHTML=mchip("Acute",medKind==="acute",'data-k="acute"')+mchip("Preventive",medKind==="prev",'data-k="prev"');
+}
+$("medKind").onclick=e=>{const b=e.target.closest("[data-k]");if(b){medKind=b.dataset.k;renderMeds();}};
+/* removed meds are only hidden, so older diary entries keep their names */
+$("medList").onclick=e=>{
+  const b=e.target.closest("[data-id]");if(!b)return;
+  const m=state.meds.find(x=>x.id===b.dataset.id);
+  if(m&&confirm("Remove "+m.name+"? Past entries keep it.")){m.off=true;save();renderMeds();}
+};
+$("medAdd").onclick=()=>{
+  const name=$("medName").value.trim().slice(0,40);
+  if(!name)return;
+  const old=state.meds.find(m=>m.name.toLowerCase()===name.toLowerCase());
+  if(old){old.off=false;old.kind=medKind;}
+  else state.meds.push({id:"m"+Date.now().toString(36),name,kind:medKind});
+  $("medName").value="";save();renderMeds();
+};
+$("medName").onkeydown=e=>{if(e.key==="Enter")$("medAdd").click();};
+$("medDone").onclick=()=>{
+  $("medWrap").classList.remove("show");
+  if($("mdWrap").classList.contains("show"))renderMd();
+  render();
+};
+
+/* ---------- doctor report (print / save as PDF) ---------- */
+let rpSel=90;
+function rpRange(){
+  const t=today();
+  if(rpSel==="custom"){
+    let a=$("rpFrom").value||shiftDay(t,-89),b=$("rpTo").value||t;
+    if(a>b)[a,b]=[b,a];
+    return [a,b];
+  }
+  if(rpSel==="last")return [shiftDay(state.lastExport,1)<=t?shiftDay(state.lastExport,1):t,t];
+  return [shiftDay(t,-(rpSel-1)),t];
+}
+function openReport(){
+  if(rpSel==="last"&&!state.lastExport)rpSel=90;
+  $("rpName").value=state.profile.name||"";
+  $("rpDob").value=state.profile.dob||"";
+  if(!$("rpTo").value)$("rpTo").value=today();
+  if(!$("rpFrom").value)$("rpFrom").value=shiftDay(today(),-89);
+  renderRp();
+  $("rpWrap").classList.add("show");
+}
+function renderRp(){
+  const opts=[[30,"30 days"],[90,"90 days"],[182,"6 months"],[365,"12 months"]];
+  if(state.lastExport)opts.push(["last","Since last report"]);
+  opts.push(["custom","Custom"]);
+  $("rpRange").innerHTML=opts.map(([v,l])=>mchip(l,rpSel===v,'data-r="'+v+'"')).join("");
+  $("rpCustom").hidden=rpSel!=="custom";
+  const [a,b]=rpRange(),n=migKeys(a,b).length;
+  $("rpSummary").textContent=fmtDay(a)+" - "+fmtDay(b)+": "+n+" migraine day"+(n===1?"":"s")+".";
+}
+$("rpRange").onclick=e=>{const b=e.target.closest("[data-r]");if(!b)return;rpSel=isNaN(+b.dataset.r)?b.dataset.r:+b.dataset.r;renderRp();};
+$("rpFrom").onchange=renderRp;$("rpTo").onchange=renderRp;
+$("rpGo").onclick=()=>{
+  state.profile={name:$("rpName").value.trim().slice(0,60),dob:$("rpDob").value||""};
+  const [a,b]=rpRange();
+  $("report").innerHTML=reportHTML(a,b);
+  state.lastExport=today();save();render();
+  $("rpWrap").classList.remove("show");
+  const old=document.title;
+  document.title="Migraine report "+a+" to "+b;
+  const back=()=>{document.title=old;removeEventListener("afterprint",back);};
+  addEventListener("afterprint",back);
+  /* let the sheet close (and its history entry pop) before the print dialog */
+  setTimeout(()=>{try{print();}catch(e){back();toast("Printing isn't available here");}},400);
+};
+function reportHTML(from,to){
+  const n=daysBetween(from,to)+1,mk=migKeys(from,to),det=k=>state.migLog[k]||{};
+  const recN=flagCount("rec",from,to),exN=flagCount("ex",from,to);
+  const sc=[0,0,0,0];mk.forEach(k=>sc[det(k).sev||0]++);
+  const rated=sc[1]+sc[2]+sc[3],avgSev=rated?(sc[1]+2*sc[2]+3*sc[3])/rated:0;
+  const acuteN=acuteDays(from,to);
+  const pFrom=shiftDay(from,-n),pTo=shiftDay(from,-1),prevN=migKeys(pFrom,pTo).length;
+  const hasPrev=Object.keys(state.days).some(k=>k>=pFrom&&k<=pTo);
+  const per30=x=>(x/n*30).toFixed(1);
+  const prof=state.profile||{};
+  let h='<h1>Migraine diary</h1><div class="meta">'+
+    (prof.name?'<b>'+esc(prof.name)+'</b>'+(prof.dob?' · born '+fmtDay(prof.dob):'')+' · ':'')+
+    fmtDay(from)+' - '+fmtDay(to)+' ('+n+' days) · generated '+fmtDay(today())+'</div>';
+  h+='<div class="kpis">'+
+    '<div class="kpi"><b>'+mk.length+'</b><small>migraine days ('+per30(mk.length)+' per 30 days)</small></div>'+
+    '<div class="kpi"><b>'+(rated?SEVS[Math.round(avgSev)-1].name:"-")+'</b><small>average severity'+(rated?' ('+avgSev.toFixed(1)+' of 3, '+rated+' rated)':'')+'</small></div>'+
+    '<div class="kpi"><b>'+acuteN+'</b><small>days with acute medication ('+per30(acuteN)+' per 30 days)</small></div>'+
+    '<div class="kpi"><b>'+recN+'</b><small>recovery days after a migraine</small></div></div>';
+  const prev=state.meds.filter(m=>m.kind==="prev"&&!m.off).map(m=>esc(m.name));
+  h+='<p>'+(hasPrev?'Previous '+n+' days: <b>'+prevN+'</b> migraine days ('+(mk.length<prevN?"fewer now":mk.length>prevN?"more now":"no change")+'). ':'')+
+    'Severity: '+sc[3]+' severe, '+sc[2]+' moderate, '+sc[1]+' mild'+(sc[0]?', '+sc[0]+' unrated':'')+'. Workout days: '+exN+'.</p>';
+  if(prev.length)h+='<p>Preventive medication: <b>'+prev.join(", ")+'</b></p>';
+
+  /* month-by-day calendar grid */
+  const months=[];
+  for(let y=+from.slice(0,4),m=+from.slice(5,7)-1;y<+to.slice(0,4)||(y===+to.slice(0,4)&&m<=+to.slice(5,7)-1);m===11?(y++,m=0):m++)months.push([y,m]);
+  h+='<h2>Calendar</h2><table class="grid"><tr><th class="mo"></th>';
+  for(let d=1;d<=31;d++)h+='<th>'+d+'</th>';
+  h+='</tr>';
+  for(const [y,m] of months){
+    const len=new Date(y,m+1,0).getDate();
+    h+='<tr><td class="mo">'+new Date(y,m,1).toLocaleString("en",{month:"short"})+' '+y+'</td>';
+    for(let d=1;d<=31;d++){
+      const ds=y+"-"+pad(m+1)+"-"+pad(d),e=state.days[ds];
+      if(d>len||ds<from||ds>to){h+='<td></td>';continue;}
+      if(e&&e.mig){const sv=det(ds).sev||0;h+='<td class="'+(sv?"c-s"+sv:"c-m")+'">'+(sv||"M")+'</td>';}
+      else if(e&&e.rec)h+='<td class="c-r">R</td>';
+      else if(e&&e.ex)h+='<td class="c-x">·</td>';
+      else h+='<td class="c-e"></td>';
+    }
+    h+='</tr>';
+  }
+  h+='</table><div class="legend-r">'+
+    '<span><i style="background:#4F86B5"></i>3 severe</span><span><i style="background:#7FAFD4"></i>2 moderate</span>'+
+    '<span><i style="background:#BFD9EE"></i>1 mild</span><span><i style="background:#DCE7F0"></i>M migraine, unrated</span>'+
+    '<span><i style="background:#CDEEDF"></i>R recovery</span><span><i style="background:#EFE8FA"></i>· workout</span></div>';
+
+  /* per month */
+  h+='<h2>By month</h2><table><tr><th>Month</th><th>Migraine days</th><th>Severe</th><th>Acute medication days</th><th>Recovery days</th><th>Workout days</th></tr>';
+  for(const [y,m] of months){
+    const a=[from,y+"-"+pad(m+1)+"-01"].sort()[1],b=[to,y+"-"+pad(m+1)+"-"+pad(new Date(y,m+1,0).getDate())].sort()[0];
+    const mm=migKeys(a,b),ac=acuteDays(a,b);
+    h+='<tr><td>'+new Date(y,m,1).toLocaleString("en",{month:"long"})+' '+y+(a.slice(8)!=="01"||b!==y+"-"+pad(m+1)+"-"+pad(new Date(y,m+1,0).getDate())?' (partial)':'')+'</td>'+
+      '<td>'+mm.length+'</td><td>'+mm.filter(k=>det(k).sev===3).length+'</td>'+
+      '<td'+(ac>=OVERUSE_MONTH?' class="warn"':'')+'>'+ac+(ac>=OVERUSE_MONTH?' - overuse risk':'')+'</td>'+
+      '<td>'+flagCount("rec",a,b)+'</td><td>'+flagCount("ex",a,b)+'</td></tr>';
+  }
+  h+='</table>';
+
+  /* medication effect */
+  const mu={};
+  mk.forEach(k=>{for(const [id,eff] of Object.entries(det(k).meds||{})){
+    const r=mu[id]||(mu[id]={n:0,y:0,p:0,no:0,u:0});
+    r.n++;eff==="y"?r.y++:eff==="p"?r.p++:eff==="n"?r.no++:r.u++;
+  }});
+  if(Object.keys(mu).length){
+    h+='<h2>Medication taken during migraines</h2><table><tr><th>Medication</th><th>Type</th><th>Days</th><th>Helped</th><th>Partly</th><th>Didn\'t help</th><th>Not rated</th></tr>';
+    for(const [id,r] of Object.entries(mu).sort((a,b)=>b[1].n-a[1].n)){
+      const m=medById(id);
+      h+='<tr><td>'+esc(m.name)+'</td><td>'+(m.kind==="prev"?"preventive":"acute")+'</td><td>'+r.n+'</td><td>'+r.y+'</td><td>'+r.p+'</td><td>'+r.no+'</td><td>'+r.u+'</td></tr>';
+    }
+    h+='</table>';
+  }
+
+  /* triggers and symptoms */
+  const cnt=(key,nm)=>{const c={};mk.forEach(k=>(det(k)[key]||[]).forEach(id=>c[id]=(c[id]||0)+1));
+    return Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([id,x])=>'<tr><td>'+esc(nm(id))+'</td><td>'+x+'</td><td>'+Math.round(x/mk.length*100)+'%</td></tr>').join("");};
+  const tr=cnt("trig",trigName),sy=cnt("sym",symName);
+  if(tr)h+='<h2>Possible triggers</h2><table><tr><th>Trigger</th><th>Migraine days</th><th>Share of migraines</th></tr>'+tr+'</table>';
+  if(sy)h+='<h2>Symptoms</h2><table><tr><th>Symptom</th><th>Migraine days</th><th>Share of migraines</th></tr>'+sy+'</table>';
+
+  /* diary */
+  if(mk.length){
+    h+='<h2>Diary</h2><table><tr><th>Date</th><th>Severity</th><th>Duration</th><th>Medication</th><th>Triggers / symptoms</th><th>Note</th></tr>';
+    for(const k of mk){
+      const x=det(k),effTxt={y:"helped",p:"partly",n:"didn't help"};
+      const meds=Object.entries(x.meds||{}).map(([id,f])=>esc(medById(id).name)+(f?' ('+effTxt[f]+')':'')).join(", ");
+      const ts=(x.trig||[]).map(trigName).concat((x.sym||[]).map(symName)).map(esc).join(", ");
+      h+='<tr><td>'+fmtDay(k,{weekday:"short",day:"numeric",month:"short",year:"numeric"})+'</td><td>'+(x.sev?SEVS[x.sev-1].name:"")+'</td><td>'+durName(x.dur)+
+        '</td><td>'+meds+'</td><td>'+ts+'</td><td>'+esc(x.note||"")+'</td></tr>';
+    }
+    h+='</table>';
+  }
+  h+='<div class="foot">Self-reported headache diary kept in the Streak Buddies app. Days without a recorded migraine are counted as migraine-free. '+
+    'Acute medication days count days where an acute medicine was logged during a migraine; '+OVERUSE_MONTH+'+ per month is flagged as a medication-overuse risk.</div>';
+  return h;
+}
+
+/* ---------- backup file ---------- */
+function exportBackup(){
+  const data=JSON.stringify(Object.assign({app:"streak-buddies",exported:new Date().toISOString()},state));
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));
+  a.download="streak-backup-"+today()+".json";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  state.lastBackup=today();save();render();
+  toast("Backup saved - keep the file somewhere safe");
+}
+$("bkFile").onchange=async e=>{
+  const f=e.target.files[0];e.target.value="";
+  if(!f)return;
+  let d=null;
+  try{d=JSON.parse(await f.text());}catch(err){}
+  if(!d||!d.days||typeof d.days!=="object"||Array.isArray(d.days)){toast("That file isn't a Streak backup");return;}
+  const n=Object.keys(d.days).length;
+  if(!confirm("Replace everything on this phone with the backup"+(d.exported?" from "+String(d.exported).slice(0,10):"")+" ("+n+" logged days)?"))return;
+  delete d.app;delete d.exported;
+  state=Object.assign(freshState(),d);
+  normalizeState();
+  save();render();queueSync();
+  toast("Backup restored");
+};
+["mdWrap","medWrap","rpWrap"].forEach(id=>{
+  $(id).addEventListener("click",e=>{if(e.target===e.currentTarget)$(id).classList.remove("show");});
+});
+document.querySelectorAll("[data-ico]").forEach(el=>{el.innerHTML=ICO[el.dataset.ico];});
 
 /* ---------- activity picker ---------- */
 let apPick=null,apCb=null;
@@ -1759,8 +2565,7 @@ $("resetBtn").onclick=()=>{
       rpc("push_unregister",{p_endpoint:pushSub.endpoint}).catch(()=>{});
       pushSub.unsubscribe().catch(()=>{});pushSub=null;
     }
-    state={v:4,days:{},remTime:"19:00",remOn:false,soundOn:true,lastRemind:"",buddy:null,friends:[],
-      coins:0,farm:{},pets:[],lastEarn:""};
+    state=freshState();
     $("dbgBtn").style.display="none";
     save();render();
     $("setWrap").classList.remove("show");
@@ -1890,7 +2695,7 @@ $("mascot").onclick=()=>{
 };
 /* idle wiggle + sound now and then */
 function idleMascot(){
-  if(!document.hidden&&Math.random()<.7){
+  if(!document.hidden&&state.tab!=="mig"&&Math.random()<.7){
     const m=$("mascot");m.classList.remove("poke");void m.offsetWidth;m.classList.add("poke");
     if(actx)animalSound(dayOfYear()%SQUAD.length);
   }
@@ -1900,7 +2705,7 @@ setTimeout(idleMascot,15000);
 
 /* ---------- wandering buddies ---------- */
 function spawnWalker(once){
-  if(document.hidden){if(!once)schedWalker();return;}
+  if(document.hidden||(!once&&state.tab==="mig")){if(!once)schedWalker();return;}
   const i=Math.random()*SQUAD.length|0;
   const fromLeft=Math.random()<.5;
   const el=document.createElement("div");
